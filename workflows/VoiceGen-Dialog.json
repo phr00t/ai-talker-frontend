@@ -1,0 +1,52 @@
+{
+  "1": {
+    "inputs": {
+      "sample_text": "$SAMPLE_TEXT",
+      "speech": "$DIALOG",
+      "seed": 817,
+      "model": "F5",
+      "vocoder": "vocos",
+      "speed": 1,
+      "model_type": "F5TTS_v1_Base",
+      "speak_and_recognation": {
+        "__value__": [
+          false,
+          true
+        ]
+      },
+      "sample_audio": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "F5TTSAudioInputs",
+    "_meta": {
+      "title": "F5-TTS Audio from input"
+    }
+  },
+  "3": {
+    "inputs": {
+      "audio_file": "$REF_AUDIO",
+      "seek_seconds": 0,
+      "duration": 0
+    },
+    "class_type": "VHS_LoadAudio",
+    "_meta": {
+      "title": "Load Audio (Path)🎥🅥🅗🅢"
+    }
+  },
+  "6": {
+    "inputs": {
+      "filename_prefix": "$SAVE_PREFIX",
+      "audioUI": "",
+      "audio": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "SaveAudio",
+    "_meta": {
+      "title": "SaveAudio"
+    }
+  }
+}

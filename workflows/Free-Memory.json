@@ -1,0 +1,38 @@
+{
+  "1": {
+    "inputs": {
+      "empty_cache": true,
+      "gc_collect": true,
+      "unload_all_models": true,
+      "any_input": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "VRAM_Debug",
+    "_meta": {
+      "title": "VRAM Debug"
+    }
+  },
+  "2": {
+    "inputs": {
+      "value": 0.5000000000000001
+    },
+    "class_type": "Float-🔬",
+    "_meta": {
+      "title": "Float"
+    }
+  },
+  "3": {
+    "inputs": {
+      "ANY": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "DebugPrint-🔬",
+    "_meta": {
+      "title": "DebugPrint"
+    }
+  }
+}

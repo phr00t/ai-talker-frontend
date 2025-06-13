@@ -1,0 +1,38 @@
+{
+  "1": {
+    "inputs": {
+      "repo_id": "parler-tts/parler-tts-large-v1"
+    },
+    "class_type": "ParlerTTS_LoadModel",
+    "_meta": {
+      "title": "ParlerTTS_LoadModel"
+    }
+  },
+  "2": {
+    "inputs": {
+      "prompt": "The quick brown fox jumps over the lazy dog, doesn't he, well, maybe he can't, or perhaps not, it depends on the circumstances, you see!",
+      "description": "${VOICE_DESCRIPTION}. Clear, high audio quality. Very articulate and easy to understand.",
+      "model": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "ParlerTTS_Sampler",
+    "_meta": {
+      "title": "ParlerTTS_Sampler"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "${SAVE_PREFIX}",
+      "audio": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "SaveAudio",
+    "_meta": {
+      "title": "SaveAudio"
+    }
+  }
+}

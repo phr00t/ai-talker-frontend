@@ -1,0 +1,46 @@
+{
+  "1": {
+    "inputs": {
+      "model": "base",
+      "language": "auto",
+      "audio": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "Apply Whisper",
+    "_meta": {
+      "title": "Apply Whisper"
+    }
+  },
+  "2": {
+    "inputs": {
+      "audio_file": "$AUDIO_FILE",
+      "seek_seconds": 0,
+      "duration": 0
+    },
+    "class_type": "VHS_LoadAudio",
+    "_meta": {
+      "title": "Load Audio (Path)🎥🅥🅗🅢"
+    }
+  },
+  "3": {
+    "inputs": {
+      "path": "./ComfyUI/output/talker/",
+      "filename_prefix": "whisper",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "file_extension": ".txt",
+      "encoding": "utf-8",
+      "filename_suffix": "",
+      "text": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "Save Text File",
+    "_meta": {
+      "title": "Save Text File"
+    }
+  }
+}
