@@ -21,15 +21,24 @@ using System.Windows.Forms;
 using CSCore.CoreAudioAPI;
 
 /*
+ * BUG: picture prompts sometimes are empty, need to encourage "this has been filled out already" stuff
+ *   - also, why is the picture description coming "from" the character...?
  */
 
 namespace TalkerFrontend {
     public class Integration {
 
+        public enum AUTOGEN_IMAGE {
+            MANUAL = 0,
+            AUTO_SINGLE = 1,
+            AUTO_CONTINUOUS = 2
+        }
+
         public class ImageGenSettings {
             public string Model = "", Size;
             public string Workflow = "ImageGen-Chroma.json";
             public int Steps;
+            public AUTOGEN_IMAGE AutogenMode;
             public string Negative;
             public bool KillKobold, LocationWeight;
             public Size GetSize {
@@ -50,7 +59,9 @@ namespace TalkerFrontend {
             Steps = 16,
             Negative = "disfigured, gross, bad quality, bad hands, blurry, deformed",
             KillKobold = true,
-            Size = "896x896"
+            Size = "896x896",
+            AutogenMode = AUTOGEN_IMAGE.MANUAL,
+            LocationWeight = false
         };
 
         public static bool VerifyComfyUI() {
@@ -71,17 +82,6 @@ namespace TalkerFrontend {
                         return res;
                     }
                     return 2048;
-                }
-            }
-            public int WordsPerRecall {
-                get {
-                    string wprstr = MainForm.GetControl<TextBox>("AdvWordRecall").Text;
-                    if (int.TryParse(wprstr, out int res)) {
-                        if (res < 8) return 8;
-                        if (res > 512) return 512;
-                        return res;
-                    }
-                    return 36;
                 }
             }
             public List<string> ExtraStopTokens {
@@ -279,6 +279,7 @@ namespace TalkerFrontend {
         public static void Abort() {
             ChatManager.YourPrompt = null;
             ChatManager.YourImageDescription = null;
+            autogen_timer = 0;
             MainForm.DisableAutoTalk();
             ChatManager.SayTalking = false;
             ChatManager.SayGenerating = false;
@@ -335,14 +336,20 @@ namespace TalkerFrontend {
                 t.Start();
             } else if (ChatManager.PictureRequested) {
                 string[] separate = text.Split(new string[] { "Who:", "What:" }, StringSplitOptions.None);
-                if (separate.Length == 3) {
+                if (separate.Length == 3 && separate[0].Length > 2 && separate[1].Length > 2 && separate[2].Length > 2) {
                     string raw_location = StringProcessor.TruncateStringByWordCount(separate[0].Trim(), CurrentImageOptions.LocationWeight ? 16 : 24);
                     string location = CurrentImageOptions.LocationWeight ? "(" + raw_location + ":0.66)" : raw_location;
-                    string raw_who = StringProcessor.ReplaceWholeWord(separate[1].Trim(), MainForm.UserName, "");
-                    string who = raw_who.Replace(ChatManager.SelectedCharacter.Name, ChatManager.SelectedCharacter.VisualDescription + " named " + ChatManager.SelectedCharacter.Name);
+                    string[] who_words = StringProcessor.ReplaceWholeWord(separate[1].Trim(), MainForm.UserName, "").Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    string who = "";
+                    foreach (string who_word in who_words) {
+                        string visuals_found = Character.GetCharacterVisuals(who_word);
+                        if (visuals_found != null) who += visuals_found + ", ";
+                    }
                     string what = StringProcessor.ReplaceWholeWord(separate[2].Trim(), MainForm.UserName + "'s", "POV");
                     what = StringProcessor.ReplaceWholeWord(what, MainForm.UserName, "POV");
-                    string image_prompt = who + ", " + StringProcessor.TruncateStringByWordCount(what, CurrentImageOptions.LocationWeight ? 40 : 64) + ". " + location + ". " + ChatManager.SelectedCharacter.ImageStyle;
+                    string image_prompt = StringProcessor.TruncateStringByWordCount(who, CurrentImageOptions.LocationWeight ? 32 : 48) + ", " +
+                                          StringProcessor.TruncateStringByWordCount(what, CurrentImageOptions.LocationWeight ? 32 : 48) + ". " +
+                                          location + ". " + ChatManager.SelectedCharacter.ImageStyle;
                     Dictionary<string, string> repl = new Dictionary<string, string>();
                     var size = CurrentImageOptions.GetSize;
                     repl["$START_PROMPT"] = image_prompt;
@@ -357,6 +364,9 @@ namespace TalkerFrontend {
                     MainForm.SetStatus("Generating Image");
                     MainForm.PrepareWatcher(Path.Combine(ComfyUIDir, "output/talker/"));
                     SendComfyRequest(Path.Combine(BaseDirectory, "workflows/" + CurrentImageOptions.Workflow), repl);
+                } else {
+                    // got garbage, try again
+                    ChatManager.GetPicture();
                 }
             } else {
                 ChatManager.ChatRequested = false;
@@ -367,6 +377,9 @@ namespace TalkerFrontend {
                 MainForm.UpdateChatLog();
                 MainForm.SetStatus("Ready");
                 ChatManager.ResetAutotalk();
+                if (CurrentImageOptions.AutogenMode != AUTOGEN_IMAGE.MANUAL) {
+                    ChatManager.GetPicture();
+                }
             }
         }
 
@@ -387,7 +400,7 @@ namespace TalkerFrontend {
             ChatManager.SayTalking = false;
         }
 
-        public static int monitordelay = 30;
+        public static int monitordelay = 30, autogen_timer = 0;
         public static string LastAudioFile;
         public static List<Task<RestResponse>> all_response_tasks = new List<Task<RestResponse>>();
         public static void Update() {
@@ -398,7 +411,7 @@ namespace TalkerFrontend {
                     string extension = Path.GetExtension(final_filename).ToLower();
                     switch (extension) {
                         case ".png":
-                            MainForm.GetControl<PictureBox>("WhoPicture").Image = Image.FromFile(final_filename);
+                            MainForm.GetControl<PictureBox>("WhoPicture").ImageLocation = final_filename;
                             MainForm.SetStatus("Ready");
                             ChatManager.PictureRequested = false;
                             break;
@@ -502,6 +515,15 @@ namespace TalkerFrontend {
                             HandleError(rrsp);
                         }
                     } else HandleError(rrsp);
+                }
+            }
+            if (CurrentImageOptions.AutogenMode == AUTOGEN_IMAGE.AUTO_CONTINUOUS) {
+                MainForm.DisableAutoTalk();
+                if (MainForm.ReadyOrNot(true, true, true) == "" && ChatManager.CurrentChatLog.Length > 16) {
+                    if (autogen_timer > 0) {
+                        autogen_timer--;
+                        if (autogen_timer <= 0) ChatManager.GetPicture();
+                    }
                 }
             }
         }
@@ -609,14 +631,14 @@ namespace TalkerFrontend {
             }
         }
 
-        private static string last_prompt_sent;
-        private static int last_prompt_size;
-        private static bool last_prompt_notcreative;
+        //private static string last_prompt_sent;
+        //private static int last_prompt_size;
+        //private static bool last_prompt_notcreative;
         public static void SendTextPrompt(string prompt, int? max_len = null, bool not_creative = false, bool send_pic = false, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
             EnsureKoboldCppMode(true);
             var rr = new RestRequest("/api/v1/generate", Method.Post);
-            last_prompt_sent = prompt;
-            last_prompt_notcreative = not_creative;
+            //last_prompt_sent = prompt;
+            //last_prompt_notcreative = not_creative;
             rr.RequestFormat = DataFormat.Json;
 
             // clean up newlines
@@ -624,7 +646,7 @@ namespace TalkerFrontend {
 
             TalkerSettings cursettings = not_creative ? NonCreativeSettings : GetCurrentSettings(MainForm.IsCreative);
 
-            last_prompt_size = max_len ?? cursettings.MaxGeneration;
+            //last_prompt_size = max_len ?? cursettings.MaxGeneration;
             List<string> final_stops = new List<string>(extra_stop_sequences);
             final_stops.AddRange(cursettings.ExtraStopTokens);
 
@@ -640,7 +662,7 @@ namespace TalkerFrontend {
             var requestBody = new {
                 max_context_length = max_context_len,
                 stop_sequence = final_stops.ToArray(),
-                max_length = last_prompt_size, // Use provided value
+                max_length = max_len ?? cursettings.MaxGeneration,
                 prompt = prompt,         // Use provided value
                 quiet = false,
                 rep_pen = 1.0,

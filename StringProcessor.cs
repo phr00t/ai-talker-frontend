@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 namespace TalkerFrontend {
     public class StringProcessor {
 
-        public static int WordsPerMemory => 36;
-
         public static List<string> GetMostUniqueStrings(List<string> stringList, int n) {
             if (stringList == null || stringList.Count == 0 || n <= 0) {
                 return new List<string>();
@@ -177,14 +175,47 @@ namespace TalkerFrontend {
             return result.ToString();
         }
 
-        public static List<string> GetInfo(string from, string request, ConcurrentDictionary<string, List<string>> memory, int max_chars) {
+        public static string GetCapitalWords(string largeString, bool actually_lower_case = false) {
+            if (string.IsNullOrEmpty(largeString)) {
+                return string.Empty;
+            }
+
+            // Using a StringBuilder for efficient string concatenation.
+            StringBuilder capitalWordsBuilder = new StringBuilder();
+
+            // Regular expression to find sequences of one or more uppercase letters (A-Z).
+            // \b ensures whole word matching, although for "capital words" it's less critical
+            // than just matching uppercase sequences.
+            // [A-Z]+ matches one or more uppercase letters.
+            MatchCollection matches = Regex.Matches(largeString, actually_lower_case ? @"\b[a-z]+\b" : @"\b[A-Z][\w]*\b");
+
+            foreach (Match match in matches) {
+                // Append the matched capital word.
+                capitalWordsBuilder.Append(match.Value);
+                // Append a space after each word.
+                capitalWordsBuilder.Append(" ");
+            }
+
+            // Remove the trailing space if any capital words were found.
+            if (capitalWordsBuilder.Length > 0) {
+                capitalWordsBuilder.Length--; // Remove the last space
+            }
+
+            return capitalWordsBuilder.ToString();
+        }
+
+        public static List<string> GetInfo(string from, string request, ConcurrentDictionary<string, List<string>> memory, int max_chars, int fill_level = 0) {
+            List<string> results = new List<string>();
             int overgather = max_chars * 4; // lets collect more information, then return the top unique results
             request = from + " " + request;
-            string[] word_split = request.Split(new char[] { ' ', '.', '?', '!', ':', ';', ',' });
-            List<string> results = new List<string>();
+            string[] word_split = request.Split(new char[] { ' ', '.', '?', '!', ':', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            HashSet<string> words_processed = new HashSet<string>();
             for (int i = 0; i < word_split.Length; i++) {
                 string word = GetUsefulKeyword(RemovePunctuation(word_split[i]));
-                if (word != null && memory.TryGetValue(word, out var known)) {
+                if (word == null) continue;
+                if (words_processed.Contains(word)) continue;
+                words_processed.Add(word);
+                if (memory.TryGetValue(word, out var known)) {
                     for (int j = known.Count - 1; j >= 0; j--) {
                         string pull_info = known[j];
                         if (overgather >= pull_info.Length) {
@@ -194,6 +225,7 @@ namespace TalkerFrontend {
                     }
                 }
             }
+            int WordsPerMemory = Integration.MainForm.WordsPerRecall;
             var most_unique = GetMostUniqueStrings(results, Math.Min(max_chars / WordsPerMemory, results.Count));
             List<string> final_results = new List<string>();
             int k = 0;
@@ -201,6 +233,19 @@ namespace TalkerFrontend {
                 string line = most_unique[k++];
                 final_results.Add(line);
                 max_chars -= line.Length;
+            }
+            // we might have context still to fill, so let's find more stuff
+            if (Integration.MainForm.FillContext) {
+                if (max_chars > WordsPerMemory * 10 && ChatManager.SelectedCharacter is Character c) {
+                    switch (fill_level) {
+                        case 0:
+                            final_results.InsertRange(0, GetInfo(from, GetCapitalWords(c.PersistentDescription), memory, max_chars, 1));
+                            break;
+                        case 1:
+                            final_results.InsertRange(0, GetInfo(from, GetCapitalWords(c.PersistentDescription, true), memory, max_chars, 2));
+                            break;
+                    }
+                }
             }
             return final_results;
         }
@@ -222,7 +267,7 @@ namespace TalkerFrontend {
         public static ConcurrentDictionary<string, List<string>> GenerateLongTerm(string lotsOfInfo) {
             ConcurrentDictionary<string, List<string>> data = new ConcurrentDictionary<string, List<string>>();
             var matches = Regex.Matches(lotsOfInfo, @"\b\w+\b(?!: )");
-
+            int WordsPerMemory = Integration.MainForm.WordsPerRecall;
             // Step 2: Process the words in parallel.
             // Parallel.ForEach will efficiently distribute the calls to wordProcessor
             // across multiple threads.

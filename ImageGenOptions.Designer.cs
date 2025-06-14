@@ -35,6 +35,8 @@
             this.Resolution = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.LocationWeight = new System.Windows.Forms.CheckBox();
+            this.autogen = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Workflow
@@ -175,12 +177,41 @@
             this.LocationWeight.Text = "SDXL Prompt Mode (Reduce Location Weight/Truncate)";
             this.LocationWeight.UseVisualStyleBackColor = true;
             // 
+            // autogen
+            // 
+            this.autogen.BackColor = System.Drawing.Color.Navy;
+            this.autogen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.autogen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.autogen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.autogen.ForeColor = System.Drawing.Color.White;
+            this.autogen.FormattingEnabled = true;
+            this.autogen.Items.AddRange(new object[] {
+            "Manual Request Only",
+            "Automate 1 Per Response",
+            "Continuous Generation"});
+            this.autogen.Location = new System.Drawing.Point(12, 423);
+            this.autogen.Name = "autogen";
+            this.autogen.Size = new System.Drawing.Size(448, 28);
+            this.autogen.TabIndex = 53;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(9, 400);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(230, 20);
+            this.label5.TabIndex = 52;
+            this.label5.Text = "Automatic Image Generation?";
+            // 
             // ImageGenOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(474, 409);
+            this.ClientSize = new System.Drawing.Size(474, 473);
+            this.Controls.Add(this.autogen);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.LocationWeight);
             this.Controls.Add(this.Resolution);
             this.Controls.Add(this.label4);
@@ -219,5 +250,7 @@
         private System.Windows.Forms.TextBox Resolution;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox LocationWeight;
+        private System.Windows.Forms.ComboBox autogen;
+        private System.Windows.Forms.Label label5;
     }
 }

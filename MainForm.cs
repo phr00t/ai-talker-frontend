@@ -29,6 +29,18 @@ namespace TalkerFrontend {
         public Dictionary<string, Control> AllControls;
         public static string OptionsFile => Path.Combine(Integration.BaseDirectory, "options.txt");
 
+        public int WordsPerRecall {
+            get {
+                string wprstr = AdvWordRecall.Text;
+                if (int.TryParse(wprstr, out int res)) {
+                    if (res < 8) return 8;
+                    if (res > 512) return 512;
+                    return res;
+                }
+                return 48;
+            }
+        }
+
         public void SetMonitor(string text) {
             int len = text.Length - partial_response.Text.Length;
             if (len > 0) {
@@ -70,6 +82,7 @@ namespace TalkerFrontend {
         public string UserName => MyName.Text;
         public string CharName => WhoList.Text;
         public bool UseRecommended => CBUseRecommended.Checked;
+        public bool FillContext => CBFillContext.Checked;
 
         private void Form1_Load(object sender, EventArgs e) {
             AllControls = new Dictionary<string, Control>();
@@ -111,12 +124,14 @@ namespace TalkerFrontend {
                     AdvWordRecall.Text = Integration.LoadTagged(optdata, "AdvWordRecall") ?? AdvWordRecall.Text;
                     AdvTopP.Text = Integration.LoadTagged(optdata, "AdvTopP") ?? AdvTopP.Text;
                     CBUseRecommended.Checked = (Integration.LoadTagged(optdata, "CBUseRecommended") ?? "true") == "true";
+                    CBFillContext.Checked = (Integration.LoadTagged(optdata, "CBFillContext") ?? "true") == "true";
                     Integration.CurrentImageOptions.KillKobold = (Integration.LoadTagged(optdata, "KillKobold") ?? "true") == "true";
                     Integration.CurrentImageOptions.LocationWeight = (Integration.LoadTagged(optdata, "LocationWeight") ?? "true") == "true";
                     Integration.CurrentImageOptions.Workflow = Integration.LoadTagged(optdata, "Workflow") ?? Integration.CurrentImageOptions.Workflow;
                     Integration.CurrentImageOptions.Model = Integration.LoadTagged(optdata, "Model") ?? Integration.CurrentImageOptions.Model;
                     Integration.CurrentImageOptions.Negative = Integration.LoadTagged(optdata, "Negative") ?? Integration.CurrentImageOptions.Negative;
                     Integration.CurrentImageOptions.Size = Integration.LoadTagged(optdata, "Size") ?? Integration.CurrentImageOptions.Size;
+                    Integration.CurrentImageOptions.AutogenMode = (Integration.AUTOGEN_IMAGE)int.Parse(Integration.LoadTagged(optdata, "AutogenMode") ?? ((int)Integration.CurrentImageOptions.AutogenMode).ToString());
                     Integration.CurrentImageOptions.Steps = int.Parse(Integration.LoadTagged(optdata, "Steps") ?? Integration.CurrentImageOptions.Steps.ToString());
                 } catch { }
             }
@@ -158,6 +173,7 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(AdvWordRecall.Text, "AdvWordRecall");
             optdata += Integration.StringTagged(AdvTopP.Text, "AdvTopP");
             optdata += Integration.StringTagged(CBUseRecommended.Checked ? "true" : "false", "CBUseRecommended");
+            optdata += Integration.StringTagged(CBFillContext.Checked ? "true" : "false", "CBFillContext");
             optdata += Integration.StringTagged(Integration.IMGConfig.KoboldCppVisualModel, "KoboldCppVisualModel");
             optdata += Integration.StringTagged(Integration.IMGConfig.ImagePrompt, "ImagePrompt");
             optdata += Integration.StringTagged(Integration.IMGConfig.UseExistingTextModel ? "true" : "false", "UseExistingTextModel");
@@ -168,6 +184,7 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(Integration.CurrentImageOptions.Workflow, "Workflow");
             optdata += Integration.StringTagged(Integration.CurrentImageOptions.Model, "Model");
             optdata += Integration.StringTagged(Integration.CurrentImageOptions.Size, "Size");
+            optdata += Integration.StringTagged(((int)Integration.CurrentImageOptions.AutogenMode).ToString(), "AutogenMode");
             optdata += Integration.StringTagged(Integration.CurrentImageOptions.Steps.ToString(), "Steps");
             File.WriteAllText(OptionsFile, optdata);
         }
@@ -248,17 +265,23 @@ namespace TalkerFrontend {
         private void WhoList_SelectedValueChanged(object sender, EventArgs e) {
             string sel_name = WhoList.SelectedItem?.ToString() ?? "";
             if (sel_name.Length > 0) {
+                string last_image = ChatManager.SelectedCharacter?.GetPicture ?? "";
                 ChatManager.SelectedCharacter = new Character(sel_name);
                 ChatManager.SelectedCharacter.AttemptLoad();
                 UpdateChatLog();
-                string fn = ChatManager.SelectedCharacter.GetPicture;
-                if (File.Exists(fn)) {
-                    try {
-                        WhoPicture.Image = Image.FromFile(ChatManager.SelectedCharacter.GetPicture);
-                    } catch { 
-                        WhoPicture = null;
-                    }
-                } else WhoPicture.Image = null;
+                // update picture?
+                if (WhoPicture.Image == null || CBGroupChat.Checked == false ||
+                    Integration.CurrentImageOptions.AutogenMode == Integration.AUTOGEN_IMAGE.MANUAL) {
+                    string fn = ChatManager.SelectedCharacter.GetPicture;
+                    if (File.Exists(fn)) {
+                        try {
+                            //WhoPicture.Image = Image.FromFile();
+                            WhoPicture.ImageLocation = ChatManager.SelectedCharacter.GetPicture;
+                        } catch {
+                            WhoPicture = null;
+                        }
+                    } else WhoPicture.Image = null;
+                }
             }
         }       
 
@@ -287,7 +310,7 @@ namespace TalkerFrontend {
         }
 
         private void SendButton_Click(object sender, EventArgs e) {
-            string err = ReadyOrNot(true, false, false);
+            string err = ReadyOrNot(false, false, false);
             if (err.Length == 0) {
                 ChatManager.YourPrompt = SendText.Text.Trim();
                 ChatManager.YourImageDescription = null;
@@ -311,8 +334,9 @@ namespace TalkerFrontend {
 
         private void button1_Click(object sender, EventArgs e) {
             if (Integration.VerifyComfyUI()) {
-                string err = ReadyOrNot(false, true, true);
+                string err = ReadyOrNot(true, true, true);
                 if (err.Length == 0) {
+                    Integration.MainForm.DisableAutoTalk();
                     ChatManager.GetPicture();
                 } else {
                     MessageBox.Show(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -390,6 +414,11 @@ namespace TalkerFrontend {
                 strings.Add(WhoList.Items[i].ToString());
             }
             if (strings.Contains(MyName.Text) == false) strings.Add(MyName.Text);
+            // add first names, if needed
+            for (int i = 0; i < strings.Count; i++) {
+                string[] ss = strings[i].Split(' ');
+                if (ss.Length > 1) strings.Add(ss[0]);
+            }
             return strings;
         }
 

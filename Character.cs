@@ -20,6 +20,15 @@ namespace TalkerFrontend {
             }
         }
 
+        public static string GetCharacterVisuals(string name) {
+            string filename = Path.Combine(Integration.CharDirectory, name.Trim() + ".txt");
+            if (!File.Exists(filename)) return null;
+            string data = File.ReadAllText(filename);
+            string visuals = Integration.LoadTagged(data, "VisualDescription");
+            if (visuals == null || visuals.Length <= 1) return null;
+            return visuals + " named ";
+        }
+
         public void AttemptLoad() {
             string filename = Path.Combine(Integration.CharDirectory, Name.Trim() + ".txt");
             if (File.Exists(filename)) {

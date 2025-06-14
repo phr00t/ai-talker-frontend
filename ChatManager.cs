@@ -31,17 +31,17 @@ namespace TalkerFrontend {
 
         public static string[] StopSequences(bool forPictures) {
             List<string> stoppers = new List<string>() { "You:", "User:", "Human:", "Timestamp:", "Assistant:", "AI:", "P.S. ", "</think>",
-                                                            "Your Response:", "User's Response:", "Human's Response:", "Assistant's Response:", "AI's Response:" };
+                                                         "Your Response:", "User's Response:", "Human's Response:", "Assistant's Response:", "AI's Response:" };
             var charnames = Integration.MainForm.GetCharacterList();
             for (int i=0; i<charnames.Count; i++) {
                 string stop_to_use = charnames[i] + ":";
                 if (stoppers.Contains(stop_to_use) == false) {
                     stoppers.Add(stop_to_use);
-                    stoppers.Add(charnames[i] + "'s Response:");
-                    stoppers.Add(charnames[i] + "'s response:");
+                    stoppers.Add(charnames[i] + "'s Responds:");
+                    stoppers.Add(charnames[i] + "'s responds:");
                     stoppers.Add(charnames[i] + "'s says:");
-                    stoppers.Add(charnames[i] + " Response:");
-                    stoppers.Add(charnames[i] + " response:");
+                    stoppers.Add(charnames[i] + " Responds:");
+                    stoppers.Add(charnames[i] + " responds:");
                     stoppers.Add(charnames[i] + " recalled the following that");
                 }
             }
@@ -60,30 +60,30 @@ namespace TalkerFrontend {
         public static string CurrentChatLog {
             get {
                 if (Integration.MainForm.GroupChatMode)
-                    return SelectedCharacter.ProcessTags(GroupChatLog);
+                    return SelectedCharacter?.ProcessTags(GroupChatLog) ?? "";
 
-                return SelectedCharacter.ProcessTags(SelectedCharacter.ChatLog);
+                return SelectedCharacter?.ProcessTags(SelectedCharacter.ChatLog) ?? "";
             }
             set {
                 if (Integration.MainForm.GroupChatMode)
                     GroupChatLog = value;
-                else
-                    SelectedCharacter.ChatLog = value;
+                else if (SelectedCharacter is Character c)
+                    c.ChatLog = value;
             }
         }
 
         public static int CurrentChatLogIndex {
             get {
                 if (Integration.MainForm.GroupChatMode)
-                    return SelectedCharacter.GroupChatLogMemoryPosition;
+                    return SelectedCharacter?.GroupChatLogMemoryPosition ?? 0;
 
-                return SelectedCharacter.ChatLogMemoryPosition;
+                return SelectedCharacter?.ChatLogMemoryPosition ?? 0;
             }
             set {
                 if (Integration.MainForm.GroupChatMode)
                     SelectedCharacter.GroupChatLogMemoryPosition = value;
-                else
-                    SelectedCharacter.ChatLogMemoryPosition = value;
+                else if (SelectedCharacter is Character c)
+                    c.ChatLogMemoryPosition = value;
             }
         }
 
@@ -153,10 +153,10 @@ namespace TalkerFrontend {
         }
 
         public static void GetPicture() {
+            Integration.autogen_timer = 50;
             PictureRequested = true;
             ChatRequested = false;
             ImagePromptRequested = false;
-            Integration.MainForm.DisableAutoTalk();
             Integration.MainForm.ClearMonitor();
             string prompt = PromptGenerator.GetPrompt("PICTURE", Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim(),
                                                                  Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim(),

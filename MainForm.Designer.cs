@@ -88,6 +88,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.CBFillContext = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -323,7 +324,7 @@
             // 
             // ReplayButton
             // 
-            this.ReplayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.ReplayButton.BackColor = System.Drawing.Color.Yellow;
             this.ReplayButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ReplayButton.ForeColor = System.Drawing.Color.Black;
             this.ReplayButton.Location = new System.Drawing.Point(1377, 178);
@@ -393,7 +394,7 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.Black;
             this.button1.Location = new System.Drawing.Point(12, 674);
@@ -516,6 +517,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.CBFillContext);
             this.tabPage2.Controls.Add(this.AdvWordRecall);
             this.tabPage2.Controls.Add(this.label14);
             this.tabPage2.Controls.Add(this.AdvExtraStops);
@@ -546,21 +548,22 @@
             this.AdvWordRecall.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvWordRecall.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvWordRecall.ForeColor = System.Drawing.Color.White;
-            this.AdvWordRecall.Location = new System.Drawing.Point(41, 512);
+            this.AdvWordRecall.Location = new System.Drawing.Point(299, 469);
             this.AdvWordRecall.Name = "AdvWordRecall";
-            this.AdvWordRecall.Size = new System.Drawing.Size(350, 27);
+            this.AdvWordRecall.Size = new System.Drawing.Size(80, 27);
             this.AdvWordRecall.TabIndex = 55;
-            this.AdvWordRecall.Text = "36";
+            this.AdvWordRecall.Text = "48";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(38, 471);
+            this.label14.Location = new System.Drawing.Point(21, 463);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(272, 60);
             this.label14.TabIndex = 54;
             this.label14.Text = "Words Per Memory Recall:\r\n(higher = more depth, less breadth)\r\n\r\n";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // AdvExtraStops
             // 
@@ -568,18 +571,18 @@
             this.AdvExtraStops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvExtraStops.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvExtraStops.ForeColor = System.Drawing.Color.White;
-            this.AdvExtraStops.Location = new System.Drawing.Point(41, 388);
+            this.AdvExtraStops.Location = new System.Drawing.Point(24, 385);
             this.AdvExtraStops.Multiline = true;
             this.AdvExtraStops.Name = "AdvExtraStops";
             this.AdvExtraStops.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.AdvExtraStops.Size = new System.Drawing.Size(408, 76);
+            this.AdvExtraStops.Size = new System.Drawing.Size(408, 67);
             this.AdvExtraStops.TabIndex = 53;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(41, 367);
+            this.label13.Location = new System.Drawing.Point(24, 364);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(355, 20);
             this.label13.TabIndex = 52;
@@ -591,7 +594,7 @@
             this.AdvMaxTokens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvMaxTokens.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvMaxTokens.ForeColor = System.Drawing.Color.White;
-            this.AdvMaxTokens.Location = new System.Drawing.Point(41, 338);
+            this.AdvMaxTokens.Location = new System.Drawing.Point(24, 335);
             this.AdvMaxTokens.Name = "AdvMaxTokens";
             this.AdvMaxTokens.Size = new System.Drawing.Size(350, 27);
             this.AdvMaxTokens.TabIndex = 51;
@@ -601,7 +604,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(38, 317);
+            this.label12.Location = new System.Drawing.Point(21, 314);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(178, 20);
             this.label12.TabIndex = 50;
@@ -613,7 +616,7 @@
             this.AdvDryBase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvDryBase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvDryBase.ForeColor = System.Drawing.Color.White;
-            this.AdvDryBase.Location = new System.Drawing.Point(41, 287);
+            this.AdvDryBase.Location = new System.Drawing.Point(24, 284);
             this.AdvDryBase.Name = "AdvDryBase";
             this.AdvDryBase.Size = new System.Drawing.Size(350, 27);
             this.AdvDryBase.TabIndex = 49;
@@ -623,7 +626,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(38, 266);
+            this.label11.Location = new System.Drawing.Point(21, 263);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(93, 20);
             this.label11.TabIndex = 48;
@@ -635,7 +638,7 @@
             this.AdvDryMult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvDryMult.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvDryMult.ForeColor = System.Drawing.Color.White;
-            this.AdvDryMult.Location = new System.Drawing.Point(41, 236);
+            this.AdvDryMult.Location = new System.Drawing.Point(24, 233);
             this.AdvDryMult.Name = "AdvDryMult";
             this.AdvDryMult.Size = new System.Drawing.Size(350, 27);
             this.AdvDryMult.TabIndex = 47;
@@ -645,7 +648,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(38, 215);
+            this.label9.Location = new System.Drawing.Point(21, 212);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(122, 20);
             this.label9.TabIndex = 46;
@@ -657,7 +660,7 @@
             this.AdvTopP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvTopP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvTopP.ForeColor = System.Drawing.Color.White;
-            this.AdvTopP.Location = new System.Drawing.Point(41, 188);
+            this.AdvTopP.Location = new System.Drawing.Point(24, 185);
             this.AdvTopP.Name = "AdvTopP";
             this.AdvTopP.Size = new System.Drawing.Size(350, 27);
             this.AdvTopP.TabIndex = 45;
@@ -667,7 +670,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(38, 167);
+            this.label10.Location = new System.Drawing.Point(21, 164);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 20);
             this.label10.TabIndex = 44;
@@ -679,7 +682,7 @@
             this.AdvMinP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvMinP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvMinP.ForeColor = System.Drawing.Color.White;
-            this.AdvMinP.Location = new System.Drawing.Point(41, 141);
+            this.AdvMinP.Location = new System.Drawing.Point(24, 138);
             this.AdvMinP.Name = "AdvMinP";
             this.AdvMinP.Size = new System.Drawing.Size(350, 27);
             this.AdvMinP.TabIndex = 43;
@@ -689,7 +692,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(38, 120);
+            this.label8.Location = new System.Drawing.Point(21, 117);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(57, 20);
             this.label8.TabIndex = 42;
@@ -701,7 +704,7 @@
             this.AdvTemperature.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvTemperature.ForeColor = System.Drawing.Color.White;
-            this.AdvTemperature.Location = new System.Drawing.Point(41, 93);
+            this.AdvTemperature.Location = new System.Drawing.Point(24, 90);
             this.AdvTemperature.Name = "AdvTemperature";
             this.AdvTemperature.Size = new System.Drawing.Size(350, 27);
             this.AdvTemperature.TabIndex = 41;
@@ -711,7 +714,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(38, 72);
+            this.label4.Location = new System.Drawing.Point(21, 69);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(109, 20);
             this.label4.TabIndex = 40;
@@ -782,7 +785,7 @@
             // 
             // button4
             // 
-            this.button4.BackColor = System.Drawing.Color.Cyan;
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.ForeColor = System.Drawing.Color.Black;
             this.button4.Location = new System.Drawing.Point(867, 610);
@@ -808,7 +811,7 @@
             // 
             // button6
             // 
-            this.button6.BackColor = System.Drawing.Color.Cyan;
+            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.Black;
             this.button6.Location = new System.Drawing.Point(12, 771);
@@ -828,6 +831,21 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            // 
+            // CBFillContext
+            // 
+            this.CBFillContext.AutoSize = true;
+            this.CBFillContext.BackColor = System.Drawing.Color.Black;
+            this.CBFillContext.Checked = true;
+            this.CBFillContext.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CBFillContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CBFillContext.Location = new System.Drawing.Point(24, 523);
+            this.CBFillContext.Name = "CBFillContext";
+            this.CBFillContext.Size = new System.Drawing.Size(418, 24);
+            this.CBFillContext.TabIndex = 56;
+            this.CBFillContext.Text = "Maximize Context Usage (slower, better responses)";
+            this.CBFillContext.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CBFillContext.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
@@ -962,6 +980,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.OpenFileDialog KoboldFinder;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.CheckBox CBFillContext;
     }
 }
 

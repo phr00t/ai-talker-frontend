@@ -47,6 +47,7 @@ namespace TalkerFrontend {
             Negative.Text = Integration.CurrentImageOptions.Negative;
             KillKobold.Checked = Integration.CurrentImageOptions.KillKobold;
             LocationWeight.Checked = Integration.CurrentImageOptions.LocationWeight;
+            autogen.SelectedIndex = (int)Integration.CurrentImageOptions.AutogenMode;
             Steps.Text = Integration.CurrentImageOptions.Steps.ToString();
             if (Workflow.Items.Contains(Integration.CurrentImageOptions.Workflow))
                 Workflow.SelectedItem = Integration.CurrentImageOptions.Workflow;
@@ -61,6 +62,7 @@ namespace TalkerFrontend {
                 Integration.CurrentImageOptions.Size = Resolution.Text;
                 Integration.CurrentImageOptions.Model = Model.SelectedItem?.ToString() ?? "";
                 Integration.CurrentImageOptions.Steps = int.Parse(Steps.Text);
+                Integration.CurrentImageOptions.AutogenMode = (Integration.AUTOGEN_IMAGE)autogen.SelectedIndex;
             } catch { }
             Integration.MainForm.SaveOptions();
         }
