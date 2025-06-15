@@ -221,7 +221,10 @@ namespace TalkerFrontend {
             CharMaker.instance.LoadOrCreateCharacter("Name" + (WhoList.Items.Count + 1).ToString());
         }
 
+        private volatile bool AlreadyRefreshingNames;
         public void RefreshNames(bool skipyou) {
+            if (AlreadyRefreshingNames) return; 
+            AlreadyRefreshingNames = true;
             string previous_you = MyName.Text.Trim();
             string previous_name = WhoList.Text.Trim();
             ChatManager.MeCharacter = null;
@@ -247,6 +250,7 @@ namespace TalkerFrontend {
                 }
             }
             WhoList_SelectedValueChanged(null, null);
+            AlreadyRefreshingNames = false;
         }
 
         private void EditWho_Click(object sender, EventArgs e) {

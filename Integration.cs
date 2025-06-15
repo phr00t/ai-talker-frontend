@@ -21,8 +21,9 @@ using System.Windows.Forms;
 using CSCore.CoreAudioAPI;
 
 /*
- * BUG: picture prompts sometimes are empty, need to encourage "this has been filled out already" stuff
- *   - also, why is the picture description coming "from" the character...?
+ * BUG: prompts do not consistently provide a single response from the desired character... sometimes it goes into "Story writing mode" or thinking...
+ *      need to modify prompt to be more explicit on what the response should be, without triggering thinking
+ * - add a feature to insert something into the prompt at the start (useful for /no_think qwen3 tag or a "bos" token)
  */
 
 namespace TalkerFrontend {

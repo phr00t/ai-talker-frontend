@@ -37,11 +37,11 @@ namespace TalkerFrontend {
                 string stop_to_use = charnames[i] + ":";
                 if (stoppers.Contains(stop_to_use) == false) {
                     stoppers.Add(stop_to_use);
-                    stoppers.Add(charnames[i] + "'s Responds:");
-                    stoppers.Add(charnames[i] + "'s responds:");
+                    stoppers.Add(charnames[i] + "'s Response:");
+                    stoppers.Add(charnames[i] + "'s response:");
                     stoppers.Add(charnames[i] + "'s says:");
-                    stoppers.Add(charnames[i] + " Responds:");
-                    stoppers.Add(charnames[i] + " responds:");
+                    stoppers.Add(charnames[i] + " Response:");
+                    stoppers.Add(charnames[i] + " response:");
                     stoppers.Add(charnames[i] + " recalled the following that");
                 }
             }
@@ -80,10 +80,12 @@ namespace TalkerFrontend {
                 return SelectedCharacter?.ChatLogMemoryPosition ?? 0;
             }
             set {
-                if (Integration.MainForm.GroupChatMode)
-                    SelectedCharacter.GroupChatLogMemoryPosition = value;
-                else if (SelectedCharacter is Character c)
-                    c.ChatLogMemoryPosition = value;
+                if (SelectedCharacter is Character c) {
+                    if (Integration.MainForm.GroupChatMode)
+                        c.GroupChatLogMemoryPosition = value;
+                    else
+                        c.ChatLogMemoryPosition = value;
+                }
             }
         }
 
@@ -105,7 +107,8 @@ namespace TalkerFrontend {
             Integration.MainForm.SelectRandomCharacter();
             PictureRequested = false;
             ChatRequested = true;
-            string prompt = PromptGenerator.GetContinuePrompt(SelectedCharacter, WhoTalking?.Name ?? "", Integration.MainForm.GetControl<TextBox>("partial_response").Text);
+            string prompt = PromptGenerator.GetMasterPrompt(SelectedCharacter, Integration.MainForm.GetControl<TextBox>("partial_response").Text, WhoTalking?.Name ?? "",
+                                                            WhoTalking?.PersistentDescription ?? "", out _);
             WhoTalking = SelectedCharacter;
             Integration.MainForm.ClearMonitor();
             Integration.SendTextPrompt(prompt, null, false, false, false, StopSequences(false), BannedTalkTokens);
@@ -136,8 +139,8 @@ namespace TalkerFrontend {
             } else {
                 string MyName = MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
                 string MyDescription = Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
-                if (MeCharacter is Character cc) MyDescription += "[" + MyName + "'s Profile: " + cc.ProcessTags(cc.PersistentDescription) + "]";
-                string prompt = PromptGenerator.GetPrompt(request, MyName, MyDescription, SelectedCharacter, out string append_log, image_description);
+                if (MeCharacter is Character cc) MyDescription += cc.ProcessTags(cc.PersistentDescription);
+                string prompt = PromptGenerator.GetMasterPrompt(SelectedCharacter, request, MyName, MyDescription, out string append_log, image_description);
                 CurrentChatLog += "\n\n" + append_log;
                 Integration.MainForm.UpdateChatLog();
                 PictureRequested = false;
@@ -158,9 +161,7 @@ namespace TalkerFrontend {
             ChatRequested = false;
             ImagePromptRequested = false;
             Integration.MainForm.ClearMonitor();
-            string prompt = PromptGenerator.GetPrompt("PICTURE", Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim(),
-                                                                 Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim(),
-                                                                 SelectedCharacter, out string append_log);
+            string prompt = PromptGenerator.GetPicturePrompt(SelectedCharacter, Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim());
             Integration.MainForm.SetStatus("Picture Description Generate");
             Integration.SendTextPrompt(prompt, 512, true, false, false, StopSequences(true), BannedTalkTokens);
         }
