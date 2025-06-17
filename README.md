@@ -18,13 +18,13 @@ I loved KoboldCpp so much, I decided to make a Windows .NET frontend for it.
 13. Includes "jailbreaking" prompt language
 14. Takes up less memory/VRAM than opening up a whole web browser
 
+![image](https://github.com/user-attachments/assets/bc27383c-5194-4cdf-bd13-dad8dae1be3e)
+
 ![image](https://github.com/user-attachments/assets/8412a9b8-ef85-47ca-b7b5-bca843708262)
 
 ![image](https://github.com/user-attachments/assets/4e100e89-0646-450e-994e-40fe68c15af9)
 
 ![image](https://github.com/user-attachments/assets/d5ecaef5-807f-443b-a769-5e7aec32fdc7)
-
-![image](https://github.com/user-attachments/assets/bc27383c-5194-4cdf-bd13-dad8dae1be3e)
 
 CC BY-NC-SA 4.0
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
