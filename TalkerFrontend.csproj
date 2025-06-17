@@ -187,10 +187,6 @@
     <Compile Include="PromptGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringProcessor.cs" />
-    <Compile Include="WebCamDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WebCamDialog.Designer.cs" />
     <EmbeddedResource Include="CharMaker.resx">
       <DependentUpon>CharMaker.cs</DependentUpon>
     </EmbeddedResource>
@@ -212,7 +208,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="WebCamDialog.resx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
