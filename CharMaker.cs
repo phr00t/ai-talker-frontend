@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using XmpCore.Impl;
 
 namespace TalkerFrontend {
     public partial class CharMaker : Form {
@@ -24,20 +25,24 @@ namespace TalkerFrontend {
 
         public Character LoadedCharacter;
 
-        public void LoadOrCreateCharacter(string name) {
-            if (name == null || name == "") name = "Assistant";
-            LoadedCharacter = new Character(name);
-            LoadedCharacter.AttemptLoad();
-            CharName.Text = name;
+        public void LoadCharacter(Character c) {
+            LoadedCharacter = c;
+            CharName.Text = c.Name;
             ImageFile.Text = LoadedCharacter.PictureFile;
-            VisualDescription.Text = LoadedCharacter.VisualDescription;
-            PersistentDesc.Text = LoadedCharacter.PersistentDescription;
-            LongTermMemory.Text = LoadedCharacter.LongTermMemory_Raw;
+            VisualDescription.Text = LoadedCharacter.VisualDescription.Replace("\n", "\r\n");
+            PersistentDesc.Text = LoadedCharacter.PersistentDescription.Replace("\n", "\r\n");
+            LongTermMemory.Text = LoadedCharacter.LongTermMemory_Raw.Replace("\n", "\r\n");
             VoiceText.Text = LoadedCharacter.VoiceText;
             VoiceWAV.Text = LoadedCharacter.VoiceWAV;
             voiceDesc.Text = LoadedCharacter.VoiceDescription;
             visual_style.Text = LoadedCharacter.ImageStyle;
             charchatlog.Text = LoadedCharacter.ChatLog?.Replace("\n", "\r\n") ?? "";
+        }
+
+        public void LoadOrCreateCharacter(string name) {
+            if (name == null || name == "") name = "Assistant";
+            LoadedCharacter = Character.EfficientLoadCharacter(LoadedCharacter, name, false);
+            LoadCharacter(LoadedCharacter);
         }
 
         private void CharMaker_Load(object sender, EventArgs e) {
@@ -47,15 +52,15 @@ namespace TalkerFrontend {
         private void SaveButton_Click(object sender, EventArgs e) {
             if (CharName.Text.Length > 0 && LoadedCharacter != null) {
                 LoadedCharacter.Name = CharName.Text;
-                LoadedCharacter.VisualDescription = VisualDescription.Text;
-                LoadedCharacter.PersistentDescription = PersistentDesc.Text;
+                LoadedCharacter.VisualDescription = VisualDescription.Text.Replace("\r\n", "\n");
+                LoadedCharacter.PersistentDescription = PersistentDesc.Text.Replace("\r\n", "\n");
                 LoadedCharacter.PictureFile = ImageFile.Text;
-                LoadedCharacter.LongTermMemory_Raw = LongTermMemory.Text;
+                LoadedCharacter.LongTermMemory_Raw = LongTermMemory.Text.Replace("\r\n", "\n");
                 LoadedCharacter.VoiceWAV = VoiceWAV.Text;
                 LoadedCharacter.VoiceText = VoiceText.Text;
                 LoadedCharacter.VoiceDescription = voiceDesc.Text;
                 LoadedCharacter.ImageStyle = visual_style.Text;
-                LoadedCharacter.ChatLog = charchatlog.Text;
+                LoadedCharacter.ChatLog = charchatlog.Text.Replace("\r\n", "\n");
                 LoadedCharacter.Save();
                 Integration.MainForm.RefreshNames(false);
             }

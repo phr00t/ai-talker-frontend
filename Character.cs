@@ -41,14 +41,30 @@ namespace TalkerFrontend {
                 PersistentDescription = Integration.LoadTagged(data, "PersistentDesc") ?? "";
                 LongTermMemory_Raw = Integration.LoadTagged(data, "LongTermMemory") ?? "";
                 ChatLog = Integration.LoadTagged(data, "ChatLog") ?? "";
+                LastLongTermLogUsed = Integration.LoadTagged(data, "LastLongTermLogUsed") ?? "";
                 VoiceDescription = Integration.LoadTagged(data, "VoiceDescription") ?? "";
                 ImageStyle = Integration.LoadTagged(data, "ImageStyle") ?? "";
-                UpdateLongTerm();
             }
         }
 
+        public static Character EfficientLoadCharacter(Character existing_loaded, string name, bool force) {
+            Character c = new Character(name);
+            c.AttemptLoad();
+            if (existing_loaded != null && name == existing_loaded.Name)
+                c.LongTermMemory = existing_loaded.LongTermMemory;
+            c.UpdateLongTerm();
+            return c;
+        }
+
         public void UpdateLongTerm() {
-            LongTermMemory = StringProcessor.GenerateLongTerm((Integration.MainForm.GroupChatMode ? ProcessTags(ChatManager.GroupChatLog) + " " : "") + ProcessTags(LongTermMemory_Raw) + " " + ProcessTags(ChatLog));
+            string long_term_string = (Integration.MainForm.GroupChatMode ? ProcessTags(ChatManager.GroupChatLog) + " " : "") + ProcessTags(LongTermMemory_Raw) + " " + ProcessTags(ChatLog);
+            if (long_term_string.Length != LastLongTermLogUsed.Length ||
+                long_term_string != LastLongTermLogUsed ||
+                LongTermMemory == null) {
+                LongTermMemory = StringProcessor.GenerateLongTerm(long_term_string);
+                LastLongTermLogUsed = long_term_string;
+                Save();
+            }
         }
 
         public Character(string name) {
@@ -68,6 +84,7 @@ namespace TalkerFrontend {
             data += Integration.StringTagged(PersistentDescription, "PersistentDesc");
             data += Integration.StringTagged(LongTermMemory_Raw, "LongTermMemory");
             data += Integration.StringTagged(ChatLog, "ChatLog");
+            data += Integration.StringTagged(LastLongTermLogUsed, "LastLongTermLogUsed");
             data += Integration.StringTagged(ImageStyle, "ImageStyle");
             data += Integration.StringTagged(VoiceDescription, "VoiceDescription");
             Directory.CreateDirectory(Integration.CharDirectory);
@@ -118,7 +135,7 @@ namespace TalkerFrontend {
         }
 
         public string PictureFile, VisualDescription, VoiceWAV, VoiceText;
-        public string Name, ChatLog, LongTermMemory_Raw;
+        public string Name, ChatLog, LongTermMemory_Raw, LastLongTermLogUsed;
         public string PersistentDescription, VoiceDescription, ImageStyle;
         public int ChatLogMemoryPosition, GroupChatLogMemoryPosition;
         public ConcurrentDictionary<string, List<string>> LongTermMemory;
