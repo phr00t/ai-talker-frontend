@@ -3,7 +3,7 @@ I loved KoboldCpp so much, I decided to make a Windows .NET frontend for it.
 ![image](https://github.com/user-attachments/assets/fd50a646-4d55-44ad-aed3-0cd73bb31b06)
 
 1. You can import Character Card PNGs, Kobold stories and character JSON files (via Add/Edit Char)
-2. Connects to ComfyUI to handle many important features that you can use custom workflows for (voice cloning, image generation, voice generation, speech regognition)
+2. Connects to ComfyUI to handle many important features that you can use custom workflows for (voice cloning, image generation, voice generation, speech recognition)
 3. Comes with some ComfyUI workflows: Chroma and SDXL image generation, Whisper speech recognition, Parler TTS for voice generation, F5-TTS voice cloning and VRAM freeing
 4. Simple interface for taking and sending pictures (webcam, pasting or loading from file)
 5. Handles opening and closing KoboldCpp to free up VRAM for image generation (it set in options, useful for bigger models like Chroma)
