@@ -1,4 +1,4 @@
-I loved KoboldCpp so much, I decided to make a Windows .NET frontend for it.
+I loved KoboldCpp so much, I decided to make an "easy" Windows .NET frontend for it.
 
 ![image](https://github.com/user-attachments/assets/fd50a646-4d55-44ad-aed3-0cd73bb31b06)
 
