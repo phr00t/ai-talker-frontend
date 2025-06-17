@@ -26,6 +26,7 @@ I loved KoboldCpp so much, I decided to make a Windows .NET frontend for it.
 
 ![image](https://github.com/user-attachments/assets/d5ecaef5-807f-443b-a769-5e7aec32fdc7)
 
+Phr00t's Software
 CC BY-NC-SA 4.0
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
 https://creativecommons.org/licenses/by-nc-sa/4.0/
