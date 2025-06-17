@@ -61,6 +61,7 @@
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.CBFillContext = new System.Windows.Forms.CheckBox();
             this.AdvWordRecall = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.AdvExtraStops = new System.Windows.Forms.TextBox();
@@ -88,7 +89,6 @@
             this.button6 = new System.Windows.Forms.Button();
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.CBFillContext = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -542,6 +542,21 @@
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
             // 
+            // CBFillContext
+            // 
+            this.CBFillContext.AutoSize = true;
+            this.CBFillContext.BackColor = System.Drawing.Color.Black;
+            this.CBFillContext.Checked = true;
+            this.CBFillContext.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CBFillContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CBFillContext.Location = new System.Drawing.Point(24, 523);
+            this.CBFillContext.Name = "CBFillContext";
+            this.CBFillContext.Size = new System.Drawing.Size(418, 24);
+            this.CBFillContext.TabIndex = 56;
+            this.CBFillContext.Text = "Maximize Context Usage (slower, better responses)";
+            this.CBFillContext.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CBFillContext.UseVisualStyleBackColor = false;
+            // 
             // AdvWordRecall
             // 
             this.AdvWordRecall.BackColor = System.Drawing.Color.Navy;
@@ -832,21 +847,6 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
-            // CBFillContext
-            // 
-            this.CBFillContext.AutoSize = true;
-            this.CBFillContext.BackColor = System.Drawing.Color.Black;
-            this.CBFillContext.Checked = true;
-            this.CBFillContext.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CBFillContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CBFillContext.Location = new System.Drawing.Point(24, 523);
-            this.CBFillContext.Name = "CBFillContext";
-            this.CBFillContext.Size = new System.Drawing.Size(418, 24);
-            this.CBFillContext.TabIndex = 56;
-            this.CBFillContext.Text = "Maximize Context Usage (slower, better responses)";
-            this.CBFillContext.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.CBFillContext.UseVisualStyleBackColor = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(134F, 134F);
@@ -897,7 +897,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend";
+            this.Text = "Phr00t\'s AI Talker Frontend v1.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
