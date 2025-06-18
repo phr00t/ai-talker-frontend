@@ -29,9 +29,9 @@ namespace TalkerFrontend {
             LoadedCharacter = c;
             CharName.Text = c.Name;
             ImageFile.Text = LoadedCharacter.PictureFile;
-            VisualDescription.Text = LoadedCharacter.VisualDescription.Replace("\n", "\r\n");
-            PersistentDesc.Text = LoadedCharacter.PersistentDescription.Replace("\n", "\r\n");
-            LongTermMemory.Text = LoadedCharacter.LongTermMemory_Raw.Replace("\n", "\r\n");
+            VisualDescription.Text = LoadedCharacter.VisualDescription?.Replace("\n", "\r\n") ?? "";
+            PersistentDesc.Text = LoadedCharacter.PersistentDescription?.Replace("\n", "\r\n") ?? "";
+            LongTermMemory.Text = LoadedCharacter.LongTermMemory_Raw?.Replace("\n", "\r\n") ?? "";
             VoiceText.Text = LoadedCharacter.VoiceText;
             VoiceWAV.Text = LoadedCharacter.VoiceWAV;
             voiceDesc.Text = LoadedCharacter.VoiceDescription;

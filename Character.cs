@@ -58,7 +58,7 @@ namespace TalkerFrontend {
 
         public void UpdateLongTerm() {
             string long_term_string = (Integration.MainForm.GroupChatMode ? ProcessTags(ChatManager.GroupChatLog) + " " : "") + ProcessTags(LongTermMemory_Raw) + " " + ProcessTags(ChatLog);
-            if (long_term_string.Length != LastLongTermLogUsed.Length ||
+            if (long_term_string.Length != (LastLongTermLogUsed?.Length ?? -1) ||
                 long_term_string != LastLongTermLogUsed ||
                 LongTermMemory == null) {
                 LongTermMemory = StringProcessor.GenerateLongTerm(long_term_string);
@@ -141,6 +141,7 @@ namespace TalkerFrontend {
         public ConcurrentDictionary<string, List<string>> LongTermMemory;
 
         public string ProcessTags(string text) {
+            if (text == null) return "";
             if (text.Length > 36000) return text; // if we have tons of text, this probably is not tagged and a data dump
             return text.Replace("{{user}}", Integration.MainForm.UserName)
                        .Replace("{{User}}", Integration.MainForm.UserName)
