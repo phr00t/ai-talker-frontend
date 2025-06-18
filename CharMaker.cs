@@ -39,8 +39,7 @@ namespace TalkerFrontend {
             charchatlog.Text = LoadedCharacter.ChatLog?.Replace("\n", "\r\n") ?? "";
         }
 
-        public void LoadOrCreateCharacter(string name) {
-            if (name == null || name == "") name = "Assistant";
+        public void LoadOrCreateCharacter(string name = "") {
             LoadedCharacter = Character.EfficientLoadCharacter(LoadedCharacter, name, false);
             LoadCharacter(LoadedCharacter);
         }
@@ -50,7 +49,7 @@ namespace TalkerFrontend {
         }
 
         private void SaveButton_Click(object sender, EventArgs e) {
-            if (CharName.Text.Length > 0 && LoadedCharacter != null) {
+            if (CharName.Text.Trim().Length > 0 && LoadedCharacter != null) {
                 LoadedCharacter.Name = CharName.Text;
                 LoadedCharacter.VisualDescription = VisualDescription.Text.Replace("\r\n", "\n");
                 LoadedCharacter.PersistentDescription = PersistentDesc.Text.Replace("\r\n", "\n");
@@ -63,8 +62,10 @@ namespace TalkerFrontend {
                 LoadedCharacter.ChatLog = charchatlog.Text.Replace("\r\n", "\n");
                 LoadedCharacter.Save();
                 Integration.MainForm.RefreshNames(false);
+                Close();
+            } else {
+                MessageBox.Show("No name supplied for character, can't save...", "No Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            Close();
         }
 
         private void raw_data_Click(object sender, EventArgs e) {

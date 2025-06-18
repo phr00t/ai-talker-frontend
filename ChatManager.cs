@@ -104,7 +104,7 @@ namespace TalkerFrontend {
         }
 
         public static void SendContinue() {
-            Integration.MainForm.SelectRandomCharacter();
+            Integration.MainForm.SelectNextCharacter();
             PictureRequested = false;
             ChatRequested = true;
             string prompt = PromptGenerator.GetMasterPrompt(SelectedCharacter, Integration.MainForm.GetControl<TextBox>("partial_response").Text, WhoTalking?.Name ?? "",

@@ -49,10 +49,12 @@ namespace TalkerFrontend {
 
         public static Character EfficientLoadCharacter(Character existing_loaded, string name, bool force) {
             Character c = new Character(name);
-            c.AttemptLoad();
-            if (existing_loaded != null && name == existing_loaded.Name)
-                c.LongTermMemory = existing_loaded.LongTermMemory;
-            c.UpdateLongTerm();
+            if (name.Length > 0) {
+                c.AttemptLoad();
+                if (existing_loaded != null && name == existing_loaded.Name)
+                    c.LongTermMemory = existing_loaded.LongTermMemory;
+                c.UpdateLongTerm();
+            }
             return c;
         }
 
@@ -87,7 +89,6 @@ namespace TalkerFrontend {
             data += Integration.StringTagged(LastLongTermLogUsed, "LastLongTermLogUsed");
             data += Integration.StringTagged(ImageStyle, "ImageStyle");
             data += Integration.StringTagged(VoiceDescription, "VoiceDescription");
-            Directory.CreateDirectory(Integration.CharDirectory);
             string fn = Path.Combine(Integration.CharDirectory, Name.Trim() + ".txt");
             File.WriteAllText(fn, data);
         }

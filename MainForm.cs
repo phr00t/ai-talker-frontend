@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Speech.Recognition;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,15 +61,15 @@ namespace TalkerFrontend {
             ChatManager.UpdateLiveVoice(text, true);    
         }
 
-        public void SelectRandomCharacter() {
+        public void SelectNextCharacter() {
             int char_count = WhoList.Items.Count;
             if (char_count > 1) {
-                int cur_option = WhoList.SelectedIndex;
-                int new_option = -1;
-                do {
-                    new_option = Random.Next(0, char_count);
-                } while (new_option == cur_option);
-                WhoList.SelectedIndex = new_option;
+                int next_option = (WhoList.SelectedIndex + 1) % char_count;
+                if (next_option < 0)
+                    next_option = char_count - 1;
+                if (next_option > char_count - 1)
+                    next_option = 0;
+                WhoList.SelectedIndex = next_option;
             }
         }
 
@@ -150,11 +151,21 @@ namespace TalkerFrontend {
                 SaveOptions();
             }
 
+            Directory.CreateDirectory(Integration.CharDirectory);
+            CharWatcher.Path = Integration.CharDirectory;
+            CharWatcher.Deleted += CharWatcher_Created;
+            CharWatcher.Created += CharWatcher_Created;
+            CharWatcher.Renamed += CharWatcher_Created;
+
             // need to pick 
             Enabled = true;
             Integration.ReadKoboldConfig(pickKoboldConfig.FileName);
             Focus();
             Activate();
+        }
+
+        private void CharWatcher_Created(object sender, FileSystemEventArgs e) {
+            RefreshNames(false);
         }
 
         public string GetKoboldConfig => pickKoboldConfig.FileName ?? "";
@@ -198,6 +209,14 @@ namespace TalkerFrontend {
 
         private void MainTimer_Tick(object sender, EventArgs e) {
             Integration.Update();
+            if (CBAutoTalk.Checked) {
+                // check for autotalk error
+                string err = ReadyOrNot(false, true, false);
+                if (err != "") {
+                    DisableAutoTalk();
+                    MessageBox.Show("Cannot auto trigger talking:\n\n" + err, "Auto Trigger Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
             if (ReadyOrNot(true, true, true) != "") return;
             if (ChatManager.YourPrompt != null && ChatManager.YourPrompt.Length > 0) {
                 SetStatus("Processing Your Prompt");
@@ -218,7 +237,7 @@ namespace TalkerFrontend {
         private void AddWho_Click(object sender, EventArgs e) {
             CharMaker.instance = new CharMaker();
             CharMaker.instance.Show(this);
-            CharMaker.instance.LoadOrCreateCharacter("Name" + (WhoList.Items.Count + 1).ToString());
+            CharMaker.instance.LoadOrCreateCharacter();
         }
 
         private volatile bool AlreadyRefreshingNames;

@@ -89,6 +89,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.CharWatcher = new System.IO.FileSystemWatcher();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -96,6 +97,7 @@
             this.tabPage1.SuspendLayout();
             this.prtab.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CharWatcher)).BeginInit();
             this.SuspendLayout();
             // 
             // WhoPicture
@@ -847,6 +849,12 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
+            // CharWatcher
+            // 
+            this.CharWatcher.EnableRaisingEvents = true;
+            this.CharWatcher.Filter = "*.txt";
+            this.CharWatcher.SynchronizingObject = this;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(134F, 134F);
@@ -910,6 +918,7 @@
             this.prtab.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CharWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -981,6 +990,7 @@
         private System.Windows.Forms.OpenFileDialog KoboldFinder;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox CBFillContext;
+        private System.IO.FileSystemWatcher CharWatcher;
     }
 }
 

@@ -21,10 +21,6 @@ using System.Windows.Forms;
 using CSCore.CoreAudioAPI;
 
 /*
- * - add a "record" feature that records a conversation that can create a video to replay it?
- *   - save images generated
- *   - audio generated
- *   - might be interesting to watch later?
  */
 
 namespace TalkerFrontend {
