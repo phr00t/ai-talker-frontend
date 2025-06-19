@@ -82,7 +82,7 @@ namespace TalkerFrontend {
             if (chat_content.Length == 0)
                 chat_content = "(beginning of situation)\n\n";
             else
-                chat_content = "Situation/Interaction/Activity History:\n" + chat_content + "\n(end history)\n\n";
+                chat_content = "Situation/Interaction/Activity History:\n" + chat_content + "\n\n";
 
             // memory recall info
             string recall_info = "";
