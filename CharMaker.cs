@@ -117,7 +117,11 @@ namespace TalkerFrontend {
             } else {
                 // typical format
                 name = CharName.Text = SafeTryGet(properties, "name");
-                PersistentDesc.Text = SafeTryGet(properties, "description");
+                string personality = SafeTryGet(properties, "personality");
+                if (personality.Length == 0)
+                    PersistentDesc.Text = SafeTryGet(properties, "description");
+                else
+                    PersistentDesc.Text = SafeTryGet(properties, "description") + "\n\n" + personality;
                 charchatlog.Text = SafeTryGet(properties, "first_mes");
                 LongTermMemory.Text = SafeTryGet(properties, "scenario");
             }
