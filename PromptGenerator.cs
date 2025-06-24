@@ -73,7 +73,7 @@ namespace TalkerFrontend {
             // chat chat should be saved as long term memory in chunks
             if (chat_log_cut > 0) {
                 int memory_to_store = chat_log_cut - ChatManager.CurrentChatLogIndex;
-                if (memory_to_store > Integration.MainForm.WordsPerRecall * 2) {
+                if (memory_to_store > Integration.MainForm.WordsPerRecall * 4) {
                     string cut_chat = chat_log_source.Substring(ChatManager.CurrentChatLogIndex, memory_to_store);
                     ChatManager.CurrentChatLogIndex = chat_log_cut;
                     StringProcessor.CombineMemories(StringProcessor.GenerateLongTerm(cut_chat), who.LongTermMemory);
