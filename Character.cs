@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
+using static TalkerFrontend.StringProcessor;
 
 namespace TalkerFrontend {
     public class Character {
@@ -139,7 +140,7 @@ namespace TalkerFrontend {
         public string Name, ChatLog, LongTermMemory_Raw, LastLongTermLogUsed;
         public string PersistentDescription, VoiceDescription, ImageStyle;
         public int ChatLogMemoryPosition, GroupChatLogMemoryPosition;
-        public ConcurrentDictionary<string, List<string>> LongTermMemory;
+        public ConcurrentDictionary<string, List<StringPosition>> LongTermMemory;
 
         public string ProcessTags(string text) {
             if (text == null) return "";

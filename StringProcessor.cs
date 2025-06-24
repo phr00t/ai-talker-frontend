@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 namespace TalkerFrontend {
     public class StringProcessor {
 
-        public static List<string> GetMostUniqueStrings(List<string> stringList, int n) {
-            if (stringList == null || stringList.Count == 0 || n <= 0) {
+        public static List<string> GetMostUniqueStrings(List<string> stringList) {
+            if (stringList == null || stringList.Count == 0) {
                 return new List<string>();
             }
+
+            int n = stringList.Count;
 
             // Get distinct strings to work with, as duplicates don't affect uniqueness score.
             var uniqueStrings = stringList.Distinct().ToList();
@@ -145,12 +147,12 @@ namespace TalkerFrontend {
             "well"
         };
 
-        public static void CombineMemories(ConcurrentDictionary<string, List<string>> newstuff, ConcurrentDictionary<string, List<string>> existing) {
+        public static void CombineMemories(ConcurrentDictionary<string, List<StringPosition>> newstuff, ConcurrentDictionary<string, List<StringPosition>> existing) {
             Parallel.ForEach(newstuff, (pair) => {
                 if (existing.TryAdd(pair.Key, pair.Value) == false) {
                     // need to merge info
-                    List<string> newlist = pair.Value;
-                    List<string> existing_list = existing[pair.Key];
+                    List<StringPosition> newlist = pair.Value;
+                    List<StringPosition> existing_list = existing[pair.Key];
                     for (int m = 0; m < newlist.Count; m++) {
                         for (int n = 0; n < existing_list.Count; n++) {
                             if (existing_list[n].Contains(newlist[m]))
@@ -204,29 +206,39 @@ namespace TalkerFrontend {
             return capitalWordsBuilder.ToString();
         }
 
-        public static List<string> GetInfo(string from, string request, ConcurrentDictionary<string, List<string>> memory, int max_chars, int fill_level = 0) {
+        public static List<string> GetInfo(string from, string request, ConcurrentDictionary<string, List<StringPosition>> memory, int max_chars, int fill_level = 0, HashSet<string> words_processed = null) {
             List<string> results = new List<string>();
-            int overgather = max_chars * 4; // lets collect more information, then return the top unique results
             request = from + " " + request;
             string[] word_split = request.Split(new char[] { ' ', '.', '?', '!', ':', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-            HashSet<string> words_processed = new HashSet<string>();
+            if (words_processed == null) words_processed = new HashSet<string>();
+            List<List<StringPosition>> possible_recalls = new List<List<StringPosition>>();
+            int total_recalls = 0;
             for (int i = 0; i < word_split.Length; i++) {
                 string word = GetUsefulKeyword(RemovePunctuation(word_split[i]));
                 if (word == null) continue;
                 if (words_processed.Contains(word)) continue;
                 words_processed.Add(word);
                 if (memory.TryGetValue(word, out var known)) {
-                    for (int j = known.Count - 1; j >= 0; j--) {
-                        string pull_info = known[j];
-                        if (overgather >= pull_info.Length) {
-                            overgather -= pull_info.Length;
-                            results.Add(pull_info);
-                        } else continue;
-                    }
+                    possible_recalls.Add(known);
+                    total_recalls += known.Count;
                 }
             }
+            // ok, lets recall an evenly distributed set of the latest memories
             int WordsPerMemory = Integration.MainForm.WordsPerRecall;
-            var most_unique = GetMostUniqueStrings(results, Math.Min(max_chars / WordsPerMemory, results.Count));
+            int recalls_to_grab = Math.Min(total_recalls, max_chars / WordsPerMemory);
+            int looking_at_list = 0;
+            while (recalls_to_grab > 0) {
+                List<StringPosition> recallfrom = possible_recalls[looking_at_list];
+                int last_index = recallfrom.Count - 1;
+                if (last_index >= 0) {
+                    results.Add(recallfrom[last_index].Text);
+                    recallfrom.RemoveAt(last_index);
+                    recalls_to_grab--;
+                }
+                looking_at_list = (looking_at_list + 1) % possible_recalls.Count;
+            }
+            // now lets add in the most unique memories, up to our limit
+            var most_unique = GetMostUniqueStrings(results);
             List<string> final_results = new List<string>();
             int k = 0;
             while (k < most_unique.Count && max_chars > 0) {
@@ -239,10 +251,10 @@ namespace TalkerFrontend {
                 if (max_chars > WordsPerMemory * 10 && ChatManager.SelectedCharacter is Character c) {
                     switch (fill_level) {
                         case 0:
-                            final_results.InsertRange(0, GetInfo(from, GetCapitalWords(c.PersistentDescription), memory, max_chars, 1));
+                            final_results.InsertRange(0, GetInfo(from, GetCapitalWords(c.PersistentDescription), memory, max_chars, 1, words_processed));
                             break;
                         case 1:
-                            final_results.InsertRange(0, GetInfo(from, GetCapitalWords(c.PersistentDescription, true), memory, max_chars, 2));
+                            final_results.InsertRange(0, GetInfo(from, GetCapitalWords(c.PersistentDescription, true), memory, max_chars, 2, words_processed));
                             break;
                     }
                 }
@@ -264,34 +276,61 @@ namespace TalkerFrontend {
             public int Index;
         }
 
-        public static ConcurrentDictionary<string, List<string>> GenerateLongTerm(string lotsOfInfo) {
-            ConcurrentDictionary<string, List<string>> data = new ConcurrentDictionary<string, List<string>>();
+        public class StringPosition : IComparable<StringPosition> {
+            public int Position;
+            public string Text;
+
+            public bool Contains(StringPosition sp) {
+                return sp.Text.Contains(Text);
+            }
+
+            public override string ToString() {
+                return Text;
+            }
+
+            public override bool Equals(object obj) {
+                return obj is StringPosition sp && sp.Text.Equals(Text);
+            }
+
+            public override int GetHashCode() {
+                return Text.GetHashCode();
+            }
+
+            public int CompareTo(StringPosition other) {
+                return other.Position.CompareTo(other.Position);
+            }
+        }
+
+        public static ConcurrentDictionary<string, List<StringPosition>> GenerateLongTerm(string lotsOfInfo) {
+            ConcurrentDictionary<string, List<StringPosition>> data = new ConcurrentDictionary<string, List<StringPosition>>();
             var matches = Regex.Matches(lotsOfInfo, @"\b\w+\b(?!: )");
             int WordsPerMemory = Integration.MainForm.WordsPerRecall;
-            // Step 2: Process the words in parallel.
-            // Parallel.ForEach will efficiently distribute the calls to wordProcessor
-            // across multiple threads.
             Parallel.ForEach(matches.Cast<Match>(), (wordInfo) =>
             {
                 string word_lower = GetUsefulKeyword(wordInfo.Value);
                 int search_pos = wordInfo.Index;
                 if (word_lower != null) {
                     string to_add = ReturnAround(lotsOfInfo, search_pos, WordsPerMemory);
-                    List<string> info = new List<string>() { to_add };
+                    StringPosition to_add_sp = new StringPosition() { Position = search_pos, Text = to_add };
+                    List<StringPosition> info = new List<StringPosition>() { to_add_sp };
                     if (data.TryAdd(word_lower, info) == false) {
-                        List<string> existing = data[word_lower];
+                        List<StringPosition> existing = data[word_lower];
                         lock (existing) {
                             bool already_got_it = false;
                             for (int m = 0; m < existing.Count; m++) {
-                                if (existing[m].Contains(to_add)) {
+                                if (existing[m].Contains(to_add_sp)) {
                                     already_got_it = true;
                                     break;
                                 }
                             }
-                            if (already_got_it == false) existing.Add(to_add);
+                            if (already_got_it == false) existing.Add(to_add_sp);
                         }
                     }
                 }
+            });
+            // sort by order
+            Parallel.ForEach(data.Values, (stringposs) => {
+                stringposs.Sort();
             });
             return data;
         }
