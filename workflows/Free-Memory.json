@@ -18,19 +18,20 @@
     "inputs": {
       "value": 0.5000000000000001
     },
-    "class_type": "Float-🔬",
+    "class_type": "PrimitiveFloat",
     "_meta": {
       "title": "Float"
     }
   },
   "3": {
     "inputs": {
-      "ANY": [
+      "value": [
         "1",
         0
-      ]
+      ],
+      "prefix": "Value:"
     },
-    "class_type": "DebugPrint-🔬",
+    "class_type": "ConsoleDebug+",
     "_meta": {
       "title": "DebugPrint"
     }

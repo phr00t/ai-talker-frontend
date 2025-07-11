@@ -19,25 +19,6 @@
       "title": "Load CLIP"
     }
   },
-  "3": {
-    "inputs": {
-      "lora_name": "Chroma\\Hyper-Chroma-Turbo-Alpha-16steps-lora.safetensors",
-      "strength_model": 1,
-      "strength_clip": 0,
-      "model": [
-        "1",
-        0
-      ],
-      "clip": [
-        "2",
-        0
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
   "8": {
     "inputs": {
       "text": "$START_PROMPT",
@@ -48,8 +29,8 @@
         ]
       },
       "clip": [
-        "3",
-        1
+        "2",
+        0
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -67,8 +48,8 @@
         ]
       },
       "clip": [
-        "3",
-        1
+        "2",
+        0
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -116,12 +97,12 @@
     "inputs": {
       "seed": $SEED,
       "steps": $STEPS,
-      "cfg": 3.5,
-      "sampler_name": "euler_ancestral",
+      "cfg": 1.0,
+      "sampler_name": "uni_pc_bh2",
       "scheduler": "beta",
       "denoise": 1,
       "model": [
-        "3",
+        "1",
         0
       ],
       "positive": [

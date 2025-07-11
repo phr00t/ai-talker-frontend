@@ -228,12 +228,7 @@
     <None Include="workflows\ImageGen-SDXL.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="workflows\VoiceGen-Dialog.Chatterbox.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workflows\VoiceGen-Dialog.F5.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="workflows\VoiceGen-Dialog.F5.json" />
     <None Include="workflows\VoiceGen-Dialog.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

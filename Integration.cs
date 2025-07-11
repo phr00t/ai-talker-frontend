@@ -337,7 +337,7 @@ namespace TalkerFrontend {
                 if (separate.Length == 3 && separate[0].Length > 2 && separate[1].Length > 2 && separate[2].Length > 2) {
                     string raw_location = StringProcessor.TruncateStringByWordCount(separate[0].Trim(), CurrentImageOptions.LocationWeight ? 16 : 24);
                     string location = CurrentImageOptions.LocationWeight ? "(" + raw_location + ":0.66)" : raw_location;
-                    string[] who_words = StringProcessor.ReplaceWholeWord(separate[1].Trim(), MainForm.UserName, "").Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] who_words = StringProcessor.ReplaceWholeWord(separate[1].Trim(), MainForm.UserName, "").Split(new string[] { ",", " and ", " with ", " near ", " by ", "." }, StringSplitOptions.RemoveEmptyEntries);
                     string who = "";
                     foreach (string who_word in who_words) {
                         string visuals_found = Character.GetCharacterVisuals(who_word);

@@ -1,30 +1,44 @@
 {
-  "1": {
+  "2": {
     "inputs": {
-      "sample_text": "$SAMPLE_TEXT",
-      "speech": "$DIALOG",
-      "seed": 817,
-      "model": "F5",
-      "vocoder": "vocos",
-      "speed": 1,
-      "model_type": "F5TTS_v1_Base",
-      "speak_and_recognation": {
-        "__value__": [
-          false,
-          true
-        ]
-      },
-      "sample_audio": [
+      "filename_prefix": "$SAVE_PREFIX",
+      "audioUI": "",
+      "audio": [
         "3",
         0
       ]
     },
-    "class_type": "F5TTSAudioInputs",
+    "class_type": "SaveAudio",
     "_meta": {
-      "title": "F5-TTS Audio from input"
+      "title": "SaveAudio"
     }
   },
   "3": {
+    "inputs": {
+      "text": "$DIALOG",
+      "model_version": "IndexTTS-1.5",
+      "language": "en",
+      "speed": 1,
+      "seed": $SEED,
+      "temperature": 1,
+      "top_p": 0.8,
+      "top_k": 100,
+      "repetition_penalty": 10,
+      "length_penalty": 0,
+      "num_beams": 8,
+      "max_mel_tokens": 600,
+      "sentence_split": "auto",
+      "reference_audio": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "IndexTTSNode",
+    "_meta": {
+      "title": "Index TTS"
+    }
+  },
+  "4": {
     "inputs": {
       "audio_file": "$REF_AUDIO",
       "seek_seconds": 0,
@@ -33,20 +47,6 @@
     "class_type": "VHS_LoadAudio",
     "_meta": {
       "title": "Load Audio (Path)🎥🅥🅗🅢"
-    }
-  },
-  "6": {
-    "inputs": {
-      "filename_prefix": "$SAVE_PREFIX",
-      "audioUI": "",
-      "audio": [
-        "1",
-        0
-      ]
-    },
-    "class_type": "SaveAudio",
-    "_meta": {
-      "title": "SaveAudio"
     }
   }
 }

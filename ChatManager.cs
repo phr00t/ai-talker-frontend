@@ -226,7 +226,7 @@ namespace TalkerFrontend {
                     AwaitingSay.RemoveAt(0);
                     Dictionary<string, string> repl = new Dictionary<string, string>();
                     repl["$SAMPLE_TEXT"] = asay.Who.VoiceText.Trim();
-                    repl["$DIALOG"] = asay.What.ToLower(); // need tolower as all caps breaks F5-TTS
+                    repl["$DIALOG"] = asay.What; //.ToLower(); // need tolower as all caps breaks F5-TTS
                     repl["$SEED"] = MainForm.Random.Next(99999999).ToString();
                     repl["$REF_AUDIO"] = voicefn.Replace("\\", "/");
                     repl["$SAVE_PREFIX"] = "talker/dialog";
