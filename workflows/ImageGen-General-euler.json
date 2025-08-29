@@ -21,7 +21,7 @@
         ]
       },
       "clip": [
-        "7",
+        "3",
         1
       ]
     },
@@ -32,7 +32,7 @@
   },
   "3": {
     "inputs": {
-      "text": "$START_PROMPT",
+      "text": "$START_PROMPT. High quality, sharp details.",
       "speak_and_recognation": {
         "__value__": [
           false,
@@ -64,7 +64,7 @@
         ]
       },
       "clip": [
-        "7",
+        "3",
         1
       ]
     },
@@ -77,8 +77,8 @@
     "inputs": {
       "seed": $SEED,
       "steps": $STEPS,
-      "cfg": 3.6,
-      "sampler_name": "euler_ancestral",
+      "cfg": 1,
+      "sampler_name": "euler",
       "scheduler": "beta",
       "denoise": 1,
       "model": [
@@ -114,31 +114,12 @@
       "title": "Empty Latent Image"
     }
   },
-  "7": {
-    "inputs": {
-      "lora_name": "Accelerators\\LCMTurboMix_Euler_A_fix.safetensors",
-      "strength_model": 1,
-      "strength_clip": 1,
-      "model": [
-        "3",
-        0
-      ],
-      "clip": [
-        "3",
-        1
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
   "8": {
     "inputs": {
       "hard_mode": true,
       "boost": true,
       "model": [
-        "7",
+        "3",
         0
       ]
     },

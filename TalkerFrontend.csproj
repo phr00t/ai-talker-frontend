@@ -222,6 +222,9 @@
     <None Include="workflows\Free-Memory.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="workflows\ImageGen-General-euler.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="workflows\ImageGen-Chroma.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
