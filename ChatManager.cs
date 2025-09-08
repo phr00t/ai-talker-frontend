@@ -220,7 +220,7 @@ namespace TalkerFrontend {
             AwaitingSay = ConsolidateAwaitSay();
             AWAITSAY asay = AwaitingSay[0];
             string voicefn = asay.Who.GetWAV;
-            bool hasVoiceReady = File.Exists(voicefn) && asay.Who.VoiceText.Length > 0;
+            bool hasVoiceReady = File.Exists(voicefn);// && asay.Who.VoiceText.Length > 0;
             if (asay.Who.VoiceDescription.Length > 0 || hasVoiceReady) {
                 if (!SayGenerating && hasVoiceReady) {
                     AwaitingSay.RemoveAt(0);

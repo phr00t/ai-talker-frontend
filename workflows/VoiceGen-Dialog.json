@@ -1,10 +1,32 @@
 {
+  "1": {
+    "inputs": {
+      "model_pack_name": "resembleai_default_voice",
+      "text": "$DIALOG",
+      "exaggeration": 0.5,
+      "temperature": 0.8,
+      "cfg_weight": 0.5,
+      "repetition_penalty": 1.2,
+      "min_p": 0.05,
+      "top_p": 1,
+      "seed": $SEED,
+      "use_watermark": false,
+      "audio_prompt": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "ChatterboxTTS",
+    "_meta": {
+      "title": "Chatterbox TTS 📢"
+    }
+  },
   "2": {
     "inputs": {
       "filename_prefix": "$SAVE_PREFIX",
       "audioUI": "",
       "audio": [
-        "3",
+        "1",
         0
       ]
     },
@@ -13,36 +35,11 @@
       "title": "SaveAudio"
     }
   },
-  "3": {
-    "inputs": {
-      "text": "$DIALOG",
-      "model_version": "IndexTTS-1.5",
-      "language": "en",
-      "speed": 1,
-      "seed": $SEED,
-      "temperature": 1,
-      "top_p": 0.8,
-      "top_k": 100,
-      "repetition_penalty": 10,
-      "length_penalty": 0,
-      "num_beams": 8,
-      "max_mel_tokens": 600,
-      "sentence_split": "auto",
-      "reference_audio": [
-        "4",
-        0
-      ]
-    },
-    "class_type": "IndexTTSNode",
-    "_meta": {
-      "title": "Index TTS"
-    }
-  },
   "4": {
     "inputs": {
       "audio_file": "$REF_AUDIO",
       "seek_seconds": 0,
-      "duration": 0
+      "duration": 15
     },
     "class_type": "VHS_LoadAudio",
     "_meta": {
