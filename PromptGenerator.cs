@@ -64,7 +64,7 @@ namespace TalkerFrontend {
 
             // how much chat log do we need to fill?
             string chat_log_source = ChatManager.CurrentChatLog;
-            int max_context_length_allowed = Integration.GetMaxCharacterLength - prompt.Length - image_description.Length - timestamp.Length - timestamp_response.Length;
+            int max_context_length_allowed = Integration.GetMaxCharacterLength - prompt.Length - image_description.Length - timestamp.Length - timestamp_response.Length - Integration.LatestRSSFeedCompiled.Length;
             int chat_len_allowed = (int)Math.Round(max_context_length_allowed * 0.7f);
             int chat_log_cut = Math.Max(0, chat_log_source.Length - chat_len_allowed);
             string chat_content = (chat_log_cut <= 0 ? chat_log_source : "..." + chat_log_source.Substring(chat_log_cut)).Trim();
@@ -94,6 +94,7 @@ namespace TalkerFrontend {
             append_to_log = timestamp + ", " + last_name + ": " + request;
 
             return prompt +
+                   Integration.LatestRSSFeedCompiled +
                    recall_info +
                    chat_content +
                    append_to_log + "\n\n" +

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Web.Globalization;
 using System.Windows.Forms;
 using CSCore.CoreAudioAPI;
+using SimpleFeedReader;
 
 /*
  */
@@ -69,6 +70,8 @@ namespace TalkerFrontend {
             }
             return true;
         }
+
+        public static float UpdateRSSFeedTimer = 0f;
 
         public class TalkerSettings {
             public int MaxGeneration {
@@ -398,10 +401,42 @@ namespace TalkerFrontend {
             ChatManager.SayTalking = false;
         }
 
+        public static FeedReader RSSFeedReader = new FeedReader();
+        public static Task<IEnumerable<FeedItem>> feedEntries;
+        public static string LatestRSSFeedCompiled;
         public static int monitordelay = 30, autogen_timer = 0;
         public static string LastAudioFile;
         public static List<Task<RestResponse>> all_response_tasks = new List<Task<RestResponse>>();
         public static void Update() {
+            UpdateRSSFeedTimer -= 0.1f;
+            string rss_feed_addr = MainForm.GetControl<TextBox>("rss_feed").Text;
+            string rss_feed_count = MainForm.GetControl<TextBox>("rss_feed_count").Text;
+            int.TryParse(rss_feed_count, out int rss_count);
+            if (rss_count > 0 && rss_feed_addr.Length > 0) {
+                if (UpdateRSSFeedTimer < 0f && feedEntries == null) {
+                    feedEntries = RSSFeedReader.RetrieveFeedAsync(rss_feed_addr);
+                    UpdateRSSFeedTimer = 60f * 2f; // retry every 2 minutes
+                }
+                if (feedEntries != null && feedEntries.IsCompleted) {
+                    if ((feedEntries?.Result?.Count() ?? 0) > 0) {
+                        string compile_news = "";
+                        compile_news = "\n\nExternally provided current events (which may or may not be related to the discussion):\n";
+                        foreach (var entry in feedEntries.Result) {
+                            compile_news += entry.PublishDate.Value.DateTime.ToShortDateString() + ": " +
+                                                     entry.Title + " (" + entry.Summary + ")\n";
+                            rss_count--;
+                            if (rss_count <= 0) break;
+                        }
+                        compile_news += "(end of current events list)\n\n";
+                        LatestRSSFeedCompiled = compile_news;
+                        UpdateRSSFeedTimer = 60f * 15f; // 15 minutes to update RSS feed
+                    } else
+                        UpdateRSSFeedTimer = 60f; // try again in a minute
+                    feedEntries = null;
+                }
+            } else {
+                LatestRSSFeedCompiled = "";
+            }
             if (monitor_count > 0) {
                 monitor_count--;
                 if (monitor_count <= 0 && monitoring_file != null) {

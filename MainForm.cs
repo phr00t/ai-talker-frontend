@@ -120,6 +120,8 @@ namespace TalkerFrontend {
                     AdvDryMult.Text = Integration.LoadTagged(optdata, "AdvDryMult") ?? AdvDryMult.Text;
                     AdvMinP.Text = Integration.LoadTagged(optdata, "AdvMinP") ?? AdvMinP.Text;
                     AdvMaxTokens.Text = Integration.LoadTagged(optdata, "AdvMaxTokens") ?? AdvMaxTokens.Text;
+                    rss_feed.Text = Integration.LoadTagged(optdata, "rss_feed") ?? rss_feed.Text;
+                    rss_feed_count.Text = Integration.LoadTagged(optdata, "rss_feed_count") ?? rss_feed_count.Text;
                     AdvExtraStops.Text = Integration.LoadTagged(optdata, "AdvExtraStops") ?? AdvExtraStops.Text;
                     AdvTemperature.Text = Integration.LoadTagged(optdata, "AdvTemperature") ?? AdvTemperature.Text;
                     AdvWordRecall.Text = Integration.LoadTagged(optdata, "AdvWordRecall") ?? AdvWordRecall.Text;
@@ -182,6 +184,8 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(AdvExtraStops.Text, "AdvExtraStops");
             optdata += Integration.StringTagged(AdvTemperature.Text, "AdvTemperature");
             optdata += Integration.StringTagged(AdvWordRecall.Text, "AdvWordRecall");
+            optdata += Integration.StringTagged(rss_feed.Text, "rss_feed");
+            optdata += Integration.StringTagged(rss_feed_count.Text, "rss_feed_count");
             optdata += Integration.StringTagged(AdvTopP.Text, "AdvTopP");
             optdata += Integration.StringTagged(CBUseRecommended.Checked ? "true" : "false", "CBUseRecommended");
             optdata += Integration.StringTagged(CBFillContext.Checked ? "true" : "false", "CBFillContext");
@@ -581,6 +585,10 @@ namespace TalkerFrontend {
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e) {
 
+        }
+
+        private void rss_feed_TextChanged(object sender, EventArgs e) {
+            Integration.UpdateRSSFeedTimer = 5f;
         }
     }
 }
