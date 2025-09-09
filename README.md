@@ -17,6 +17,7 @@ I loved KoboldCpp so much, I decided to make an "easy" Windows .NET frontend for
 12. Option to maximize available context to stuff as much "long term memory" as possible that is relevant to the discussion along with a chat log
 13. Includes "jailbreaking" prompt language
 14. Takes up less memory/VRAM than opening up a whole web browser
+15. Automatically inject RSS feeds into context to help talk about current events
 
 ![image](https://github.com/user-attachments/assets/bc27383c-5194-4cdf-bd13-dad8dae1be3e)
 
