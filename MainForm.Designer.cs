@@ -61,6 +61,10 @@
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.rss_feed_count = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.rss_feed = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.CBFillContext = new System.Windows.Forms.CheckBox();
             this.AdvWordRecall = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -90,10 +94,6 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
-            this.rss_feed_count = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.rss_feed = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -379,7 +379,7 @@
             this.ComfyUI_Textbox.Name = "ComfyUI_Textbox";
             this.ComfyUI_Textbox.Size = new System.Drawing.Size(351, 25);
             this.ComfyUI_Textbox.TabIndex = 29;
-            this.ComfyUI_Textbox.Text = "D:/ComfyUI_windows_portable/ComfyUI/";
+            this.ComfyUI_Textbox.Text = "D:/ComfyUI/";
             this.ComfyUI_Textbox.TextChanged += new System.EventHandler(this.ComfyUI_Textbox_TextChanged);
             // 
             // label6
@@ -430,9 +430,9 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(912, 11);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(330, 20);
+            this.label7.Size = new System.Drawing.Size(253, 20);
             this.label7.TabIndex = 31;
-            this.label7.Text = "KoboldCpp Unpacked koboldcpp.py Location:";
+            this.label7.Text = "koboldcpp.py OR KoboldCpp URL:";
             // 
             // button2
             // 
@@ -552,6 +552,51 @@
             this.tabPage2.Size = new System.Drawing.Size(459, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // rss_feed_count
+            // 
+            this.rss_feed_count.BackColor = System.Drawing.Color.Navy;
+            this.rss_feed_count.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rss_feed_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rss_feed_count.ForeColor = System.Drawing.Color.White;
+            this.rss_feed_count.Location = new System.Drawing.Point(23, 560);
+            this.rss_feed_count.Name = "rss_feed_count";
+            this.rss_feed_count.Size = new System.Drawing.Size(314, 25);
+            this.rss_feed_count.TabIndex = 60;
+            this.rss_feed_count.Text = "0";
+            this.rss_feed_count.TextChanged += new System.EventHandler(this.rss_feed_TextChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(21, 541);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(202, 20);
+            this.label15.TabIndex = 59;
+            this.label15.Text = "RSS feeds entries to inject:";
+            // 
+            // rss_feed
+            // 
+            this.rss_feed.BackColor = System.Drawing.Color.Navy;
+            this.rss_feed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rss_feed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rss_feed.ForeColor = System.Drawing.Color.White;
+            this.rss_feed.Location = new System.Drawing.Point(23, 514);
+            this.rss_feed.Name = "rss_feed";
+            this.rss_feed.Size = new System.Drawing.Size(363, 25);
+            this.rss_feed.TabIndex = 58;
+            this.rss_feed.TextChanged += new System.EventHandler(this.rss_feed_TextChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(21, 496);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(212, 20);
+            this.label16.TabIndex = 57;
+            this.label16.Text = "Inject RSS feed into context:";
             // 
             // CBFillContext
             // 
@@ -863,51 +908,6 @@
             this.CharWatcher.EnableRaisingEvents = true;
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
-            // 
-            // rss_feed_count
-            // 
-            this.rss_feed_count.BackColor = System.Drawing.Color.Navy;
-            this.rss_feed_count.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rss_feed_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rss_feed_count.ForeColor = System.Drawing.Color.White;
-            this.rss_feed_count.Location = new System.Drawing.Point(23, 560);
-            this.rss_feed_count.Name = "rss_feed_count";
-            this.rss_feed_count.Size = new System.Drawing.Size(314, 25);
-            this.rss_feed_count.TabIndex = 60;
-            this.rss_feed_count.Text = "0";
-            this.rss_feed_count.TextChanged += new System.EventHandler(this.rss_feed_TextChanged);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(21, 541);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(202, 20);
-            this.label15.TabIndex = 59;
-            this.label15.Text = "RSS feeds entries to inject:";
-            // 
-            // rss_feed
-            // 
-            this.rss_feed.BackColor = System.Drawing.Color.Navy;
-            this.rss_feed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rss_feed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rss_feed.ForeColor = System.Drawing.Color.White;
-            this.rss_feed.Location = new System.Drawing.Point(23, 514);
-            this.rss_feed.Name = "rss_feed";
-            this.rss_feed.Size = new System.Drawing.Size(363, 25);
-            this.rss_feed.TabIndex = 58;
-            this.rss_feed.TextChanged += new System.EventHandler(this.rss_feed_TextChanged);
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(21, 496);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(212, 20);
-            this.label16.TabIndex = 57;
-            this.label16.Text = "Inject RSS feed into context:";
             // 
             // MainForm
             // 

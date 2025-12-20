@@ -22,6 +22,8 @@ using CSCore.CoreAudioAPI;
 using SimpleFeedReader;
 
 /*
+ * x support remote use
+ * - add qwen edit support (basically a workflow to take the input image of the character)
  */
 
 namespace TalkerFrontend {
@@ -32,6 +34,8 @@ namespace TalkerFrontend {
             AUTO_SINGLE = 1,
             AUTO_CONTINUOUS = 2
         }
+
+        public static bool RemoteOnlyMode = false;
 
         public class ImageGenSettings {
             public string Model = "", Size;
@@ -223,15 +227,21 @@ namespace TalkerFrontend {
                 string host = properties.GetProperty("host").GetString();
                 if (host.Length == 0) host = "127.0.0.1";
                 KoboldURL = "http://" + host + ":" + port;
-                if (port > 0) Initialize();
+                if (port > 0) Initialize(false);
             }
         }
 
         public static RestClient GetClientFor(RestRequest rr) {
             if (rr.Resource.StartsWith("/api"))
                 return KoboldAPI;
-            else
+            else {
+                if (ComfyAPI != null) ComfyAPI.Dispose();
+                var ttsoptions = new RestClientOptions(MainForm.GetControl<TextBox>("ComfyURL").Text) {
+                    Timeout = TimeSpan.FromHours(12),
+                };
+                ComfyAPI = new RestClient(ttsoptions);
                 return ComfyAPI;
+            }
         }
 
         public static Process KoboldProcess;
@@ -299,24 +309,19 @@ namespace TalkerFrontend {
             ExecuteRequest(new RestRequest("/interrupt", Method.Post));
         }
 
-        public static void Initialize() {
+        public static void Initialize(bool getContextSize) {
             ChatManager.LoadGroupChat();
             Abort();
             try {
-                if (ComfyAPI != null) ComfyAPI.Dispose();
                 if (KoboldAPI != null) KoboldAPI.Dispose();
                 //if (TTSServer != null) TTSServer.Dispose();
             } catch (Exception) { }
             var options = new RestClientOptions(KoboldURL) {
                 Timeout = TimeSpan.FromHours(12),
             };
-            var ttsoptions = new RestClientOptions(MainForm.GetControl<TextBox>("ComfyURL").Text) {
-                Timeout = TimeSpan.FromHours(12),
-            };
-            ComfyAPI = new RestClient(ttsoptions);
             KoboldAPI = new RestClient(options);
             //ExecuteRequest(new RestRequest("/api/v1/model"));
-            //ExecuteRequest(new RestRequest("/api/extra/true_max_context_length"));
+            if (getContextSize) ExecuteRequest(new RestRequest("/api/extra/true_max_context_length"));
             SendTestString();
         }
 
@@ -361,7 +366,7 @@ namespace TalkerFrontend {
                     repl["$SEED"] = MainForm.Random.Next(99999999).ToString();
                     repl["$OUTPUT_PATH"] = "talker/imgreq";
                     repl["$NEG_PROMPT"] = CurrentImageOptions.Negative;
-                    if (CurrentImageOptions.KillKobold) EnsureKoboldCppMode(false);
+                    if (CurrentImageOptions.KillKobold && !RemoteOnlyMode) EnsureKoboldCppMode(false);
                     MainForm.SetStatus("Generating Image");
                     MainForm.PrepareWatcher(Path.Combine(ComfyUIDir, "output/talker/"));
                     SendComfyRequest(Path.Combine(BaseDirectory, "workflows/" + CurrentImageOptions.Workflow), repl);
@@ -583,7 +588,7 @@ namespace TalkerFrontend {
 
         public static void SendTestString() {
             MainForm.SetStatus("Getting token estimates");
-            EnsureKoboldCppMode(true, false, 500);
+            if (!RemoteOnlyMode) EnsureKoboldCppMode(true, false, 500);
             var rr = new RestRequest("/api/extra/tokencount", Method.Post);
             rr.RequestFormat = DataFormat.Json;
             var requestBody = new {
@@ -668,7 +673,7 @@ namespace TalkerFrontend {
         //private static int last_prompt_size;
         //private static bool last_prompt_notcreative;
         public static void SendTextPrompt(string prompt, int? max_len = null, bool not_creative = false, bool send_pic = false, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
-            EnsureKoboldCppMode(true);
+            if (!RemoteOnlyMode) EnsureKoboldCppMode(true);
             var rr = new RestRequest("/api/v1/generate", Method.Post);
             //last_prompt_sent = prompt;
             //last_prompt_notcreative = not_creative;

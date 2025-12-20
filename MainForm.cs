@@ -73,6 +73,28 @@ namespace TalkerFrontend {
             }
         }
 
+        public static string ShowDialog(string text, string caption, string start_text = "", string helper_text = "") {
+            Form prompt = new Form() {
+                Width = 500,
+                Height = 300,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                Text = caption,
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            Label textLabel = new Label() { Left = 10, Top = 20, Text = text + helper_text, AutoSize = false, Width = 480, Height = 100 };
+            TextBox textBox = new TextBox() { Left = 10, Top = 150, Width = 450, Text = start_text };
+            Button confirmation = new Button() { Text = "OK", Left = 200, Width = 100, Top = 200, Height = 30, DialogResult = DialogResult.OK };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.AcceptButton = confirmation;
+
+            string final_result = prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+            return final_result.Trim();
+        }
+
         public void ClearMonitor() {
             partial_response.Text = "";
         }
@@ -139,18 +161,31 @@ namespace TalkerFrontend {
                 } catch { }
             }
 
-            if (pickKoboldConfig.ShowDialog() != DialogResult.OK) {
-                Application.Exit();
-                return;
-            }
-            
-            if (!File.Exists(KoboldPY.Text.Trim())) {
-                if (KoboldFinder.ShowDialog() != DialogResult.OK) {
+            // TODO: need to pick whether remote or local
+            // if remote, disable features like starting/killing kobold and probably whisper listening
+            string result = ShowDialog("KoboldCpp IP:Port? Leave blank to use KoboldCpp Config locally", "KoboldCpp Connection Configuration", "127.0.0.1:5001");
+            if (result == "") {
+                Integration.RemoteOnlyMode = false;
+                if (pickKoboldConfig.ShowDialog() != DialogResult.OK) {
                     Application.Exit();
                     return;
                 }
-                KoboldPY.Text = KoboldFinder.FileName;
-                SaveOptions();
+
+                if (!File.Exists(KoboldPY.Text.Trim())) {
+                    if (KoboldFinder.ShowDialog() != DialogResult.OK) {
+                        Application.Exit();
+                        return;
+                    }
+                    KoboldPY.Text = KoboldFinder.FileName;
+                    SaveOptions();
+                }
+
+                Integration.ReadKoboldConfig(pickKoboldConfig.FileName);
+            } else {
+                Integration.RemoteOnlyMode = true;
+                KoboldPY.Text = Integration.KoboldURL = "http://" + result;
+                Integration.max_context_len = 16 * 1024; // default context length until read
+                Integration.Initialize(true);
             }
 
             Directory.CreateDirectory(Integration.CharDirectory);
@@ -161,7 +196,6 @@ namespace TalkerFrontend {
 
             // need to pick 
             Enabled = true;
-            Integration.ReadKoboldConfig(pickKoboldConfig.FileName);
             Focus();
             Activate();
         }
@@ -326,7 +360,7 @@ namespace TalkerFrontend {
             else if (check_if_talking && ChatManager.ChatRequested) err = "Text generation is currently happening!";
             else if (check_if_picture && ChatManager.PictureRequested) err = "We are waiting for a picture!";
             //else if (!File.Exists(KoboldCpp.Text)) err = "KoboldCpp Config file not found!";
-            else if (!File.Exists(KoboldPY.Text)) err = "koboldcpp.py file not found!";
+            else if (Integration.RemoteOnlyMode == false && !File.Exists(KoboldPY.Text)) err = "koboldcpp.py file not found!";
             //else if (MyRelation.Text.Length <= 0) err = "You need to provide how you should be known!";
             else if (!no_prompt_needed && SendText.Text.Length <= 0) err = "You need to provide some text to send!";
             if (err == "") SaveOptions();

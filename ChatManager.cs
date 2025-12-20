@@ -117,7 +117,7 @@ namespace TalkerFrontend {
         public static string previousYourPrompt;
         public static void SendChat(string request, bool send_pic, string image_description = null) {
             bool hasPicToSend = send_pic && MainForm.NewImageToSend && Integration.MainForm.GetImage != null;
-            if (hasPicToSend && Integration.IMGConfig.UseExistingTextModel == false) {
+            if (hasPicToSend && Integration.IMGConfig.UseExistingTextModel == false && !Integration.RemoteOnlyMode) {
                 // uh oh, need to load the visual model to read this image before doing this!
                 Integration.MainForm.DisableAutoTalk();
                 Integration.KillKobold();
