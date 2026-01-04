@@ -94,6 +94,7 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
+            this.postprocess_prompt = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -524,6 +525,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.postprocess_prompt);
             this.tabPage2.Controls.Add(this.rss_feed_count);
             this.tabPage2.Controls.Add(this.label15);
             this.tabPage2.Controls.Add(this.rss_feed);
@@ -559,7 +561,7 @@
             this.rss_feed_count.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rss_feed_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rss_feed_count.ForeColor = System.Drawing.Color.White;
-            this.rss_feed_count.Location = new System.Drawing.Point(23, 560);
+            this.rss_feed_count.Location = new System.Drawing.Point(21, 597);
             this.rss_feed_count.Name = "rss_feed_count";
             this.rss_feed_count.Size = new System.Drawing.Size(314, 25);
             this.rss_feed_count.TabIndex = 60;
@@ -570,7 +572,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(21, 541);
+            this.label15.Location = new System.Drawing.Point(19, 578);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(202, 20);
             this.label15.TabIndex = 59;
@@ -582,7 +584,7 @@
             this.rss_feed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rss_feed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rss_feed.ForeColor = System.Drawing.Color.White;
-            this.rss_feed.Location = new System.Drawing.Point(23, 514);
+            this.rss_feed.Location = new System.Drawing.Point(21, 551);
             this.rss_feed.Name = "rss_feed";
             this.rss_feed.Size = new System.Drawing.Size(363, 25);
             this.rss_feed.TabIndex = 58;
@@ -592,7 +594,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(21, 496);
+            this.label16.Location = new System.Drawing.Point(19, 533);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(212, 20);
             this.label16.TabIndex = 57;
@@ -909,6 +911,21 @@
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
             // 
+            // postprocess_prompt
+            // 
+            this.postprocess_prompt.AutoSize = true;
+            this.postprocess_prompt.BackColor = System.Drawing.Color.Black;
+            this.postprocess_prompt.Checked = true;
+            this.postprocess_prompt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.postprocess_prompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.postprocess_prompt.Location = new System.Drawing.Point(21, 496);
+            this.postprocess_prompt.Name = "postprocess_prompt";
+            this.postprocess_prompt.Size = new System.Drawing.Size(414, 22);
+            this.postprocess_prompt.TabIndex = 61;
+            this.postprocess_prompt.Text = "Post-process prompt for better long term memory retrieval";
+            this.postprocess_prompt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.postprocess_prompt.UseVisualStyleBackColor = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -959,7 +976,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend v1.7";
+            this.Text = "Phr00t\'s AI Talker Frontend v2.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
@@ -1049,6 +1066,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox rss_feed;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.CheckBox postprocess_prompt;
     }
 }
 

@@ -106,6 +106,7 @@ namespace TalkerFrontend {
         public string CharName => WhoList.Text;
         public bool UseRecommended => CBUseRecommended.Checked;
         public bool FillContext => CBFillContext.Checked;
+        public bool PostProcessPrompt => postprocess_prompt.Checked;
 
         private void Form1_Load(object sender, EventArgs e) {
             AllControls = new Dictionary<string, Control>();
@@ -150,6 +151,7 @@ namespace TalkerFrontend {
                     AdvTopP.Text = Integration.LoadTagged(optdata, "AdvTopP") ?? AdvTopP.Text;
                     CBUseRecommended.Checked = (Integration.LoadTagged(optdata, "CBUseRecommended") ?? "true") == "true";
                     CBFillContext.Checked = (Integration.LoadTagged(optdata, "CBFillContext") ?? "true") == "true";
+                    postprocess_prompt.Checked = (Integration.LoadTagged(optdata, "postprocess_prompt") ?? "true") == "true";
                     Integration.CurrentImageOptions.KillKobold = (Integration.LoadTagged(optdata, "KillKobold") ?? "true") == "true";
                     Integration.CurrentImageOptions.LocationWeight = (Integration.LoadTagged(optdata, "LocationWeight") ?? "true") == "true";
                     Integration.CurrentImageOptions.Workflow = Integration.LoadTagged(optdata, "Workflow") ?? Integration.CurrentImageOptions.Workflow;
@@ -222,6 +224,7 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(rss_feed_count.Text, "rss_feed_count");
             optdata += Integration.StringTagged(AdvTopP.Text, "AdvTopP");
             optdata += Integration.StringTagged(CBUseRecommended.Checked ? "true" : "false", "CBUseRecommended");
+            optdata += Integration.StringTagged(postprocess_prompt.Checked ? "true" : "false", "postprocess_prompt");
             optdata += Integration.StringTagged(CBFillContext.Checked ? "true" : "false", "CBFillContext");
             optdata += Integration.StringTagged(Integration.IMGConfig.KoboldCppVisualModel, "KoboldCppVisualModel");
             optdata += Integration.StringTagged(Integration.IMGConfig.ImagePrompt, "ImagePrompt");
@@ -357,6 +360,7 @@ namespace TalkerFrontend {
             else if (Integration.TokenPerCharacter <= 0f) err = "Wait for Token Estimation result...\n\nIf this doesn't complete, make sure KoboldCpp started!";
             else if (WhoList.SelectedItem == null) err = "You need to pick someone to talk to!";
             else if (ChatManager.ImagePromptRequested) err = "Processing an Image Sent, please wait...";
+            else if (ChatManager.KeywordsRequested) err = "Getting prompt keywords, please wait...";
             else if (check_if_talking && ChatManager.ChatRequested) err = "Text generation is currently happening!";
             else if (check_if_picture && ChatManager.PictureRequested) err = "We are waiting for a picture!";
             //else if (!File.Exists(KoboldCpp.Text)) err = "KoboldCpp Config file not found!";

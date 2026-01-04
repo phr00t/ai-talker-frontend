@@ -23,7 +23,7 @@ namespace TalkerFrontend {
 
         public static Character SelectedCharacter, MeCharacter;
 
-        public static bool PictureRequested, ChatRequested, ImagePromptRequested;
+        public static bool PictureRequested, ChatRequested, ImagePromptRequested, KeywordsRequested;
 
         public static string[] BannedTalkTokens = new string[] {
             "[", "]", "(", ")", "_"
@@ -115,7 +115,7 @@ namespace TalkerFrontend {
         }
 
         public static string previousYourPrompt;
-        public static void SendChat(string request, bool send_pic, string image_description = null) {
+        public static void SendChat(string request, bool send_pic, string image_description = null, string keywords_provided = null) {
             bool hasPicToSend = send_pic && MainForm.NewImageToSend && Integration.MainForm.GetImage != null;
             if (hasPicToSend && Integration.IMGConfig.UseExistingTextModel == false && !Integration.RemoteOnlyMode) {
                 // uh oh, need to load the visual model to read this image before doing this!
@@ -127,6 +127,7 @@ namespace TalkerFrontend {
                 PictureRequested = false;
                 ChatRequested = false;
                 ImagePromptRequested = true;
+                KeywordsRequested = false;
                 AutoTalkTimer = 0;
                 Integration.MainForm.SetStatus("Preprocessing Image");
                 Task t = new Task(() => {
@@ -136,15 +137,24 @@ namespace TalkerFrontend {
                     Integration.SendTextPrompt(Integration.IMGConfig.ImagePrompt, 1024, true, true, false, StopSequences(false));
                 });
                 t.Start();
-            } else {
+            } else if (Integration.MainForm.PostProcessPrompt && keywords_provided == null) {
+                ChatRequested = false;
+                KeywordsRequested = true;
+                ImagePromptRequested = false;
+                AutoTalkTimer = 0;
+                string prompt = PromptGenerator.GetRAGKeywords(request);
+                Integration.MainForm.ClearMonitor();
+                Integration.SendTextPrompt(prompt, (int)Math.Max(128, request.Length * 1.5f), true, false, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
+            } else if (Integration.MainForm.PostProcessPrompt == false || keywords_provided != null) {
                 string MyName = MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
                 string MyDescription = Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
                 if (MeCharacter is Character cc) MyDescription += cc.ProcessTags(cc.PersistentDescription);
-                string prompt = PromptGenerator.GetMasterPrompt(SelectedCharacter, request, MyName, MyDescription, out string append_log, image_description);
+                string prompt = PromptGenerator.GetMasterPrompt(SelectedCharacter, request, MyName, MyDescription, out string append_log, image_description, keywords_provided);
                 CurrentChatLog += "\n\n" + append_log;
                 Integration.MainForm.UpdateChatLog();
                 PictureRequested = false;
                 ChatRequested = true;
+                KeywordsRequested = false;
                 ImagePromptRequested = false;
                 AutoTalkTimer = 0;
                 WhoTalking = SelectedCharacter;
@@ -159,6 +169,7 @@ namespace TalkerFrontend {
             Integration.autogen_timer = 50;
             PictureRequested = true;
             ChatRequested = false;
+            KeywordsRequested = false;
             ImagePromptRequested = false;
             Integration.MainForm.ClearMonitor();
             string prompt = PromptGenerator.GetPicturePrompt(SelectedCharacter, Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim());

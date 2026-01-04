@@ -23,7 +23,8 @@ using SimpleFeedReader;
 
 /*
  * x support remote use
- * - add qwen edit support (basically a workflow to take the input image of the character)
+ * - process chat prompt keyword extraction *NEEDS TESTING*
+ * - add qwen edit support (basically a workflow to take the input image of the character) *NEEDS TESTING*
  */
 
 namespace TalkerFrontend {
@@ -303,6 +304,7 @@ namespace TalkerFrontend {
             ChatManager.PictureRequested = false;
             ChatManager.ChatRequested = false;
             ChatManager.ImagePromptRequested = false;
+            ChatManager.KeywordsRequested = false;
             waitingKoboldResponses.Clear();
             waitingComfyResponses.Clear();
             ExecuteRequest(new RestRequest("/api/extra/abort", Method.Post));
@@ -327,7 +329,10 @@ namespace TalkerFrontend {
 
         public static void ProcessLLMResponse(string text) {
             text = text.Replace("<think>", " ").Replace("</think>", " ").Replace("/no-think", " ").Replace("/no_think", " ");
-            if (ChatManager.ImagePromptRequested) {
+            if (ChatManager.KeywordsRequested) {
+                ChatManager.KeywordsRequested = false;
+                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription, text);
+            } else if (ChatManager.ImagePromptRequested) {
                 IMGConfig.LastImagePromptResult = text;
                 // switch back to regular text model
                 KillKobold();
@@ -363,6 +368,13 @@ namespace TalkerFrontend {
                     repl["$MODEL"] = CurrentImageOptions.Model;
                     repl["$SIZE_X"] = size.Width.ToString();
                     repl["$SIZE_Y"] = size.Height.ToString();
+                    string img_in = ChatManager.SelectedCharacter.GetPicture;
+                    repl["$INPUT_IMAGE"] = img_in;
+                    if (File.Exists(img_in)) {
+                        repl["$VALID_IMAGE"] = ",\r\n      \"image1\": [\r\n        \"1\",\r\n        0\r\n      ]";
+                    } else {
+                        repl["$VALID_IMAGE"] = "";
+                    }
                     repl["$SEED"] = MainForm.Random.Next(99999999).ToString();
                     repl["$OUTPUT_PATH"] = "talker/imgreq";
                     repl["$NEG_PROMPT"] = CurrentImageOptions.Negative;
@@ -628,7 +640,7 @@ namespace TalkerFrontend {
 
                 if (replacements != null) {
                     foreach (var pair in replacements) {
-                        if (pair.Key == "$PROMPT_TRAVEL")
+                        if (pair.Key == "$PROMPT_TRAVEL" || pair.Key == "$VALID_IMAGE")
                             json_template = json_template.Replace(pair.Key, pair.Value.Replace("\n", " "));
                         else
                             json_template = json_template.Replace(pair.Key, pair.Value.Replace("\"", "'").Replace("\n", " ").Replace("\\", "\\\\"));
@@ -685,7 +697,7 @@ namespace TalkerFrontend {
             TalkerSettings cursettings = not_creative ? NonCreativeSettings : GetCurrentSettings(MainForm.IsCreative);
 
             //last_prompt_size = max_len ?? cursettings.MaxGeneration;
-            List<string> final_stops = new List<string>(extra_stop_sequences);
+            List<string> final_stops = extra_stop_sequences == null ? new List<string>() : new List<string>(extra_stop_sequences);
             final_stops.AddRange(cursettings.ExtraStopTokens);
 
             List<string> images = new List<string>();

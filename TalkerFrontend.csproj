@@ -238,6 +238,9 @@
     <None Include="workflows\ImageGen-Chroma.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="workflows\ImageGen-QwenEdit.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="workflows\ImageGen-SDXL.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

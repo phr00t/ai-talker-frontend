@@ -48,7 +48,14 @@ namespace TalkerFrontend {
                    picture_instructions;
         }
 
-        public static string GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null) {
+        public static string GetRAGKeywords(string request) {
+            return "The following is a prompt received by a human:\n\n" + request + "\n\nWe need to decompose this request into a list of keywords to search a database for potentially relevant information needed for an informed response to that prompt. The keywords " +
+                   "need to be provided in a comma separated list. The list of keywords should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way. For example, if the prompt was 'did you have any pets?', useful search keywords would look like:\n\n" +
+                   "pet, cat, dog\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. However, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" + 
+                   "Do not include anything else in this response, just the comma separated list only. When done listing keywords, finish with 'Keywords Finished'.\n\nKeyword list: ";
+        }
+
+        public static string GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {
             string prompt = who.Name + " Situation/Interaction/Activity Log\n\n" +
                 who.Name + "'s Profile: " + who.ProcessTags(who.PersistentDescription) + "\n\n" +
                 last_name + "'s Profile: " + (last_name_profile == null || last_name_profile.Length == 0 ? "(no profile)" : last_name_profile) + "\n\n" + Jailbreak + "\n\n";
@@ -84,7 +91,7 @@ namespace TalkerFrontend {
 
             // memory recall info
             string recall_info = "";
-            List<string> memory_recall = StringProcessor.GetInfo(last_name, request, who.LongTermMemory, max_context_length_allowed - chat_content.Length);
+            List<string> memory_recall = StringProcessor.GetInfo(last_name, processed_keywords ?? request, who.LongTermMemory, max_context_length_allowed - chat_content.Length);
             for (int i = 0; i < memory_recall.Count; i++)
                 recall_info += "\n..." + memory_recall[i] + "...";
 
