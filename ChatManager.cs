@@ -144,7 +144,12 @@ namespace TalkerFrontend {
                 AutoTalkTimer = 0;
                 string prompt = PromptGenerator.GetRAGKeywords(request);
                 Integration.MainForm.ClearMonitor();
-                Integration.SendTextPrompt(prompt, (int)Math.Max(128, request.Length * 1.5f), true, false, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
+                int len = (int)Math.Round(0.5f * (request.Length / Integration.CharactersPerToken + 256));
+                if (len > 512)
+                    len = 512;
+                else if (len < 128)
+                    len = 128;
+                Integration.SendTextPrompt(prompt, len, true, false, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
             } else if (Integration.MainForm.PostProcessPrompt == false || keywords_provided != null) {
                 string MyName = MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
                 string MyDescription = Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();

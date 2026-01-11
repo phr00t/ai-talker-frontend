@@ -357,7 +357,7 @@ namespace TalkerFrontend {
             // lots of safety checks
             string err = "";
             if (MyName.Text.Length <= 0) err = "You need to provide your name!";
-            else if (Integration.TokenPerCharacter <= 0f) err = "Wait for Token Estimation result...\n\nIf this doesn't complete, make sure KoboldCpp started!";
+            else if (Integration.CharactersPerToken <= 0f) err = "Wait for Token Estimation result...\n\nIf this doesn't complete, make sure KoboldCpp started!";
             else if (WhoList.SelectedItem == null) err = "You need to pick someone to talk to!";
             else if (ChatManager.ImagePromptRequested) err = "Processing an Image Sent, please wait...";
             else if (ChatManager.KeywordsRequested) err = "Getting prompt keywords, please wait...";

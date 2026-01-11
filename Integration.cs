@@ -148,11 +148,11 @@ namespace TalkerFrontend {
         public static List<Task<RestResponse>> waitingComfyResponses = new List<Task<RestResponse>>();
 
         public static int max_context_len;
-        public static float TokenPerCharacter;
+        public static float CharactersPerToken;
         public static RestClient ComfyAPI, KoboldAPI;
         public static string ModelName, KoboldURL;
 
-        public static int GetMaxCharacterLength => (int)Math.Floor((max_context_len - 2560) * TokenPerCharacter);
+        public static int GetMaxCharacterLength => (int)Math.Floor((max_context_len - 2560) * CharactersPerToken);
 
         public static string BaseDirectory => Path.GetDirectoryName(Application.ExecutablePath);
         public static string CharDirectory => Path.Combine(BaseDirectory, "Characters/");
@@ -556,7 +556,7 @@ namespace TalkerFrontend {
                                         break;
                                     case "/api/extra/tokencount":
                                         int token_count = properties.GetProperty("value").GetInt32();
-                                        TokenPerCharacter = TestString.Length / (float)token_count;
+                                        CharactersPerToken = TestString.Length / (float)token_count;
                                         MainForm.SetStatus("Ready");
                                         break;
                                 }
