@@ -50,9 +50,9 @@ namespace TalkerFrontend {
 
         public static string GetRAGKeywords(string request) {
             return "The following is a prompt received by a human:\n\n" + request + "\n\nWe need to decompose this request into a list of keywords to search a database for potentially relevant information needed for an informed response to that prompt. The keywords " +
-                   "need to be provided in a comma separated list. The list of keywords should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way. For example, if the prompt was 'did you have any pets?', useful search keywords would look like:\n\n" +
-                   "pet, cat, dog\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. However, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" + 
-                   "Do not include anything else in this response, just the comma separated list only. When done listing keywords, finish with 'Keywords Finished'.\n\nKeyword list: ";
+                   "need to be provided in a comma separated list. The list of keywords should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way.\n\nFor example, if the prompt was 'did you have any pets?', a desired response would be:\n\n" +
+                   "pet, cat, dog\nKeywords Finished\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. However, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" +
+                   "Do not include anything else in this response, just the comma separated list for keywords only. Thinking mode disabled; immediate response only with no interruptions, annotation or reflection. When done listing keywords, finish with 'Keywords Finished'.\n\nKeyword list: ";
         }
 
         public static string GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {

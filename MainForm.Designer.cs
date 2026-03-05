@@ -61,6 +61,7 @@
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.postprocess_prompt = new System.Windows.Forms.CheckBox();
             this.rss_feed_count = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.rss_feed = new System.Windows.Forms.TextBox();
@@ -94,7 +95,6 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
-            this.postprocess_prompt = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -296,6 +296,7 @@
             this.SendText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SendText.ForeColor = System.Drawing.Color.White;
             this.SendText.Location = new System.Drawing.Point(150, 604);
+            this.SendText.MaxLength = 500000;
             this.SendText.Multiline = true;
             this.SendText.Name = "SendText";
             this.SendText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -554,6 +555,21 @@
             this.tabPage2.Size = new System.Drawing.Size(459, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // postprocess_prompt
+            // 
+            this.postprocess_prompt.AutoSize = true;
+            this.postprocess_prompt.BackColor = System.Drawing.Color.Black;
+            this.postprocess_prompt.Checked = true;
+            this.postprocess_prompt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.postprocess_prompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.postprocess_prompt.Location = new System.Drawing.Point(21, 496);
+            this.postprocess_prompt.Name = "postprocess_prompt";
+            this.postprocess_prompt.Size = new System.Drawing.Size(414, 22);
+            this.postprocess_prompt.TabIndex = 61;
+            this.postprocess_prompt.Text = "Post-process prompt for better long term memory retrieval";
+            this.postprocess_prompt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.postprocess_prompt.UseVisualStyleBackColor = false;
             // 
             // rss_feed_count
             // 
@@ -910,21 +926,6 @@
             this.CharWatcher.EnableRaisingEvents = true;
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
-            // 
-            // postprocess_prompt
-            // 
-            this.postprocess_prompt.AutoSize = true;
-            this.postprocess_prompt.BackColor = System.Drawing.Color.Black;
-            this.postprocess_prompt.Checked = true;
-            this.postprocess_prompt.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.postprocess_prompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.postprocess_prompt.Location = new System.Drawing.Point(21, 496);
-            this.postprocess_prompt.Name = "postprocess_prompt";
-            this.postprocess_prompt.Size = new System.Drawing.Size(414, 22);
-            this.postprocess_prompt.TabIndex = 61;
-            this.postprocess_prompt.Text = "Post-process prompt for better long term memory retrieval";
-            this.postprocess_prompt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.postprocess_prompt.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
