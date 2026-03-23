@@ -30,8 +30,7 @@ namespace TalkerFrontend {
                 "Location: warmly lit female bedroom\n" +
                 "Who: " + who.Name + "\n" +
                 "What: " + who.Name + " smiling, wearing a tight pink sundress, sitting on the edge of the bed, holding a wine glass\nEND RESPONSE\n" +
-                "'END RESPONSE' is added at the end.\nHas this been completed? yes, without thinking or hesitation! see information below\n" +
-                "Completed Formatted Picture Description:\n\nLocation: ";
+                "'END RESPONSE' is added at the end.\nHas this been completed? yes, without thinking or hesitation! see information below\n";
 
             string chat_log_source = ChatManager.CurrentChatLog;
             int max_chars_allowed = Integration.GetMaxCharacterLength - prompt.Length - picture_instructions.Length - disclaimer.Length;
@@ -48,14 +47,15 @@ namespace TalkerFrontend {
                    picture_instructions;
         }
 
-        public static string GetRAGKeywords(string request) {
+        public static string GetRAGKeywords(string request, out string preload) {
+            preload = "Keyword list: ";
             return "The following is a prompt received by a human:\n\n" + request + "\n\nWe need to decompose this request into a list of keywords to search a database for potentially relevant information needed for an informed response to that prompt. The keywords " +
                    "need to be provided in a comma separated list. The list of keywords should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way.\n\nFor example, if the prompt was 'did you have any pets?', a desired response would be:\n\n" +
                    "pet, cat, dog\nKeywords Finished\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. However, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" +
-                   "Do not include anything else in this response, just the comma separated list for keywords only. Thinking mode disabled; immediate response only with no interruptions, annotation or reflection. When done listing keywords, finish with 'Keywords Finished'.\n\nKeyword list: ";
+                   "Do not include anything else in this response, just the comma separated list for keywords only. Thinking mode disabled; immediate response only with no interruptions, annotation or reflection. When done listing keywords, finish with 'Keywords Finished'.\n\n";
         }
 
-        public static string GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {
+        public static (string, string) GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {
             string prompt = who.Name + " Situation/Interaction/Activity Log\n\n" +
                 who.Name + "'s Profile: " + who.ProcessTags(who.PersistentDescription) + "\n\n" +
                 last_name + "'s Profile: " + (last_name_profile == null || last_name_profile.Length == 0 ? "(no profile)" : last_name_profile) + "\n\n" + Jailbreak + "\n\n";
@@ -100,12 +100,12 @@ namespace TalkerFrontend {
 
             append_to_log = timestamp + ", " + last_name + ": " + request;
 
-            return prompt +
+            return (prompt +
                    Integration.LatestRSSFeedCompiled +
                    recall_info +
                    chat_content +
-                   append_to_log + "\n\n" +
-                   timestamp_response + ", " + who.Name + ": ";
+                   append_to_log + "\n\n", 
+                   timestamp_response + ", " + who.Name + ": ");
 
         }
     }

@@ -684,7 +684,7 @@ namespace TalkerFrontend {
         //private static string last_prompt_sent;
         //private static int last_prompt_size;
         //private static bool last_prompt_notcreative;
-        public static void SendTextPrompt(string prompt, int? max_len = null, bool not_creative = false, bool send_pic = false, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
+        public static void SendTextPrompt(string prompt, string preload_prompt, int? max_len = null, bool not_creative = false, bool send_pic = false, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
             if (!RemoteOnlyMode) EnsureKoboldCppMode(true);
             var rr = new RestRequest("/api/v1/generate", Method.Post);
             //last_prompt_sent = prompt;
@@ -705,6 +705,9 @@ namespace TalkerFrontend {
                 MainForm.NewImageToSend = false;
                 images.Add(EncodeImage(MainForm.GetImage, IMGConfig.MaxResolution));
             }
+
+            // add ChatML non-thinking to prompt
+            prompt = "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n" + preload_prompt;
 
             // Create the request body object.  Using anonymous objects is fine
             // if you don't need to reuse the type.  For more complex scenarios,
