@@ -104,8 +104,8 @@ namespace TalkerFrontend {
                    Integration.LatestRSSFeedCompiled +
                    recall_info +
                    chat_content +
-                   append_to_log + "\n\n", 
-                   timestamp_response + ", " + who.Name + ": ");
+                   append_to_log + "\n\nProvide a unique response as " + who.Name + " to the message above.", 
+                   timestamp_response + ", " + who.Name + "'s Response: ");
 
         }
     }

@@ -387,8 +387,9 @@ namespace TalkerFrontend {
                     ChatManager.GetPicture();
                 }
             } else {
+                string timestamp = "Timestamp: " + DateTime.Now.ToString("dddd, MMMM dd, yyyy 'at' H:mm:ss");
                 ChatManager.ChatRequested = false;
-                ChatManager.CurrentChatLog += "\n\n" + ChatManager.WhoTalking.Name + ": " + text;
+                ChatManager.CurrentChatLog += "\n\n" + timestamp + ", " + ChatManager.WhoTalking.Name + ": " + text;
                 File.WriteAllText(Path.Combine(BaseDirectory, "groupchat.txt"), ChatManager.GroupChatLog);
                 ChatManager.WhoTalking.Save();
                 MainForm.SetMonitorExact(text);
@@ -719,12 +720,12 @@ namespace TalkerFrontend {
                 prompt = prompt,         // Use provided value
                 quiet = false,
                 rep_pen = 1.0,
-                rep_pen_range = 1024,
+                rep_pen_range = 512,
                 rep_pen_slope = 0.7f,
                 temperature = cursettings.Temperature,
                 dry_multiplier = cursettings.DryMultiplier,
                 dry_base = cursettings.DryBase,
-                dry_allowed_length = 2,
+                dry_allowed_length = 4,
                 dry_sequence_breakers = new string[] { ":", "\n", "|" },
                 banned_tokens = banned_tokens != null ? banned_tokens : new string[] { },
                 top_a = 0,

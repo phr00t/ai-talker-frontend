@@ -30,14 +30,13 @@ namespace TalkerFrontend {
         };
 
         public static string[] StopSequences(bool forPictures) {
-            List<string> stoppers = new List<string>() { "You:", "User:", "Human:", "Timestamp:", "Assistant:", "AI:", "P.S. ", "</think>",
+            List<string> stoppers = new List<string>() { "You:", "User:", "Human:", "Timestamp:", "Assistant:", "AI:", "P.S. ",
                                                          "Your Response:", "User's Response:", "Human's Response:", "Assistant's Response:", "AI's Response:" };
             var charnames = Integration.MainForm.GetCharacterList();
             for (int i=0; i<charnames.Count; i++) {
-                string stop_to_use = charnames[i] + ":";
+                string stop_to_use = charnames[i] + "'s Response:"; // charnames[i] + ":";
                 if (stoppers.Contains(stop_to_use) == false) {
                     stoppers.Add(stop_to_use);
-                    stoppers.Add(charnames[i] + "'s Response:");
                     stoppers.Add(charnames[i] + "'s response:");
                     stoppers.Add(charnames[i] + "'s says:");
                     stoppers.Add(charnames[i] + " Response:");
