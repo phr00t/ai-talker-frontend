@@ -49,10 +49,11 @@ namespace TalkerFrontend {
 
         public static string GetRAGKeywords(string request, out string preload) {
             preload = "Keyword list: ";
-            return "The following is a prompt received by a human:\n\n" + request + "\n\nWe need to decompose this request into a list of keywords to search a database for potentially relevant information needed for an informed response to that prompt. The keywords " +
-                   "need to be provided in a comma separated list. The list of keywords should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way.\n\nFor example, if the prompt was 'did you have any pets?', a desired response would be:\n\n" +
-                   "pet, cat, dog\nKeywords Finished\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. However, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" +
-                   "Do not include anything else in this response, just the comma separated list for keywords only. Thinking mode disabled; immediate response only with no interruptions, annotation or reflection. When done listing keywords, finish with 'Keywords Finished'.\n\n";
+            return "The following is a prompt received by a human:\n\n" + request + "\n\nWe need to decompose this request into a list of terms to search a database for potentially relevant information needed for an informed response to that prompt. The terms " +
+                   "need to be provided in a comma separated list. The list of terms should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way.\n\nFor example, if the prompt was 'did you have any pets?', a desired response would be:\n\n" +
+                   "pet, cat, dog\nKeywords Finished\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Also, try to keep term groups together, like '2026 Iran War' shouldn't be split into 3 separate terms, since the request is likely only interested in the Iran War of 2026 (not 'Iran' in general).\n\n" +
+                   "Finally, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" +
+                   "Do not include anything else in this response, just the comma separated list for keywords only. When done listing keywords, finish with 'Keywords Finished'.\n\n";
         }
 
         public static (string, string) GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {
@@ -69,9 +70,16 @@ namespace TalkerFrontend {
             if (image_desc != null)
                 image_description = "Image Attached Description: " + image_desc + "\n(end image description)";
 
+            // is there any wikipedia stuff to collect?
+            string WikipediaResearch = "";
+            if (processed_keywords != null) {
+                List<string> split_keywords = new List<string>(processed_keywords.Split(','));
+                WikipediaResearch = WikiRAG.GatherInformation(split_keywords, (int)(Integration.MainForm.GetWikiAllowance * Integration.CharactersPerToken));
+            }
+
             // how much chat log do we need to fill?
             string chat_log_source = ChatManager.CurrentChatLog;
-            int max_context_length_allowed = Integration.GetMaxCharacterLength - prompt.Length - image_description.Length - timestamp.Length - timestamp_response.Length - Integration.LatestRSSFeedCompiled.Length;
+            int max_context_length_allowed = Integration.GetMaxCharacterLength - prompt.Length - image_description.Length - timestamp.Length - timestamp_response.Length - Integration.LatestRSSFeedCompiled.Length - WikipediaResearch.Length;
             int chat_len_allowed = (int)Math.Round(max_context_length_allowed * 0.7f);
             int chat_log_cut = Math.Max(0, chat_log_source.Length - chat_len_allowed);
             string chat_content = (chat_log_cut <= 0 ? chat_log_source : "..." + chat_log_source.Substring(chat_log_cut)).Trim();
@@ -102,6 +110,7 @@ namespace TalkerFrontend {
 
             return (prompt +
                    Integration.LatestRSSFeedCompiled +
+                   WikipediaResearch +
                    recall_info +
                    chat_content +
                    append_to_log + "\n\nProvide a unique response as " + who.Name + " to the message above.", 

@@ -22,9 +22,6 @@ using CSCore.CoreAudioAPI;
 using SimpleFeedReader;
 
 /*
- * x support remote use
- * - process chat prompt keyword extraction *NEEDS TESTING*
- * - add qwen edit support (basically a workflow to take the input image of the character) *NEEDS TESTING*
  */
 
 namespace TalkerFrontend {

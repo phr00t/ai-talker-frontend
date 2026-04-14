@@ -30,6 +30,18 @@ namespace TalkerFrontend {
         public Dictionary<string, Control> AllControls;
         public static string OptionsFile => Path.Combine(Integration.BaseDirectory, "options.txt");
 
+        public string GetWikiDirectory => WikiDir.Text.Trim();
+        public int GetWikiAllowance {
+            get {
+                int retval = 0;
+                string vals = WikiAllowance.Text.Trim();
+                if (int.TryParse(vals, out int allowance)) retval = allowance;
+                if (retval < 0) return 0;
+                if (retval > 128000) return 128000;
+                return retval;
+            }
+        }
+
         public int WordsPerRecall {
             get {
                 string wprstr = AdvWordRecall.Text;
@@ -109,6 +121,7 @@ namespace TalkerFrontend {
         public bool PostProcessPrompt => postprocess_prompt.Checked;
 
         private void Form1_Load(object sender, EventArgs e) {
+            //WikiRAG.Test();
             AllControls = new Dictionary<string, Control>();
             foreach (Control control in Controls) {
                 if (control is PictureBox ||
@@ -143,6 +156,8 @@ namespace TalkerFrontend {
                     AdvDryMult.Text = Integration.LoadTagged(optdata, "AdvDryMult") ?? AdvDryMult.Text;
                     AdvMinP.Text = Integration.LoadTagged(optdata, "AdvMinP") ?? AdvMinP.Text;
                     AdvMaxTokens.Text = Integration.LoadTagged(optdata, "AdvMaxTokens") ?? AdvMaxTokens.Text;
+                    WikiDir.Text = Integration.LoadTagged(optdata, "WikiDir") ?? WikiDir.Text;
+                    WikiAllowance.Text = Integration.LoadTagged(optdata, "WikiAllowance") ?? WikiAllowance.Text;
                     rss_feed.Text = Integration.LoadTagged(optdata, "rss_feed") ?? rss_feed.Text;
                     rss_feed_count.Text = Integration.LoadTagged(optdata, "rss_feed_count") ?? rss_feed_count.Text;
                     AdvExtraStops.Text = Integration.LoadTagged(optdata, "AdvExtraStops") ?? AdvExtraStops.Text;
@@ -223,6 +238,8 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(rss_feed.Text, "rss_feed");
             optdata += Integration.StringTagged(rss_feed_count.Text, "rss_feed_count");
             optdata += Integration.StringTagged(AdvTopP.Text, "AdvTopP");
+            optdata += Integration.StringTagged(WikiAllowance.Text, "WikiAllowance");
+            optdata += Integration.StringTagged(WikiDir.Text, "WikiDir");
             optdata += Integration.StringTagged(CBUseRecommended.Checked ? "true" : "false", "CBUseRecommended");
             optdata += Integration.StringTagged(postprocess_prompt.Checked ? "true" : "false", "postprocess_prompt");
             optdata += Integration.StringTagged(CBFillContext.Checked ? "true" : "false", "CBFillContext");
@@ -627,6 +644,11 @@ namespace TalkerFrontend {
 
         private void rss_feed_TextChanged(object sender, EventArgs e) {
             Integration.UpdateRSSFeedTimer = 5f;
+        }
+
+        private void import_wikipedia_Click(object sender, EventArgs e) {
+            string result = WikiRAG.UpdateFiles();
+            MessageBox.Show(result, "Wiki Load Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

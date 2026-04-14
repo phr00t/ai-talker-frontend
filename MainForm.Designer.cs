@@ -61,6 +61,10 @@
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.WikiAllowance = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.WikiDir = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.postprocess_prompt = new System.Windows.Forms.CheckBox();
             this.rss_feed_count = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -95,6 +99,7 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
+            this.import_wikipedia = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -526,6 +531,11 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.import_wikipedia);
+            this.tabPage2.Controls.Add(this.WikiAllowance);
+            this.tabPage2.Controls.Add(this.label17);
+            this.tabPage2.Controls.Add(this.WikiDir);
+            this.tabPage2.Controls.Add(this.label18);
             this.tabPage2.Controls.Add(this.postprocess_prompt);
             this.tabPage2.Controls.Add(this.rss_feed_count);
             this.tabPage2.Controls.Add(this.label15);
@@ -555,6 +565,50 @@
             this.tabPage2.Size = new System.Drawing.Size(459, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // WikiAllowance
+            // 
+            this.WikiAllowance.BackColor = System.Drawing.Color.Navy;
+            this.WikiAllowance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WikiAllowance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiAllowance.ForeColor = System.Drawing.Color.White;
+            this.WikiAllowance.Location = new System.Drawing.Point(149, 124);
+            this.WikiAllowance.Name = "WikiAllowance";
+            this.WikiAllowance.Size = new System.Drawing.Size(293, 25);
+            this.WikiAllowance.TabIndex = 65;
+            this.WikiAllowance.Text = "1024";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(145, 105);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(205, 20);
+            this.label17.TabIndex = 64;
+            this.label17.Text = "Wikipedia Token Allowance:";
+            // 
+            // WikiDir
+            // 
+            this.WikiDir.BackColor = System.Drawing.Color.Navy;
+            this.WikiDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WikiDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiDir.ForeColor = System.Drawing.Color.White;
+            this.WikiDir.Location = new System.Drawing.Point(149, 81);
+            this.WikiDir.Name = "WikiDir";
+            this.WikiDir.Size = new System.Drawing.Size(293, 25);
+            this.WikiDir.TabIndex = 63;
+            this.WikiDir.Text = "D:/Wikipedia/";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(145, 62);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(252, 20);
+            this.label18.TabIndex = 62;
+            this.label18.Text = "Wikipedia index.txt / xml.bz2 folder:";
             // 
             // postprocess_prompt
             // 
@@ -685,7 +739,7 @@
             this.AdvMaxTokens.ForeColor = System.Drawing.Color.White;
             this.AdvMaxTokens.Location = new System.Drawing.Point(21, 300);
             this.AdvMaxTokens.Name = "AdvMaxTokens";
-            this.AdvMaxTokens.Size = new System.Drawing.Size(314, 25);
+            this.AdvMaxTokens.Size = new System.Drawing.Size(112, 25);
             this.AdvMaxTokens.TabIndex = 51;
             this.AdvMaxTokens.Text = "2048";
             // 
@@ -707,7 +761,7 @@
             this.AdvDryBase.ForeColor = System.Drawing.Color.White;
             this.AdvDryBase.Location = new System.Drawing.Point(21, 254);
             this.AdvDryBase.Name = "AdvDryBase";
-            this.AdvDryBase.Size = new System.Drawing.Size(314, 25);
+            this.AdvDryBase.Size = new System.Drawing.Size(112, 25);
             this.AdvDryBase.TabIndex = 49;
             this.AdvDryBase.Text = "1.75";
             // 
@@ -729,7 +783,7 @@
             this.AdvDryMult.ForeColor = System.Drawing.Color.White;
             this.AdvDryMult.Location = new System.Drawing.Point(21, 209);
             this.AdvDryMult.Name = "AdvDryMult";
-            this.AdvDryMult.Size = new System.Drawing.Size(314, 25);
+            this.AdvDryMult.Size = new System.Drawing.Size(112, 25);
             this.AdvDryMult.TabIndex = 47;
             this.AdvDryMult.Text = "0.8";
             // 
@@ -751,7 +805,7 @@
             this.AdvTopP.ForeColor = System.Drawing.Color.White;
             this.AdvTopP.Location = new System.Drawing.Point(21, 166);
             this.AdvTopP.Name = "AdvTopP";
-            this.AdvTopP.Size = new System.Drawing.Size(314, 25);
+            this.AdvTopP.Size = new System.Drawing.Size(112, 25);
             this.AdvTopP.TabIndex = 45;
             this.AdvTopP.Text = "1.0";
             // 
@@ -773,7 +827,7 @@
             this.AdvMinP.ForeColor = System.Drawing.Color.White;
             this.AdvMinP.Location = new System.Drawing.Point(21, 124);
             this.AdvMinP.Name = "AdvMinP";
-            this.AdvMinP.Size = new System.Drawing.Size(314, 25);
+            this.AdvMinP.Size = new System.Drawing.Size(112, 25);
             this.AdvMinP.TabIndex = 43;
             this.AdvMinP.Text = "0.15";
             // 
@@ -795,7 +849,7 @@
             this.AdvTemperature.ForeColor = System.Drawing.Color.White;
             this.AdvTemperature.Location = new System.Drawing.Point(21, 81);
             this.AdvTemperature.Name = "AdvTemperature";
-            this.AdvTemperature.Size = new System.Drawing.Size(314, 25);
+            this.AdvTemperature.Size = new System.Drawing.Size(112, 25);
             this.AdvTemperature.TabIndex = 41;
             this.AdvTemperature.Text = "1.25";
             // 
@@ -927,6 +981,19 @@
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
             // 
+            // import_wikipedia
+            // 
+            this.import_wikipedia.BackColor = System.Drawing.Color.Yellow;
+            this.import_wikipedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.import_wikipedia.ForeColor = System.Drawing.Color.Black;
+            this.import_wikipedia.Location = new System.Drawing.Point(149, 155);
+            this.import_wikipedia.Name = "import_wikipedia";
+            this.import_wikipedia.Size = new System.Drawing.Size(293, 41);
+            this.import_wikipedia.TabIndex = 66;
+            this.import_wikipedia.Text = "Import Local Wikipedia (Please wait)";
+            this.import_wikipedia.UseVisualStyleBackColor = false;
+            this.import_wikipedia.Click += new System.EventHandler(this.import_wikipedia_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -977,7 +1044,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend v2.0";
+            this.Text = "Phr00t\'s AI Talker Frontend v3.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
@@ -1068,6 +1135,11 @@
         private System.Windows.Forms.TextBox rss_feed;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.CheckBox postprocess_prompt;
+        private System.Windows.Forms.TextBox WikiAllowance;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox WikiDir;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button import_wikipedia;
     }
 }
 

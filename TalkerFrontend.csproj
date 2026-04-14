@@ -137,6 +137,9 @@
       <HintPath>packages\System.ServiceModel.Syndication.9.0.2\lib\net462\System.ServiceModel.Syndication.dll</HintPath>
     </Reference>
     <Reference Include="System.Speech" />
+    <Reference Include="System.Text.Encoding.CodePages, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encoding.CodePages.8.0.0\lib\net462\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
     <Reference Include="System.Text.Encodings.Web, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Text.Encodings.Web.9.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
@@ -166,8 +169,39 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="ChatManager.cs" />
+    <Compile Include="DataDumpPageFoundEventArgs.cs" />
+    <Compile Include="DataDumpReader.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\BZip2\BZip2.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\BZip2\BZip2Constants.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\BZip2\BZip2Exception.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\BZip2\BZip2InputStream.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\BZip2\BZip2OutputStream.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Checksum\Adler32.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Checksum\BZip2Crc.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Checksum\Crc32.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Checksum\CrcUtilities.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Checksum\IChecksum.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\ByteOrderUtils.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\EmptyRefs.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\ExactMemoryPool.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\Exceptions\SharpZipBaseException.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\Exceptions\StreamDecodingException.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\Exceptions\StreamUnsupportedException.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\Exceptions\UnexpectedEndOfStreamException.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\Exceptions\ValueOutOfRangeException.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\FileSystemScanner.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\INameTransform.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\InvalidNameException.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\IScanFilter.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\NameFilter.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\PathFilter.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\PathUtils.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\StreamUtils.cs" />
+    <Compile Include="ICSharpCode.SharpZipLib\Core\StringBuilderPool.cs" />
+    <Compile Include="IDataDumpReader.cs" />
     <Compile Include="ImageGenOptions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -180,6 +214,7 @@
     <Compile Include="ImageReaderSettings.Designer.cs">
       <DependentUpon>ImageReaderSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="IPageIndexSearcher.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,10 +228,15 @@
       <DependentUpon>CharMaker.cs</DependentUpon>
     </Compile>
     <Compile Include="Integration.cs" />
+    <Compile Include="PageIndexItem.cs" />
+    <Compile Include="PageIndexItemFoundEventArgs.cs" />
+    <Compile Include="PageIndexSearcher.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgressChangedEventArgs.cs" />
     <Compile Include="PromptGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringProcessor.cs" />
+    <Compile Include="WikiRAG.cs" />
     <EmbeddedResource Include="CharMaker.resx">
       <DependentUpon>CharMaker.cs</DependentUpon>
     </EmbeddedResource>
@@ -218,6 +258,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
