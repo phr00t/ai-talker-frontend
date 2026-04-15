@@ -584,9 +584,9 @@
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.Location = new System.Drawing.Point(145, 105);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(205, 20);
+            this.label17.Size = new System.Drawing.Size(290, 20);
             this.label17.TabIndex = 64;
-            this.label17.Text = "Wikipedia Token Allowance:";
+            this.label17.Text = "Wikipedia Token Allowance (0 disables):";
             // 
             // WikiDir
             // 
@@ -606,9 +606,9 @@
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.Location = new System.Drawing.Point(145, 62);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(252, 20);
+            this.label18.Size = new System.Drawing.Size(296, 20);
             this.label18.TabIndex = 62;
-            this.label18.Text = "Wikipedia index.txt / xml.bz2 folder:";
+            this.label18.Text = "Wikipedia index.txt / xml.bz2 dump folder:";
             // 
             // postprocess_prompt
             // 
@@ -633,7 +633,7 @@
             this.rss_feed_count.ForeColor = System.Drawing.Color.White;
             this.rss_feed_count.Location = new System.Drawing.Point(21, 597);
             this.rss_feed_count.Name = "rss_feed_count";
-            this.rss_feed_count.Size = new System.Drawing.Size(314, 25);
+            this.rss_feed_count.Size = new System.Drawing.Size(363, 25);
             this.rss_feed_count.TabIndex = 60;
             this.rss_feed_count.Text = "0";
             this.rss_feed_count.TextChanged += new System.EventHandler(this.rss_feed_TextChanged);
@@ -644,9 +644,9 @@
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.Location = new System.Drawing.Point(19, 578);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(202, 20);
+            this.label15.Size = new System.Drawing.Size(297, 20);
             this.label15.TabIndex = 59;
-            this.label15.Text = "RSS feeds entries to inject:";
+            this.label15.Text = "RSS feeds entries to inject (0 to disable):";
             // 
             // rss_feed
             // 
@@ -691,7 +691,7 @@
             this.AdvWordRecall.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AdvWordRecall.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdvWordRecall.ForeColor = System.Drawing.Color.White;
-            this.AdvWordRecall.Location = new System.Drawing.Point(268, 420);
+            this.AdvWordRecall.Location = new System.Drawing.Point(281, 424);
             this.AdvWordRecall.Name = "AdvWordRecall";
             this.AdvWordRecall.Size = new System.Drawing.Size(72, 25);
             this.AdvWordRecall.TabIndex = 55;
@@ -718,7 +718,7 @@
             this.AdvExtraStops.Multiline = true;
             this.AdvExtraStops.Name = "AdvExtraStops";
             this.AdvExtraStops.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.AdvExtraStops.Size = new System.Drawing.Size(366, 60);
+            this.AdvExtraStops.Size = new System.Drawing.Size(414, 60);
             this.AdvExtraStops.TabIndex = 53;
             // 
             // label13
