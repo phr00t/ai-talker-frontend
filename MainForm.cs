@@ -30,6 +30,7 @@ namespace TalkerFrontend {
         public Dictionary<string, Control> AllControls;
         public static string OptionsFile => Path.Combine(Integration.BaseDirectory, "options.txt");
 
+        public bool FolloWikiRedirects => WikiFollowRedirects.Checked;
         public string GetWikiDirectory => WikiDir.Text.Trim();
         public int GetWikiAllowance {
             get {
@@ -164,6 +165,7 @@ namespace TalkerFrontend {
                     AdvTemperature.Text = Integration.LoadTagged(optdata, "AdvTemperature") ?? AdvTemperature.Text;
                     AdvWordRecall.Text = Integration.LoadTagged(optdata, "AdvWordRecall") ?? AdvWordRecall.Text;
                     AdvTopP.Text = Integration.LoadTagged(optdata, "AdvTopP") ?? AdvTopP.Text;
+                    WikiFollowRedirects.Checked = (Integration.LoadTagged(optdata, "WikiFollowRedirects") ?? "true") == "true";
                     CBUseRecommended.Checked = (Integration.LoadTagged(optdata, "CBUseRecommended") ?? "true") == "true";
                     CBFillContext.Checked = (Integration.LoadTagged(optdata, "CBFillContext") ?? "true") == "true";
                     postprocess_prompt.Checked = (Integration.LoadTagged(optdata, "postprocess_prompt") ?? "true") == "true";
@@ -178,7 +180,6 @@ namespace TalkerFrontend {
                 } catch { }
             }
 
-            // TODO: need to pick whether remote or local
             // if remote, disable features like starting/killing kobold and probably whisper listening
             string result = ShowDialog("KoboldCpp IP:Port? Leave blank to use KoboldCpp Config locally", "KoboldCpp Connection Configuration", "127.0.0.1:5001");
             if (result == "") {
@@ -243,6 +244,7 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(CBUseRecommended.Checked ? "true" : "false", "CBUseRecommended");
             optdata += Integration.StringTagged(postprocess_prompt.Checked ? "true" : "false", "postprocess_prompt");
             optdata += Integration.StringTagged(CBFillContext.Checked ? "true" : "false", "CBFillContext");
+            optdata += Integration.StringTagged(WikiFollowRedirects.Checked ? "true" : "false", "WikiFollowRedirects");
             optdata += Integration.StringTagged(Integration.IMGConfig.KoboldCppVisualModel, "KoboldCppVisualModel");
             optdata += Integration.StringTagged(Integration.IMGConfig.ImagePrompt, "ImagePrompt");
             optdata += Integration.StringTagged(Integration.IMGConfig.UseExistingTextModel ? "true" : "false", "UseExistingTextModel");

@@ -110,7 +110,7 @@ namespace TalkerFrontend {
                                                                                     WhoTalking?.PersistentDescription ?? "", out _);
             WhoTalking = SelectedCharacter;
             Integration.MainForm.ClearMonitor();
-            Integration.SendTextPrompt(prompt, append_prompt, null, false, false, false, StopSequences(false), BannedTalkTokens);
+            Integration.SendTextPrompt(prompt, append_prompt, null, false, Integration.SEND_PIC_TYPE.None, false, StopSequences(false), BannedTalkTokens);
         }
 
         public static string previousYourPrompt;
@@ -133,7 +133,7 @@ namespace TalkerFrontend {
                     Thread.Sleep(3000);
                     Integration.EnsureKoboldCppMode(true, true, 500);
                     Thread.Sleep(3000);
-                    Integration.SendTextPrompt(Integration.IMGConfig.ImagePrompt, "Image Description: ", 1024, true, true, false, StopSequences(false));
+                    Integration.SendTextPrompt(Integration.IMGConfig.ImagePrompt, "Image Description: ", 1024, true, Integration.SEND_PIC_TYPE.SendClear, false, StopSequences(false));
                 });
                 t.Start();
             } else if (Integration.MainForm.PostProcessPrompt && keywords_provided == null) {
@@ -148,7 +148,7 @@ namespace TalkerFrontend {
                     len = 512;
                 else if (len < 128)
                     len = 128;
-                Integration.SendTextPrompt(prompt, preload, len, true, false, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
+                Integration.SendTextPrompt(prompt, preload, len, true, Integration.SEND_PIC_TYPE.SendNoClear, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
             } else if (Integration.MainForm.PostProcessPrompt == false || keywords_provided != null) {
                 string MyName = MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
                 string MyDescription = Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
@@ -165,7 +165,7 @@ namespace TalkerFrontend {
                 YourPrompt = null;
                 YourImageDescription = null;
                 Integration.MainForm.ClearMonitor();
-                Integration.SendTextPrompt(prompt, preload, null, false, hasPicToSend, false, StopSequences(false), BannedTalkTokens);
+                Integration.SendTextPrompt(prompt, preload, null, false, hasPicToSend ? Integration.SEND_PIC_TYPE.SendClear : Integration.SEND_PIC_TYPE.None , false, StopSequences(false), BannedTalkTokens);
             }
         }
 
@@ -178,7 +178,7 @@ namespace TalkerFrontend {
             Integration.MainForm.ClearMonitor();
             string prompt = PromptGenerator.GetPicturePrompt(SelectedCharacter, Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim());
             Integration.MainForm.SetStatus("Picture Description Generate");
-            Integration.SendTextPrompt(prompt, "Completed Formatted Picture Description:\n\nLocation: ", 512, true, false, false, StopSequences(true), BannedTalkTokens);
+            Integration.SendTextPrompt(prompt, "Completed Formatted Picture Description:\n\nLocation: ", 512, true, Integration.SEND_PIC_TYPE.None, false, StopSequences(true), BannedTalkTokens);
         }
 
         public class AWAITSAY {

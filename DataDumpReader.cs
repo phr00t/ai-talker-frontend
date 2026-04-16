@@ -20,7 +20,7 @@ namespace WikipediaExtractor
 
         public class WikipediaEntry {
             public string Title;
-            public string WholeEntry, TrimmedEntry;
+            public string WholeEntry, CappedEntry, TrimmedEntry;
             public List<string> InterestingParts = new List<string>();
         }
 
@@ -34,12 +34,14 @@ namespace WikipediaExtractor
             DataDumpStream = dataDumpStream ?? throw new ArgumentNullException("dataDumpStream");
         }
 
-        public List<WikipediaEntry> Grab(List<PageIndexItem> pageIndexItems)
+        public List<WikipediaEntry> Grab(List<PageIndexItem> pageIndexItems, out List<string> redirects, int max_len = 4096)
         {
             List<WikipediaEntry> results = new List<WikipediaEntry>();
-            foreach (var page in pageIndexItems)
+            redirects = new List<string>();
+            var was_redirects = new List<PageIndexItem>();
+            for (int i=0; i<pageIndexItems.Count; i++)
             {
-
+                var page = pageIndexItems[i];
                 byte[] streamBytes;
                 try {
                     streamBytes = ReadStream(DataDumpStream, page.ByteStart);
@@ -57,8 +59,14 @@ namespace WikipediaExtractor
                                 if (whole_text.StartsWith("#REDIRECT") == false) {
                                     results.Add(new WikipediaEntry() {
                                         Title = page.PageTitle,
-                                        WholeEntry = whole_text,
+                                        CappedEntry = whole_text.Length > max_len ? whole_text.Substring(0, max_len) : whole_text,
+                                        WholeEntry = whole_text
                                     });
+                                } else {
+                                    // oof, redirect...
+                                    redirects.Add(whole_text.Split('[').Last().Replace("]", "").Trim());
+                                    pageIndexItems.RemoveAt(i);
+                                    i--;
                                 }
                             }
                         }

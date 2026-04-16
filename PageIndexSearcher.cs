@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -38,18 +39,19 @@ namespace WikipediaExtractor
 
         public List<PageIndexItem> Search(List<string> pageTitles, FileStream fs, int top_n_results = 6)
         {
+            pageTitles = pageTitles.Distinct().ToList();
             List<PageIndexItem>[] pageIndexItems = new List<PageIndexItem>[pageTitles.Count];
 
-            int chunks_len = WholeIndex.Length / 10;
+            int SPLIT_AMOUNT = Environment.ProcessorCount / 2;
+            int chunks_len = WholeIndex.Length / SPLIT_AMOUNT;
 
             List<string[]> split_titles = new List<string[]>();
             for (int i = 0; i < pageTitles.Count; i++) {
                 pageIndexItems[i] = new List<PageIndexItem>();
-                string caps = FirstLetterToUpperCase(pageTitles[i].Trim());
-                split_titles.Add(caps.Split(' '));
+                split_titles.Add(pageTitles[i].Trim().ToLower().Split(' '));
             }
 
-            Parallel.For(0, 10, c => {
+            Parallel.For(0, SPLIT_AMOUNT, c => {
                 int starti = c * chunks_len;
                 int endi = Math.Min((c + 1) * chunks_len, WholeIndex.Length);
                 for (int i=starti; i<endi; i++) {
@@ -57,7 +59,7 @@ namespace WikipediaExtractor
                     string low_line = line.ToLower();
                     for (int j = 0; j < split_titles.Count; j++) {
                         for (int k=0; k < split_titles[j].Length; k++) {
-                            string search_term = split_titles[j][k].ToLower();
+                            string search_term = split_titles[j][k];
                             if (low_line.Contains(search_term) == false || ContainsWholeWord(low_line, search_term) == false)
                                 goto not_found;
                         }

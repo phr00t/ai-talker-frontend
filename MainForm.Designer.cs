@@ -61,6 +61,7 @@
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.import_wikipedia = new System.Windows.Forms.Button();
             this.WikiAllowance = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.WikiDir = new System.Windows.Forms.TextBox();
@@ -99,7 +100,7 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
-            this.import_wikipedia = new System.Windows.Forms.Button();
+            this.WikiFollowRedirects = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -531,6 +532,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.WikiFollowRedirects);
             this.tabPage2.Controls.Add(this.import_wikipedia);
             this.tabPage2.Controls.Add(this.WikiAllowance);
             this.tabPage2.Controls.Add(this.label17);
@@ -565,6 +567,19 @@
             this.tabPage2.Size = new System.Drawing.Size(459, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // import_wikipedia
+            // 
+            this.import_wikipedia.BackColor = System.Drawing.Color.Yellow;
+            this.import_wikipedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.import_wikipedia.ForeColor = System.Drawing.Color.Black;
+            this.import_wikipedia.Location = new System.Drawing.Point(149, 179);
+            this.import_wikipedia.Name = "import_wikipedia";
+            this.import_wikipedia.Size = new System.Drawing.Size(293, 41);
+            this.import_wikipedia.TabIndex = 66;
+            this.import_wikipedia.Text = "Import Local Wikipedia (Please wait)";
+            this.import_wikipedia.UseVisualStyleBackColor = false;
+            this.import_wikipedia.Click += new System.EventHandler(this.import_wikipedia_Click);
             // 
             // WikiAllowance
             // 
@@ -619,9 +634,9 @@
             this.postprocess_prompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.postprocess_prompt.Location = new System.Drawing.Point(21, 496);
             this.postprocess_prompt.Name = "postprocess_prompt";
-            this.postprocess_prompt.Size = new System.Drawing.Size(414, 22);
+            this.postprocess_prompt.Size = new System.Drawing.Size(365, 22);
             this.postprocess_prompt.TabIndex = 61;
-            this.postprocess_prompt.Text = "Post-process prompt for better long term memory retrieval";
+            this.postprocess_prompt.Text = "Post-process prompt for RAG / better memory use";
             this.postprocess_prompt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.postprocess_prompt.UseVisualStyleBackColor = false;
             // 
@@ -981,18 +996,20 @@
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
             // 
-            // import_wikipedia
+            // WikiFollowRedirects
             // 
-            this.import_wikipedia.BackColor = System.Drawing.Color.Yellow;
-            this.import_wikipedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.import_wikipedia.ForeColor = System.Drawing.Color.Black;
-            this.import_wikipedia.Location = new System.Drawing.Point(149, 155);
-            this.import_wikipedia.Name = "import_wikipedia";
-            this.import_wikipedia.Size = new System.Drawing.Size(293, 41);
-            this.import_wikipedia.TabIndex = 66;
-            this.import_wikipedia.Text = "Import Local Wikipedia (Please wait)";
-            this.import_wikipedia.UseVisualStyleBackColor = false;
-            this.import_wikipedia.Click += new System.EventHandler(this.import_wikipedia_Click);
+            this.WikiFollowRedirects.AutoSize = true;
+            this.WikiFollowRedirects.BackColor = System.Drawing.Color.Black;
+            this.WikiFollowRedirects.Checked = true;
+            this.WikiFollowRedirects.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.WikiFollowRedirects.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiFollowRedirects.Location = new System.Drawing.Point(149, 155);
+            this.WikiFollowRedirects.Name = "WikiFollowRedirects";
+            this.WikiFollowRedirects.Size = new System.Drawing.Size(303, 22);
+            this.WikiFollowRedirects.TabIndex = 67;
+            this.WikiFollowRedirects.Text = "Follow Wiki Redirects (Slower, but better)";
+            this.WikiFollowRedirects.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.WikiFollowRedirects.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
@@ -1140,6 +1157,7 @@
         private System.Windows.Forms.TextBox WikiDir;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button import_wikipedia;
+        private System.Windows.Forms.CheckBox WikiFollowRedirects;
     }
 }
 

@@ -49,10 +49,10 @@ namespace TalkerFrontend {
 
         public static string GetRAGKeywords(string request, out string preload) {
             preload = "Keyword list: ";
-            return "The following is a prompt received by a human:\n\n" + request + "\n\nWe need to decompose this request into a list of terms to search a database for potentially relevant information needed for an informed response to that prompt. The terms " +
-                   "need to be provided in a comma separated list. The list of terms should not be much longer than the original request, and ideally shorter. However, it does need to cover key names, objects, locations and subjects in a flexible way.\n\nFor example, if the prompt was 'did you have any pets?', a desired response would be:\n\n" +
-                   "pet, cat, dog\nKeywords Finished\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Also, try to keep term groups together, like '2026 Iran War' shouldn't be split into 3 separate terms, since the request is likely only interested in the Iran War of 2026 (not 'Iran' in general).\n\n" +
-                   "Finally, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request.\n\n" +
+            return "*** Search Term Brainstorm List ***\n\nThe following is a prompt received by a human:\n\n" + request + "\n\nWe need to brainstorm search terms to find potentially relevant information in a database for an informed response. The terms " +
+                   "need to be provided in a comma separated list. The list of terms should be unique, with the most useful listed first.\n\nNote that search terms may not exactly match words in the prompt. For example, if the prompt was 'did you have any pets?', valid search terms could be:\n\n" +
+                   "pet, cat, dog\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Try to keep term groups together, like '2026 Iran War' shouldn't be split into 3 separate terms, since the request is likely only interested in the Iran War of 2026 (not 'Iran' in general). When possible, use terms without prefixes or suffixes if it doesn't alter the meaning (for example, use 'itch' instead of 'itching').\n\n" +
+                   "Finally, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request. Do not repeat the same terms and order them in importance.\n\n" +
                    "Do not include anything else in this response, just the comma separated list for keywords only. When done listing keywords, finish with 'Keywords Finished'.\n\n";
         }
 

@@ -424,8 +424,11 @@ namespace TalkerFrontend {
         public static List<Task<RestResponse>> all_response_tasks = new List<Task<RestResponse>>();
         public static void Update() {
             UpdateRSSFeedTimer -= 0.1f;
-            string rss_feed_addr = MainForm.GetControl<TextBox>("rss_feed").Text;
-            string rss_feed_count = MainForm.GetControl<TextBox>("rss_feed_count").Text;
+            string rss_feed_addr, rss_feed_count;
+            try {
+                rss_feed_addr = MainForm.GetControl<TextBox>("rss_feed").Text;
+                rss_feed_count = MainForm.GetControl<TextBox>("rss_feed_count").Text;
+            } catch { return; }
             int.TryParse(rss_feed_count, out int rss_count);
             if (rss_count > 0 && rss_feed_addr.Length > 0) {
                 if (UpdateRSSFeedTimer < 0f && feedEntries == null) {
@@ -679,10 +682,13 @@ namespace TalkerFrontend {
             }
         }
 
-        //private static string last_prompt_sent;
-        //private static int last_prompt_size;
-        //private static bool last_prompt_notcreative;
-        public static void SendTextPrompt(string prompt, string preload_prompt, int? max_len = null, bool not_creative = false, bool send_pic = false, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
+        public enum SEND_PIC_TYPE {
+            None = 0,
+            SendClear = 1,
+            SendNoClear = 2
+        }
+
+        public static void SendTextPrompt(string prompt, string preload_prompt, int? max_len = null, bool not_creative = false, SEND_PIC_TYPE send_pic = SEND_PIC_TYPE.None, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
             if (!RemoteOnlyMode) EnsureKoboldCppMode(true);
             var rr = new RestRequest("/api/v1/generate", Method.Post);
             //last_prompt_sent = prompt;
@@ -699,8 +705,8 @@ namespace TalkerFrontend {
             final_stops.AddRange(cursettings.ExtraStopTokens);
 
             List<string> images = new List<string>();
-            if (send_pic && MainForm.GetImage != null) {
-                MainForm.NewImageToSend = false;
+            if (send_pic != SEND_PIC_TYPE.None && MainForm.GetImage != null) {
+                if (send_pic == SEND_PIC_TYPE.SendClear) MainForm.NewImageToSend = false;
                 images.Add(EncodeImage(MainForm.GetImage, IMGConfig.MaxResolution));
             }
 
