@@ -59,9 +59,9 @@ namespace TalkerFrontend {
         public static string CurrentChatLog {
             get {
                 if (Integration.MainForm.GroupChatMode)
-                    return SelectedCharacter?.ProcessTags(GroupChatLog) ?? "";
+                    return Character.ProcessTags(GroupChatLog) ?? "";
 
-                return SelectedCharacter?.ProcessTags(SelectedCharacter.ChatLog) ?? "";
+                return Character.ProcessTags(SelectedCharacter.ChatLog) ?? "";
             }
             set {
                 if (Integration.MainForm.GroupChatMode)
@@ -71,7 +71,7 @@ namespace TalkerFrontend {
             }
         }
 
-        public static int CurrentChatLogIndex {
+        /*public static int CurrentChatLogIndex {
             get {
                 if (Integration.MainForm.GroupChatMode)
                     return SelectedCharacter?.GroupChatLogMemoryPosition ?? 0;
@@ -86,12 +86,12 @@ namespace TalkerFrontend {
                         c.ChatLogMemoryPosition = value;
                 }
             }
-        }
+        }*/
 
         public static void SetGroupChatMode() {
             if (Integration.MainForm.GroupChatMode) LoadGroupChat();
             Integration.MainForm.UpdateChatLog();
-            SelectedCharacter?.UpdateLongTerm();
+            //SelectedCharacter?.UpdateLongTerm();
         }
 
         public static void LoadGroupChat() {
@@ -152,7 +152,7 @@ namespace TalkerFrontend {
             } else if (Integration.MainForm.PostProcessPrompt == false || keywords_provided != null) {
                 string MyName = MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
                 string MyDescription = Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
-                if (MeCharacter is Character cc) MyDescription += cc.ProcessTags(cc.PersistentDescription);
+                if (MeCharacter is Character cc) MyDescription += Character.ProcessTags(cc.PersistentDescription);
                 (string prompt, string preload) = PromptGenerator.GetMasterPrompt(SelectedCharacter, request, MyName, MyDescription, out string append_log, image_description, keywords_provided);
                 CurrentChatLog += "\n\n" + append_log;
                 Integration.MainForm.UpdateChatLog();

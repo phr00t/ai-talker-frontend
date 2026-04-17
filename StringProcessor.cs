@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TalkerFrontend {
@@ -147,24 +148,29 @@ namespace TalkerFrontend {
             "well"
         };
 
-        public static void CombineMemories(ConcurrentDictionary<string, List<StringPosition>> newstuff, ConcurrentDictionary<string, List<StringPosition>> existing) {
-            Parallel.ForEach(newstuff, (pair) => {
-                if (existing.TryAdd(pair.Key, pair.Value) == false) {
-                    // need to merge info
-                    List<StringPosition> newlist = pair.Value;
-                    List<StringPosition> existing_list = existing[pair.Key];
-                    for (int m = 0; m < newlist.Count; m++) {
-                        for (int n = 0; n < existing_list.Count; n++) {
-                            if (existing_list[n].Contains(newlist[m]))
-                                goto got_this_already;
+        public static ConcurrentDictionary<string, List<StringPosition>> CombineMemories(
+            ConcurrentDictionary<string, List<StringPosition>> existing,
+            ConcurrentDictionary<string, List<StringPosition>> incoming) {
+            foreach (var kvp in incoming) {
+                existing.AddOrUpdate(
+                    kvp.Key,
+                    // Key does not exist → just add the list
+                    _ => new List<StringPosition>(kvp.Value),
+
+                    // Key exists → merge lists
+                    (_, oldList) => {
+                        // Convert to HashSet for O(1) duplicate detection
+                        var set = new HashSet<StringPosition>(oldList);
+
+                        foreach (var sp in kvp.Value) {
+                            set.Add(sp);
                         }
-                        lock (existing_list) {
-                            existing_list.Add(newlist[m]);
-                        }
-                        got_this_already:;
-                    }
-                }
-            });
+
+                        return set.ToList();
+                    });
+            }
+
+            return existing;
         }
 
         public static string RemovePunctuation(string input) {
@@ -281,7 +287,7 @@ namespace TalkerFrontend {
             public string Text;
 
             public bool Contains(StringPosition sp) {
-                return sp.Text.Contains(Text);
+                return Text.Contains(sp.Text);
             }
 
             public override string ToString() {
@@ -297,7 +303,7 @@ namespace TalkerFrontend {
             }
 
             public int CompareTo(StringPosition other) {
-                return other.Position.CompareTo(other.Position);
+                return Position.CompareTo(other.Position);
             }
         }
 
@@ -305,31 +311,31 @@ namespace TalkerFrontend {
             ConcurrentDictionary<string, List<StringPosition>> data = new ConcurrentDictionary<string, List<StringPosition>>();
             var matches = Regex.Matches(lotsOfInfo, @"\b\w+\b(?!: )");
             int WordsPerMemory = Integration.MainForm.WordsPerRecall;
-            Parallel.ForEach(matches.Cast<Match>(), (wordInfo) =>
-            {
-                string word_lower = GetUsefulKeyword(wordInfo.Value);
-                int search_pos = wordInfo.Index;
-                if (word_lower != null) {
-                    string to_add = ReturnAround(lotsOfInfo, search_pos, WordsPerMemory);
-                    StringPosition to_add_sp = new StringPosition() { Position = search_pos, Text = to_add };
-                    List<StringPosition> info = new List<StringPosition>() { to_add_sp };
-                    if (data.TryAdd(word_lower, info) == false) {
-                        List<StringPosition> existing = data[word_lower];
-                        lock (existing) {
-                            bool already_got_it = false;
-                            for (int m = 0; m < existing.Count; m++) {
-                                if (existing[m].Contains(to_add_sp)) {
-                                    already_got_it = true;
-                                    break;
-                                }
+            int split_count = Environment.ProcessorCount / 2;
+            int chunk_amount = matches.Count / split_count;
+            Parallel.For(0, split_count, (c) => {
+                int starti = c * chunk_amount;
+                int endi = Math.Min(matches.Count, (c + 1) * chunk_amount);
+                for (int i=starti; i<endi; i++) {
+                    var wordInfo = matches[i];
+                    string word_lower = GetUsefulKeyword(wordInfo.Value);
+                    int search_pos = wordInfo.Index;
+                    if (word_lower != null) {
+                        string to_add = ReturnAround(lotsOfInfo, search_pos, WordsPerMemory);
+                        StringPosition to_add_sp = new StringPosition() { Position = search_pos, Text = to_add };
+                        List<StringPosition> info = new List<StringPosition>() { to_add_sp };
+                        data.AddOrUpdate(word_lower, info, (key, oldvalue) => {
+                            lock (oldvalue) {
+                                oldvalue.Add(to_add_sp);
                             }
-                            if (already_got_it == false) existing.Add(to_add_sp);
-                        }
+                            return oldvalue;
+                        });
                     }
                 }
             });
             // sort by order
             Parallel.ForEach(data.Values, (stringposs) => {
+                stringposs = stringposs.Distinct().ToList();
                 stringposs.Sort();
             });
             return data;
