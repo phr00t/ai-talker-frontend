@@ -48,8 +48,8 @@ namespace TalkerFrontend {
         }
 
         public static string GetRAGKeywords(string request, out string preload) {
-            preload = "Keyword list: ";
-            return "*** Search Term Brainstorm List ***\n\nThe following is a prompt received by a human:\n\n" + request + "\n\nWe need to brainstorm search terms to find potentially relevant information in a database for an informed response. The terms " +
+            preload = "Comma separated terms list: ";
+            return "*** Search Terms Comma Separated List ***\n\nThe following is a prompt received by a human:\n\n" + request + "\n\nWe need to brainstorm search terms to find potentially relevant information in a database for an informed response. The terms " +
                    "need to be provided in a comma separated list. The list of terms should be unique, with the most useful listed first.\n\nNote that search terms may not exactly match words in the prompt. For example, if the prompt was 'did you have any pets?', valid search terms could be:\n\n" +
                    "pet, cat, dog\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Try to keep term groups together, like '2026 Iran War' shouldn't be split into 3 separate terms, since the request is likely only interested in the Iran War of 2026 (not 'Iran' in general). When possible, use terms without prefixes or suffixes if it doesn't alter the meaning (for example, use 'itch' instead of 'itching').\n\n" +
                    "Finally, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request. Do not repeat the same terms and order them in importance.\n\n" +

@@ -18,6 +18,7 @@ namespace TalkerFrontend {
         public static string UpdateFiles(bool show_box = true) {
             string directory = Integration.MainForm.GetWikiDirectory;
             IndexFile = null; DumpFile = null; indexSearcher = null;
+            Integration.MainForm.SetWikiStatus("Wikipedia not ready.");
             if (Directory.Exists(directory)) {
                 string[] index_file = Directory.GetFiles(directory, "*index.txt");
                 string[] xml_file = Directory.GetFiles(directory, "*xml.bz2");
@@ -29,7 +30,9 @@ namespace TalkerFrontend {
                 if (xml_file.Length > 0) DumpFile = xml_file[0];
                 else return "...xml.bz2 dump not found!";
             } else return "Directory not found!";
-            return indexSearcher.WholeIndex.Length.ToString() + " entries indexed!";
+            string entries = indexSearcher.WholeIndex.Length.ToString();
+            Integration.MainForm.SetWikiStatus("Wikipedia loaded: " + entries + " entries.");
+            return entries + " entries indexed!";
         }
 
         public static string GatherInformation(List<string> pageTitles, int length_allowance = 2048, int min_len_per_document = 192) {
@@ -39,12 +42,16 @@ namespace TalkerFrontend {
             List<PageIndexItem> pageIndexItems = new List<PageIndexItem>();
             using (var dataDumpReader = new DataDumpReader(DumpFile)) {
                 List<string> searching_for = pageTitles;
-                follow_redirects: List<PageIndexItem> new_finds = indexSearcher.Search(searching_for, dataDumpReader.DataDumpStream, Math.Min(6, searching_for.Count));
+                bool exact_match = false;
+                follow_redirects: List<PageIndexItem> new_finds = indexSearcher.Search(searching_for, dataDumpReader.DataDumpStream, Math.Min(6, searching_for.Count), exact_match);
                 results.AddRange(dataDumpReader.Grab(new_finds, out searching_for));
                 pageIndexItems.AddRange(new_finds);
                 // dont research stuff we already got
                 for (int i=0; i<new_finds.Count; i++) searching_for.Remove(new_finds[i].PageTitle);
-                if (Integration.MainForm.FolloWikiRedirects && searching_for.Count > 0) goto follow_redirects;
+                if (Integration.MainForm.FolloWikiRedirects && searching_for.Count > 0) {
+                    exact_match = true;
+                    goto follow_redirects;
+                }
             }
 
             int total_len = 0, total_int = 0;
@@ -137,9 +144,9 @@ namespace TalkerFrontend {
         }
 
         public static void Test() {
-            string keywords = "Superbowl X, aftermath";
-            UpdateFiles(false);
-            GatherInformation(new List<string>(keywords.Split(',')));
+            //string keywords = "";
+            //UpdateFiles(false);
+            //GatherInformation(new List<string>(keywords.Split(',')));
         }
     }
 }

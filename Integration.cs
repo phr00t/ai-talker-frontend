@@ -20,6 +20,7 @@ using System.Web.Globalization;
 using System.Windows.Forms;
 using CSCore.CoreAudioAPI;
 using SimpleFeedReader;
+using System.Text.RegularExpressions;
 
 /*
  */
@@ -324,11 +325,38 @@ namespace TalkerFrontend {
             SendTestString();
         }
 
+        public static string ConvertToCSV(string list) {
+            if (string.IsNullOrWhiteSpace(list))
+                return string.Empty;
+
+            // If it already looks like CSV (contains commas and no "n." pattern), return as-is
+            bool looksLikeCsv = list.Contains(",") &&
+                                !System.Text.RegularExpressions.Regex.IsMatch(list, @"\b\d+\.");
+
+            if (looksLikeCsv)
+                return list.Trim();
+
+            var matches = System.Text.RegularExpressions.Regex.Matches(
+                list,
+                @"\b\d+\.\s*([^0-9]+?)(?=\s*\d+\.|$)"
+            );
+
+            var items = new List<string>();
+
+            foreach (Match m in matches) {
+                string value = m.Groups[1].Value.Trim();
+                if (!string.IsNullOrWhiteSpace(value))
+                    items.Add(value);
+            }
+
+            return string.Join(", ", items);
+        }
+
         public static void ProcessLLMResponse(string text) {
             text = text.Replace("<think>", " ").Replace("</think>", " ").Replace("/no-think", " ").Replace("/no_think", " ");
             if (ChatManager.KeywordsRequested) {
                 ChatManager.KeywordsRequested = false;
-                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription, text);
+                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription, ConvertToCSV(text));
             } else if (ChatManager.ImagePromptRequested) {
                 IMGConfig.LastImagePromptResult = text;
                 // switch back to regular text model
@@ -712,6 +740,9 @@ namespace TalkerFrontend {
 
             // add ChatML non-thinking to prompt
             prompt = "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n" + preload_prompt;
+
+            // update ui
+            MainForm.SetPromptSent(prompt);
 
             // Create the request body object.  Using anonymous objects is fine
             // if you don't need to reuse the type.  For more complex scenarios,

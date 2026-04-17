@@ -30,6 +30,14 @@ namespace TalkerFrontend {
         public Dictionary<string, Control> AllControls;
         public static string OptionsFile => Path.Combine(Integration.BaseDirectory, "options.txt");
 
+        public void SetWikiStatus(string status) {
+            WikiStatus.Text = status;
+        }
+
+        public void SetPromptSent(string prompt) {
+            sent_prompt_tb.Text = prompt;
+        }
+
         public bool FolloWikiRedirects => WikiFollowRedirects.Checked;
         public string GetWikiDirectory => WikiDir.Text.Trim();
         public int GetWikiAllowance {

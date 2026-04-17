@@ -61,6 +61,7 @@
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.WikiFollowRedirects = new System.Windows.Forms.CheckBox();
             this.import_wikipedia = new System.Windows.Forms.Button();
             this.WikiAllowance = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
@@ -100,7 +101,9 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
-            this.WikiFollowRedirects = new System.Windows.Forms.CheckBox();
+            this.WikiStatus = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.sent_prompt_tb = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -109,6 +112,7 @@
             this.prtab.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharWatcher)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // WhoPicture
@@ -484,6 +488,7 @@
             // 
             this.chat_tabs.Controls.Add(this.tabPage1);
             this.chat_tabs.Controls.Add(this.prtab);
+            this.chat_tabs.Controls.Add(this.tabPage3);
             this.chat_tabs.Controls.Add(this.tabPage2);
             this.chat_tabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chat_tabs.Location = new System.Drawing.Point(914, 206);
@@ -513,7 +518,7 @@
             this.prtab.Padding = new System.Windows.Forms.Padding(3);
             this.prtab.Size = new System.Drawing.Size(459, 668);
             this.prtab.TabIndex = 1;
-            this.prtab.Text = "Response Monitor";
+            this.prtab.Text = "Output Monitor";
             this.prtab.UseVisualStyleBackColor = true;
             // 
             // partial_response
@@ -532,6 +537,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.WikiStatus);
             this.tabPage2.Controls.Add(this.WikiFollowRedirects);
             this.tabPage2.Controls.Add(this.import_wikipedia);
             this.tabPage2.Controls.Add(this.WikiAllowance);
@@ -567,6 +573,21 @@
             this.tabPage2.Size = new System.Drawing.Size(459, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // WikiFollowRedirects
+            // 
+            this.WikiFollowRedirects.AutoSize = true;
+            this.WikiFollowRedirects.BackColor = System.Drawing.Color.Black;
+            this.WikiFollowRedirects.Checked = true;
+            this.WikiFollowRedirects.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.WikiFollowRedirects.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiFollowRedirects.Location = new System.Drawing.Point(149, 155);
+            this.WikiFollowRedirects.Name = "WikiFollowRedirects";
+            this.WikiFollowRedirects.Size = new System.Drawing.Size(303, 22);
+            this.WikiFollowRedirects.TabIndex = 67;
+            this.WikiFollowRedirects.Text = "Follow Wiki Redirects (Slower, but better)";
+            this.WikiFollowRedirects.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.WikiFollowRedirects.UseVisualStyleBackColor = false;
             // 
             // import_wikipedia
             // 
@@ -996,20 +1017,38 @@
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
             // 
-            // WikiFollowRedirects
+            // WikiStatus
             // 
-            this.WikiFollowRedirects.AutoSize = true;
-            this.WikiFollowRedirects.BackColor = System.Drawing.Color.Black;
-            this.WikiFollowRedirects.Checked = true;
-            this.WikiFollowRedirects.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.WikiFollowRedirects.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WikiFollowRedirects.Location = new System.Drawing.Point(149, 155);
-            this.WikiFollowRedirects.Name = "WikiFollowRedirects";
-            this.WikiFollowRedirects.Size = new System.Drawing.Size(303, 22);
-            this.WikiFollowRedirects.TabIndex = 67;
-            this.WikiFollowRedirects.Text = "Follow Wiki Redirects (Slower, but better)";
-            this.WikiFollowRedirects.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.WikiFollowRedirects.UseVisualStyleBackColor = false;
+            this.WikiStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiStatus.Location = new System.Drawing.Point(151, 223);
+            this.WikiStatus.Name = "WikiStatus";
+            this.WikiStatus.Size = new System.Drawing.Size(290, 20);
+            this.WikiStatus.TabIndex = 68;
+            this.WikiStatus.Text = "Wikipedia not ready.";
+            this.WikiStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.Black;
+            this.tabPage3.Controls.Add(this.sent_prompt_tb);
+            this.tabPage3.Location = new System.Drawing.Point(4, 27);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(459, 668);
+            this.tabPage3.TabIndex = 3;
+            this.tabPage3.Text = "Sent Prompt";
+            // 
+            // sent_prompt_tb
+            // 
+            this.sent_prompt_tb.BackColor = System.Drawing.Color.Black;
+            this.sent_prompt_tb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sent_prompt_tb.ForeColor = System.Drawing.Color.White;
+            this.sent_prompt_tb.Location = new System.Drawing.Point(0, 1);
+            this.sent_prompt_tb.Multiline = true;
+            this.sent_prompt_tb.Name = "sent_prompt_tb";
+            this.sent_prompt_tb.ReadOnly = true;
+            this.sent_prompt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.sent_prompt_tb.Size = new System.Drawing.Size(458, 667);
+            this.sent_prompt_tb.TabIndex = 22;
             // 
             // MainForm
             // 
@@ -1075,6 +1114,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharWatcher)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1158,6 +1199,9 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button import_wikipedia;
         private System.Windows.Forms.CheckBox WikiFollowRedirects;
+        private System.Windows.Forms.Label WikiStatus;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TextBox sent_prompt_tb;
     }
 }
 

@@ -37,7 +37,7 @@ namespace WikipediaExtractor
             return new string(a);
         }
 
-        public List<PageIndexItem> Search(List<string> pageTitles, FileStream fs, int top_n_results = 6)
+        public List<PageIndexItem> Search(List<string> pageTitles, FileStream fs, int top_n_results = 6, bool exact_match = false)
         {
             pageTitles = pageTitles.Distinct().ToList();
             List<PageIndexItem>[] pageIndexItems = new List<PageIndexItem>[pageTitles.Count];
@@ -45,43 +45,74 @@ namespace WikipediaExtractor
             int SPLIT_AMOUNT = Environment.ProcessorCount / 2;
             int chunks_len = WholeIndex.Length / SPLIT_AMOUNT;
 
-            List<string[]> split_titles = new List<string[]>();
-            for (int i = 0; i < pageTitles.Count; i++) {
-                pageIndexItems[i] = new List<PageIndexItem>();
-                split_titles.Add(pageTitles[i].Trim().ToLower().Split(' '));
+            if (!exact_match) {
+                // keyword loose search
+                List<string[]> split_titles = new List<string[]>();
+                for (int i = 0; i < pageTitles.Count; i++) {
+                    pageIndexItems[i] = new List<PageIndexItem>();
+                    split_titles.Add(pageTitles[i].Trim().ToLower().Split(' '));
+                }
+
+                Parallel.For(0, SPLIT_AMOUNT, c => {
+                    int starti = c * chunks_len;
+                    int endi = Math.Min((c + 1) * chunks_len, WholeIndex.Length);
+                    for (int i = starti; i < endi; i++) {
+                        string line = WholeIndex[i];
+                        string low_line = line.ToLower();
+                        for (int j = 0; j < split_titles.Count; j++) {
+                            for (int k = 0; k < split_titles[j].Length; k++) {
+                                string search_term = split_titles[j][k];
+                                if (low_line.Contains(search_term) == false || ContainsWholeWord(low_line, search_term) == false)
+                                    goto not_found;
+                            }
+                            // found a match!
+                            string[] split = line.Split(':');
+                            if (split.Length == 3) {
+                                PageIndexItem item = new PageIndexItem() {
+                                    ByteStart = long.Parse(split[0]),
+                                    PageId = int.Parse(split[1]),
+                                    PageTitle = split[2],
+                                };
+                                var add_to = pageIndexItems[j];
+                                lock (add_to) {
+                                    add_to.Add(item);
+                                }
+                            }
+                            not_found:;
+                        }
+                    }
+                });
+            } else {
+                // exact match search
+                for (int i = 0; i < pageTitles.Count; i++)
+                    pageIndexItems[i] = new List<PageIndexItem>();
+
+                Parallel.For(0, SPLIT_AMOUNT, c => {
+                    int starti = c * chunks_len;
+                    int endi = Math.Min((c + 1) * chunks_len, WholeIndex.Length);
+                    for (int i = starti; i < endi; i++) {
+                        string line = WholeIndex[i];
+                        for (int j = 0; j < pageTitles.Count; j++) {
+                            if (line.EndsWith(":" + pageTitles[j])) {
+                                string[] split = line.Split(':');
+                                PageIndexItem item = new PageIndexItem() {
+                                    ByteStart = long.Parse(split[0]),
+                                    PageId = int.Parse(split[1]),
+                                    PageTitle = split[2],
+                                };
+                                var add_to = pageIndexItems[j];
+                                lock (add_to) {
+                                    add_to.Add(item);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                });
             }
 
-            Parallel.For(0, SPLIT_AMOUNT, c => {
-                int starti = c * chunks_len;
-                int endi = Math.Min((c + 1) * chunks_len, WholeIndex.Length);
-                for (int i=starti; i<endi; i++) {
-                    string line = WholeIndex[i];
-                    string low_line = line.ToLower();
-                    for (int j = 0; j < split_titles.Count; j++) {
-                        for (int k=0; k < split_titles[j].Length; k++) {
-                            string search_term = split_titles[j][k];
-                            if (low_line.Contains(search_term) == false || ContainsWholeWord(low_line, search_term) == false)
-                                goto not_found;
-                        }
-                        // found a match!
-                        string[] split = line.Split(':');
-                        if (split.Length == 3) {
-                            PageIndexItem item = new PageIndexItem() {
-                                ByteStart = long.Parse(split[0]),
-                                PageId = int.Parse(split[1]),
-                                PageTitle = split[2],
-                            };
-                            var add_to = pageIndexItems[j];
-                            lock (add_to) {
-                                add_to.Add(item);
-                            }
-                        } not_found:;
-                    }
-                }
-            });
-
             // sort the smallest titles to the top (likely the closest matches)
-            foreach(var pii in pageIndexItems)
+            foreach (var pii in pageIndexItems)
                 pii.Sort((o1, o2) => { return o1.PageTitle.Length.CompareTo(o2.PageTitle.Length); });
 
             // make sure to take results from all things
