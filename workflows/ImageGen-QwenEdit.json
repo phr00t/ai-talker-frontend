@@ -77,8 +77,8 @@
       "seed": $SEED,
       "steps": $STEPS,
       "cfg": 1,
-      "sampler_name": "euler_ancestral",
-      "scheduler": "beta",
+      "sampler_name": "lcm",
+      "scheduler": "simple",
       "denoise": 1,
       "model": [
         "2",

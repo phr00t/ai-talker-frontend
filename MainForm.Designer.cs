@@ -104,6 +104,8 @@
             this.WikiStatus = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.sent_prompt_tb = new System.Windows.Forms.TextBox();
+            this.WikiMaxArticles = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -537,6 +539,8 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.WikiMaxArticles);
+            this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Controls.Add(this.WikiStatus);
             this.tabPage2.Controls.Add(this.WikiFollowRedirects);
             this.tabPage2.Controls.Add(this.import_wikipedia);
@@ -581,7 +585,7 @@
             this.WikiFollowRedirects.Checked = true;
             this.WikiFollowRedirects.CheckState = System.Windows.Forms.CheckState.Checked;
             this.WikiFollowRedirects.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WikiFollowRedirects.Location = new System.Drawing.Point(149, 155);
+            this.WikiFollowRedirects.Location = new System.Drawing.Point(149, 190);
             this.WikiFollowRedirects.Name = "WikiFollowRedirects";
             this.WikiFollowRedirects.Size = new System.Drawing.Size(303, 22);
             this.WikiFollowRedirects.TabIndex = 67;
@@ -594,7 +598,7 @@
             this.import_wikipedia.BackColor = System.Drawing.Color.Yellow;
             this.import_wikipedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.import_wikipedia.ForeColor = System.Drawing.Color.Black;
-            this.import_wikipedia.Location = new System.Drawing.Point(149, 179);
+            this.import_wikipedia.Location = new System.Drawing.Point(149, 214);
             this.import_wikipedia.Name = "import_wikipedia";
             this.import_wikipedia.Size = new System.Drawing.Size(293, 41);
             this.import_wikipedia.TabIndex = 66;
@@ -1020,7 +1024,7 @@
             // WikiStatus
             // 
             this.WikiStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WikiStatus.Location = new System.Drawing.Point(151, 223);
+            this.WikiStatus.Location = new System.Drawing.Point(151, 258);
             this.WikiStatus.Name = "WikiStatus";
             this.WikiStatus.Size = new System.Drawing.Size(290, 20);
             this.WikiStatus.TabIndex = 68;
@@ -1049,6 +1053,28 @@
             this.sent_prompt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.sent_prompt_tb.Size = new System.Drawing.Size(458, 667);
             this.sent_prompt_tb.TabIndex = 22;
+            // 
+            // WikiMaxArticles
+            // 
+            this.WikiMaxArticles.BackColor = System.Drawing.Color.Navy;
+            this.WikiMaxArticles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WikiMaxArticles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiMaxArticles.ForeColor = System.Drawing.Color.White;
+            this.WikiMaxArticles.Location = new System.Drawing.Point(149, 166);
+            this.WikiMaxArticles.Name = "WikiMaxArticles";
+            this.WikiMaxArticles.Size = new System.Drawing.Size(293, 25);
+            this.WikiMaxArticles.TabIndex = 70;
+            this.WikiMaxArticles.Text = "6";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(145, 147);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(261, 20);
+            this.label19.TabIndex = 69;
+            this.label19.Text = "Max Wikipedia Articles to Research:";
             // 
             // MainForm
             // 
@@ -1100,7 +1126,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend v3.1";
+            this.Text = "Phr00t\'s AI Talker Frontend v3.2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
@@ -1202,6 +1228,8 @@
         private System.Windows.Forms.Label WikiStatus;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox sent_prompt_tb;
+        private System.Windows.Forms.TextBox WikiMaxArticles;
+        private System.Windows.Forms.Label label19;
     }
 }
 

@@ -30,20 +30,20 @@ namespace TalkerFrontend {
                 if (xml_file.Length > 0) DumpFile = xml_file[0];
                 else return "...xml.bz2 dump not found!";
             } else return "Directory not found!";
-            string entries = indexSearcher.WholeIndex.Length.ToString();
+            string entries = indexSearcher.ActualWholeIndexSize.ToString();
             Integration.MainForm.SetWikiStatus("Wikipedia loaded: " + entries + " entries.");
             return entries + " entries indexed!";
         }
 
         public static string GatherInformation(List<string> pageTitles, int length_allowance = 2048, int min_len_per_document = 192) {
-            if (IndexFile == null || DumpFile == null || indexSearcher == null || length_allowance <= 0) return "";
+            if (IndexFile == null || DumpFile == null || indexSearcher == null || length_allowance <= 0 || Integration.MainForm.MaxWikiArticles <= 0) return "";
             for (int i = 0; i < pageTitles.Count; i++) pageTitles[i] = pageTitles[i].Trim();
             List<DataDumpReader.WikipediaEntry> results = new List<DataDumpReader.WikipediaEntry>();
             List<PageIndexItem> pageIndexItems = new List<PageIndexItem>();
             using (var dataDumpReader = new DataDumpReader(DumpFile)) {
                 List<string> searching_for = pageTitles;
                 bool exact_match = false;
-                follow_redirects: List<PageIndexItem> new_finds = indexSearcher.Search(searching_for, dataDumpReader.DataDumpStream, Math.Min(6, searching_for.Count), exact_match);
+                follow_redirects: List<PageIndexItem> new_finds = indexSearcher.Search(searching_for, Integration.MainForm.MaxWikiArticles, exact_match);
                 results.AddRange(dataDumpReader.Grab(new_finds, out searching_for));
                 pageIndexItems.AddRange(new_finds);
                 // dont research stuff we already got
@@ -146,7 +146,7 @@ namespace TalkerFrontend {
         public static void Test() {
             //string keywords = "";
             //UpdateFiles(false);
-            //GatherInformation(new List<string>(keywords.Split(',')));
+            //GatherInformation(new List<string>(keywords.Split(',')), 8192);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace WikipediaExtractor
                             int end_pos = streamText.IndexOf("</text>", start_pos);
                             if (end_pos > -1) {
                                 string whole_text = WikiRAG.CleaupWikipediaArticle(streamText.Substring(start_pos + 1, end_pos - start_pos - 1));
-                                if (whole_text.StartsWith("#REDIRECT") == false) {
+                                if (whole_text.StartsWith("#REDIRECT", StringComparison.CurrentCultureIgnoreCase) == false) {
                                     results.Add(new WikipediaEntry() {
                                         Title = page.PageTitle,
                                         CappedEntry = whole_text.Length > max_len ? whole_text.Substring(0, max_len) : whole_text,

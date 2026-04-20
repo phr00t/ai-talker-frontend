@@ -49,11 +49,12 @@ namespace TalkerFrontend {
 
         public static string GetRAGKeywords(string request, out string preload) {
             preload = "Comma separated terms list: ";
-            return "*** Search Terms Comma Separated List ***\n\nThe following is a prompt received by a human:\n\n" + request + "\n\nWe need to brainstorm search terms to find potentially relevant information in a database for an informed response. The terms " +
+            return "*** Search Terms Comma Separated List ***\n\nWe need to brainstorm search terms to find potentially relevant information in a database to provide an informed response to a human's prompt. The terms " +
                    "need to be provided in a comma separated list. The list of terms should be unique, with the most useful listed first.\n\nNote that search terms may not exactly match words in the prompt. For example, if the prompt was 'did you have any pets?', valid search terms could be:\n\n" +
                    "pet, cat, dog\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Try to keep term groups together (for example, '2026 Iran War' wouldn't be split into 3 separate terms if the request was related to the Iran War that happened in 2026).\n\n" +
                    "Finally, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request. Do not repeat the same terms and order them in importance.\n\n" +
-                   "Do not include anything else in this response, just the comma separated list for keywords only. When done listing keywords, finish with 'Keywords Finished'.\n\n";
+                   "*** Human Prompt We Are Providing Search Terms For ***\n\n" + request + "\n\n*** End Prompt ***\n\n" +
+                   "Do not include anything else in this response, just the comma separated list of the search terms only. When done listing terms, finish with 'Keywords Finished'.\n\n";
         }
 
         public static (string, string) GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {

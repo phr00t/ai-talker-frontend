@@ -38,6 +38,17 @@ namespace TalkerFrontend {
             sent_prompt_tb.Text = prompt;
         }
 
+        public int MaxWikiArticles {
+            get {
+                int retval = 6;
+                if (int.TryParse(WikiMaxArticles.Text.Trim(), out int articles))
+                    retval = articles;
+
+                if (retval < 0) return 0;
+                if (retval > 256) return 256;
+                return retval;
+            }
+        }
         public bool FolloWikiRedirects => WikiFollowRedirects.Checked;
         public string GetWikiDirectory => WikiDir.Text.Trim();
         public int GetWikiAllowance {
@@ -166,6 +177,7 @@ namespace TalkerFrontend {
                     AdvMinP.Text = Integration.LoadTagged(optdata, "AdvMinP") ?? AdvMinP.Text;
                     AdvMaxTokens.Text = Integration.LoadTagged(optdata, "AdvMaxTokens") ?? AdvMaxTokens.Text;
                     WikiDir.Text = Integration.LoadTagged(optdata, "WikiDir") ?? WikiDir.Text;
+                    WikiMaxArticles.Text = Integration.LoadTagged(optdata, "WikiMaxArticles") ?? WikiMaxArticles.Text;
                     WikiAllowance.Text = Integration.LoadTagged(optdata, "WikiAllowance") ?? WikiAllowance.Text;
                     rss_feed.Text = Integration.LoadTagged(optdata, "rss_feed") ?? rss_feed.Text;
                     rss_feed_count.Text = Integration.LoadTagged(optdata, "rss_feed_count") ?? rss_feed_count.Text;
@@ -244,6 +256,7 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(AdvExtraStops.Text, "AdvExtraStops");
             optdata += Integration.StringTagged(AdvTemperature.Text, "AdvTemperature");
             optdata += Integration.StringTagged(AdvWordRecall.Text, "AdvWordRecall");
+            optdata += Integration.StringTagged(WikiMaxArticles.Text, "WikiMaxArticles");
             optdata += Integration.StringTagged(rss_feed.Text, "rss_feed");
             optdata += Integration.StringTagged(rss_feed_count.Text, "rss_feed_count");
             optdata += Integration.StringTagged(AdvTopP.Text, "AdvTopP");
