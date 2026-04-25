@@ -60,7 +60,12 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.prtab = new System.Windows.Forms.TabPage();
             this.partial_response = new System.Windows.Forms.TextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.sent_prompt_tb = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.WikiMaxArticles = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.WikiStatus = new System.Windows.Forms.Label();
             this.WikiFollowRedirects = new System.Windows.Forms.CheckBox();
             this.import_wikipedia = new System.Windows.Forms.Button();
             this.WikiAllowance = new System.Windows.Forms.TextBox();
@@ -101,20 +106,15 @@
             this.KoboldFinder = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.CharWatcher = new System.IO.FileSystemWatcher();
-            this.WikiStatus = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.sent_prompt_tb = new System.Windows.Forms.TextBox();
-            this.WikiMaxArticles = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.chat_tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.prtab.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharWatcher)).BeginInit();
-            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // WhoPicture
@@ -536,6 +536,29 @@
             this.partial_response.Size = new System.Drawing.Size(458, 667);
             this.partial_response.TabIndex = 20;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.Black;
+            this.tabPage3.Controls.Add(this.sent_prompt_tb);
+            this.tabPage3.Location = new System.Drawing.Point(4, 27);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(459, 668);
+            this.tabPage3.TabIndex = 3;
+            this.tabPage3.Text = "Sent Prompt";
+            // 
+            // sent_prompt_tb
+            // 
+            this.sent_prompt_tb.BackColor = System.Drawing.Color.Black;
+            this.sent_prompt_tb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sent_prompt_tb.ForeColor = System.Drawing.Color.White;
+            this.sent_prompt_tb.Location = new System.Drawing.Point(0, 1);
+            this.sent_prompt_tb.Multiline = true;
+            this.sent_prompt_tb.Name = "sent_prompt_tb";
+            this.sent_prompt_tb.ReadOnly = true;
+            this.sent_prompt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.sent_prompt_tb.Size = new System.Drawing.Size(458, 667);
+            this.sent_prompt_tb.TabIndex = 22;
+            // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
@@ -577,6 +600,38 @@
             this.tabPage2.Size = new System.Drawing.Size(459, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // WikiMaxArticles
+            // 
+            this.WikiMaxArticles.BackColor = System.Drawing.Color.Navy;
+            this.WikiMaxArticles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WikiMaxArticles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiMaxArticles.ForeColor = System.Drawing.Color.White;
+            this.WikiMaxArticles.Location = new System.Drawing.Point(149, 166);
+            this.WikiMaxArticles.Name = "WikiMaxArticles";
+            this.WikiMaxArticles.Size = new System.Drawing.Size(293, 25);
+            this.WikiMaxArticles.TabIndex = 70;
+            this.WikiMaxArticles.Text = "6";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(145, 147);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(261, 20);
+            this.label19.TabIndex = 69;
+            this.label19.Text = "Max Wikipedia Articles to Research:";
+            // 
+            // WikiStatus
+            // 
+            this.WikiStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WikiStatus.Location = new System.Drawing.Point(151, 258);
+            this.WikiStatus.Name = "WikiStatus";
+            this.WikiStatus.Size = new System.Drawing.Size(290, 20);
+            this.WikiStatus.TabIndex = 68;
+            this.WikiStatus.Text = "Wikipedia not ready.";
+            this.WikiStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // WikiFollowRedirects
             // 
@@ -950,7 +1005,7 @@
             // 
             // OpenImageDialog
             // 
-            this.OpenImageDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;.png";
+            this.OpenImageDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
             // 
             // MyName
             // 
@@ -1021,61 +1076,6 @@
             this.CharWatcher.Filter = "*.txt";
             this.CharWatcher.SynchronizingObject = this;
             // 
-            // WikiStatus
-            // 
-            this.WikiStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WikiStatus.Location = new System.Drawing.Point(151, 258);
-            this.WikiStatus.Name = "WikiStatus";
-            this.WikiStatus.Size = new System.Drawing.Size(290, 20);
-            this.WikiStatus.TabIndex = 68;
-            this.WikiStatus.Text = "Wikipedia not ready.";
-            this.WikiStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.Black;
-            this.tabPage3.Controls.Add(this.sent_prompt_tb);
-            this.tabPage3.Location = new System.Drawing.Point(4, 27);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(459, 668);
-            this.tabPage3.TabIndex = 3;
-            this.tabPage3.Text = "Sent Prompt";
-            // 
-            // sent_prompt_tb
-            // 
-            this.sent_prompt_tb.BackColor = System.Drawing.Color.Black;
-            this.sent_prompt_tb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sent_prompt_tb.ForeColor = System.Drawing.Color.White;
-            this.sent_prompt_tb.Location = new System.Drawing.Point(0, 1);
-            this.sent_prompt_tb.Multiline = true;
-            this.sent_prompt_tb.Name = "sent_prompt_tb";
-            this.sent_prompt_tb.ReadOnly = true;
-            this.sent_prompt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.sent_prompt_tb.Size = new System.Drawing.Size(458, 667);
-            this.sent_prompt_tb.TabIndex = 22;
-            // 
-            // WikiMaxArticles
-            // 
-            this.WikiMaxArticles.BackColor = System.Drawing.Color.Navy;
-            this.WikiMaxArticles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.WikiMaxArticles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WikiMaxArticles.ForeColor = System.Drawing.Color.White;
-            this.WikiMaxArticles.Location = new System.Drawing.Point(149, 166);
-            this.WikiMaxArticles.Name = "WikiMaxArticles";
-            this.WikiMaxArticles.Size = new System.Drawing.Size(293, 25);
-            this.WikiMaxArticles.TabIndex = 70;
-            this.WikiMaxArticles.Text = "6";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(145, 147);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(261, 20);
-            this.label19.TabIndex = 69;
-            this.label19.Text = "Max Wikipedia Articles to Research:";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -1126,7 +1126,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend v3.2";
+            this.Text = "Phr00t\'s AI Talker Frontend v3.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
@@ -1137,11 +1137,11 @@
             this.tabPage1.PerformLayout();
             this.prtab.ResumeLayout(false);
             this.prtab.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharWatcher)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
