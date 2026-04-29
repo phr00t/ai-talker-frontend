@@ -38,6 +38,8 @@ namespace TalkerFrontend {
             sent_prompt_tb.Text = prompt;
         }
 
+        public string ManualKeywords => manual_keywords.Text.Trim();
+        public void ClearKeywords() { manual_keywords.Clear(); }
         public int MaxWikiArticles {
             get {
                 int retval = 6;
@@ -529,10 +531,8 @@ namespace TalkerFrontend {
         }
 
         private void ReplayButton_Click(object sender, EventArgs e) {
-            if (Integration.VerifyComfyUI()) {
-                ChatManager.AwaitingSay.Clear();
-                ChatManager.SayLine(partial_response.Text, ChatManager.SelectedCharacter);
-            }
+            ChatManager.AwaitingSay.Clear();
+            ChatManager.SayLine(partial_response.Text, ChatManager.SelectedCharacter);
         }
 
         private void WhoPicture_Click(object sender, EventArgs e) {

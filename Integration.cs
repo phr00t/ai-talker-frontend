@@ -66,9 +66,9 @@ namespace TalkerFrontend {
             LocationWeight = false
         };
 
-        public static bool VerifyComfyUI() {
+        public static bool VerifyComfyUI(bool show_error_box = true) {
             if (Directory.Exists(ComfyUIDir) == false) {
-                MessageBox.Show("ComfyUI not found at location. Do you have ComfyUI installed and running already?", "ComfyUI Installation Directory Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (show_error_box) MessageBox.Show("ComfyUI not found at location. Do you have ComfyUI installed and running already?", "ComfyUI Installation Directory Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;
@@ -356,7 +356,21 @@ namespace TalkerFrontend {
             text = text.Replace("<think>", " ").Replace("</think>", " ").Replace("/no-think", " ").Replace("/no_think", " ");
             if (ChatManager.KeywordsRequested) {
                 ChatManager.KeywordsRequested = false;
-                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription, ConvertToCSV(text));
+                // combine possible user-provided manual keywords
+                string[] keywords = Integration.MainForm.ManualKeywords.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] llm_keywords = ConvertToCSV(text).Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> unique_keywords = new List<string>();
+                for (int i=0; i<keywords.Length; i++) unique_keywords.Add(keywords[i].Trim());
+                for (int i=0; i<llm_keywords.Length; i++) {
+                    string lk = llm_keywords[i].Trim();
+                    for (int j=0; j<unique_keywords.Count; j++) {
+                        string comparewith = unique_keywords[j];
+                        if (comparewith.Equals(lk, StringComparison.CurrentCultureIgnoreCase)) goto skip_add;
+                    }
+                    unique_keywords.Add(lk); skip_add:;
+                }
+                MainForm.ClearKeywords();
+                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription, string.Join(",", unique_keywords));
             } else if (ChatManager.ImagePromptRequested) {
                 IMGConfig.LastImagePromptResult = text;
                 // switch back to regular text model
@@ -501,32 +515,8 @@ namespace TalkerFrontend {
                         case ".flac":
                         case ".wav":
                             // wait, was this a generated voice?
-                            int voicegen = final_filename.IndexOf("voicegen-");
-                            if (voicegen >= 0) {
-                                int end_name = final_filename.IndexOf("--", voicegen);
-                                string charname = final_filename.Substring(voicegen + 9, end_name - voicegen - 9);
-                                // generated voice, set for selected character
-                                Character got_voice_for = null;
-                                lock (ChatManager.NeedVoiceFor) {
-                                    foreach (var c in ChatManager.NeedVoiceFor) {
-                                        if (c.Name == charname) {
-                                            got_voice_for = c;
-                                            break;
-                                        }
-                                    }
-                                    if (got_voice_for != null) {
-                                        string final_voice_place = Path.Combine(CharDirectory, got_voice_for.Name + Path.GetExtension(final_filename));
-                                        File.Copy(final_filename, final_voice_place, true);
-                                        got_voice_for.VoiceWAV = final_voice_place;
-                                        got_voice_for.VoiceText = "The quick brown fox jumps over the lazy dog, doesn't he, well, maybe he can't, or perhaps not, it depends on the circumstances, you see!";
-                                        got_voice_for.Save();
-                                        ChatManager.NeedVoiceFor.Remove(got_voice_for);
-                                    }
-                                }
-                            } else {
-                                ChatManager.SayGenerating = false;
-                                PlaySound(final_filename);
-                            }
+                            ChatManager.SayGenerating = false;
+                            PlaySound(final_filename);
                             break;
                     }
                 }

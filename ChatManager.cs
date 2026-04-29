@@ -236,12 +236,12 @@ namespace TalkerFrontend {
             AWAITSAY asay = AwaitingSay[0];
             string voicefn = asay.Who.GetWAV;
             bool hasVoiceReady = File.Exists(voicefn);// && asay.Who.VoiceText.Length > 0;
-            if (asay.Who.VoiceDescription.Length > 0 || hasVoiceReady) {
-                if (!SayGenerating && hasVoiceReady) {
+            if (Integration.VerifyComfyUI(false) && hasVoiceReady) {
+                if (!SayGenerating) {
                     AwaitingSay.RemoveAt(0);
                     Dictionary<string, string> repl = new Dictionary<string, string>();
                     repl["$SAMPLE_TEXT"] = asay.Who.VoiceText.Trim();
-                    repl["$DIALOG"] = asay.What; //.ToLower(); // need tolower as all caps breaks F5-TTS
+                    repl["$DIALOG"] = asay.What;
                     repl["$SEED"] = MainForm.Random.Next(99999999).ToString();
                     repl["$REF_AUDIO"] = voicefn.Replace("\\", "/");
                     repl["$SAVE_PREFIX"] = "talker/dialog";
@@ -253,6 +253,11 @@ namespace TalkerFrontend {
                 AwaitingSay.RemoveAt(0);
                 if (synthesizer == null) {
                     synthesizer = new SpeechSynthesizer();
+                    synthesizer.SelectVoiceByHints(asay.Who.VoiceDescription.IndexOf("female", StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                                                   asay.Who.VoiceDescription.IndexOf("girl", StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                                                   asay.Who.VoiceDescription.IndexOf("mother", StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                                                   asay.Who.VoiceDescription.IndexOf("grandma", StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                                                   asay.Who.VoiceDescription.IndexOf("woman", StringComparison.CurrentCultureIgnoreCase) >= 0 ? VoiceGender.Female : VoiceGender.Male);
                     synthesizer.SetOutputToDefaultAudioDevice();
                 }
                 SayTalking = true;
@@ -271,20 +276,6 @@ namespace TalkerFrontend {
             // remove all stop tokens from this
             foreach (string stopper in StopSequences(true))
                 message = message.Replace(stopper, ".");
-            // do we have an F5-ready voice?
-            if (File.Exists(who.GetWAV) == false && who.VoiceDescription.Length > 0) {
-                lock (NeedVoiceFor) {
-                    if (NeedVoiceFor.Contains(who) == false) {
-                        NeedVoiceFor.Add(who);
-                        Dictionary<string, string> repl = new Dictionary<string, string>();
-                        repl["${VOICE_DESCRIPTION}"] = who.VoiceDescription;
-                        repl["${SAVE_PREFIX}"] = "talker/voicegen-" + who.Name + "--";
-                        Integration.MainForm.SetStatus("Generating Voice");
-                        Integration.MainForm.PrepareWatcher(Path.Combine(Integration.ComfyUIDir, "output/talker/"));
-                        Integration.SendComfyRequest(Path.Combine(Integration.BaseDirectory, "workflows/VoiceGen-Voice.json"), repl);
-                    }
-                }
-            }
             AwaitingSay.Add(new AWAITSAY() { What = message, Who = who });
         }
     }

@@ -290,9 +290,6 @@
     <None Include="workflows\VoiceGen-Dialog.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="workflows\VoiceGen-Voice.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="workflows\Whisper.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
