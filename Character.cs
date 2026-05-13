@@ -48,7 +48,7 @@ namespace TalkerFrontend {
             }
         }
 
-        public static Character EfficientLoadCharacter(Character existing_loaded, string name, bool force) {
+        public static Character EfficientLoadCharacter(string name) {
             Character c = new Character(name);
             if (name.Length > 0) {
                 c.AttemptLoad();

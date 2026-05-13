@@ -40,7 +40,7 @@ namespace TalkerFrontend {
         }
 
         public void LoadOrCreateCharacter(string name = "") {
-            LoadedCharacter = Character.EfficientLoadCharacter(LoadedCharacter, name, false);
+            LoadedCharacter = Character.EfficientLoadCharacter(name);
             LoadCharacter(LoadedCharacter);
         }
 

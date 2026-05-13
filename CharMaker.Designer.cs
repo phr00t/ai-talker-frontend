@@ -58,7 +58,7 @@
             this.CharName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CharName.ForeColor = System.Drawing.Color.White;
             this.CharName.Location = new System.Drawing.Point(50, 4);
-            this.CharName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CharName.Margin = new System.Windows.Forms.Padding(2);
             this.CharName.Name = "CharName";
             this.CharName.Size = new System.Drawing.Size(219, 21);
             this.CharName.TabIndex = 15;
@@ -81,7 +81,7 @@
             this.ImageFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ImageFile.ForeColor = System.Drawing.Color.White;
             this.ImageFile.Location = new System.Drawing.Point(50, 26);
-            this.ImageFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ImageFile.Margin = new System.Windows.Forms.Padding(2);
             this.ImageFile.Name = "ImageFile";
             this.ImageFile.Size = new System.Drawing.Size(219, 21);
             this.ImageFile.TabIndex = 17;
@@ -104,7 +104,7 @@
             this.VisualDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.VisualDescription.ForeColor = System.Drawing.Color.White;
             this.VisualDescription.Location = new System.Drawing.Point(11, 150);
-            this.VisualDescription.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.VisualDescription.Margin = new System.Windows.Forms.Padding(2);
             this.VisualDescription.Multiline = true;
             this.VisualDescription.Name = "VisualDescription";
             this.VisualDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -118,9 +118,9 @@
             this.label2.Location = new System.Drawing.Point(9, 135);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(290, 16);
+            this.label2.Size = new System.Drawing.Size(242, 16);
             this.label2.TabIndex = 18;
-            this.label2.Text = "Image Prompt/Description (for Request Picture):";
+            this.label2.Text = "Visual Description (for Request Picture):";
             // 
             // PersistentDesc
             // 
@@ -129,7 +129,7 @@
             this.PersistentDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PersistentDesc.ForeColor = System.Drawing.Color.White;
             this.PersistentDesc.Location = new System.Drawing.Point(11, 241);
-            this.PersistentDesc.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.PersistentDesc.Margin = new System.Windows.Forms.Padding(2);
             this.PersistentDesc.Multiline = true;
             this.PersistentDesc.Name = "PersistentDesc";
             this.PersistentDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -154,7 +154,7 @@
             this.LongTermMemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LongTermMemory.ForeColor = System.Drawing.Color.White;
             this.LongTermMemory.Location = new System.Drawing.Point(289, 66);
-            this.LongTermMemory.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LongTermMemory.Margin = new System.Windows.Forms.Padding(2);
             this.LongTermMemory.MaxLength = 2000000;
             this.LongTermMemory.Multiline = true;
             this.LongTermMemory.Name = "LongTermMemory";
@@ -179,7 +179,7 @@
             this.SaveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveButton.ForeColor = System.Drawing.Color.Black;
             this.SaveButton.Location = new System.Drawing.Point(522, 4);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveButton.Margin = new System.Windows.Forms.Padding(2);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(250, 41);
             this.SaveButton.TabIndex = 24;
@@ -194,7 +194,7 @@
             this.VoiceWAV.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.VoiceWAV.ForeColor = System.Drawing.Color.White;
             this.VoiceWAV.Location = new System.Drawing.Point(84, 48);
-            this.VoiceWAV.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.VoiceWAV.Margin = new System.Windows.Forms.Padding(2);
             this.VoiceWAV.Name = "VoiceWAV";
             this.VoiceWAV.Size = new System.Drawing.Size(201, 21);
             this.VoiceWAV.TabIndex = 18;
@@ -217,7 +217,7 @@
             this.VoiceText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.VoiceText.ForeColor = System.Drawing.Color.White;
             this.VoiceText.Location = new System.Drawing.Point(75, 69);
-            this.VoiceText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.VoiceText.Margin = new System.Windows.Forms.Padding(2);
             this.VoiceText.Name = "VoiceText";
             this.VoiceText.Size = new System.Drawing.Size(210, 21);
             this.VoiceText.TabIndex = 19;
@@ -240,7 +240,7 @@
             this.visual_style.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.visual_style.ForeColor = System.Drawing.Color.White;
             this.visual_style.Location = new System.Drawing.Point(86, 112);
-            this.visual_style.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.visual_style.Margin = new System.Windows.Forms.Padding(2);
             this.visual_style.Name = "visual_style";
             this.visual_style.Size = new System.Drawing.Size(199, 21);
             this.visual_style.TabIndex = 28;
@@ -271,8 +271,8 @@
             // 
             this.raw_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.raw_data.ForeColor = System.Drawing.Color.Black;
-            this.raw_data.Location = new System.Drawing.Point(355, 4);
-            this.raw_data.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.raw_data.Location = new System.Drawing.Point(360, 4);
+            this.raw_data.Margin = new System.Windows.Forms.Padding(2);
             this.raw_data.Name = "raw_data";
             this.raw_data.Size = new System.Drawing.Size(73, 41);
             this.raw_data.TabIndex = 32;
@@ -285,7 +285,7 @@
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.Black;
             this.button1.Location = new System.Drawing.Point(433, 4);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(85, 41);
             this.button1.TabIndex = 33;
@@ -300,7 +300,7 @@
             this.voiceDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.voiceDesc.ForeColor = System.Drawing.Color.White;
             this.voiceDesc.Location = new System.Drawing.Point(118, 90);
-            this.voiceDesc.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.voiceDesc.Margin = new System.Windows.Forms.Padding(2);
             this.voiceDesc.Name = "voiceDesc";
             this.voiceDesc.Size = new System.Drawing.Size(167, 21);
             this.voiceDesc.TabIndex = 34;
@@ -312,7 +312,7 @@
             this.charchatlog.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.charchatlog.ForeColor = System.Drawing.Color.White;
             this.charchatlog.Location = new System.Drawing.Point(522, 65);
-            this.charchatlog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.charchatlog.Margin = new System.Windows.Forms.Padding(2);
             this.charchatlog.MaxLength = 2000000;
             this.charchatlog.Multiline = true;
             this.charchatlog.Name = "charchatlog";
@@ -336,9 +336,9 @@
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.Black;
             this.button2.Location = new System.Drawing.Point(273, 4);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(78, 41);
+            this.button2.Size = new System.Drawing.Size(85, 41);
             this.button2.TabIndex = 37;
             this.button2.Text = "Import PNG/JSON";
             this.button2.UseVisualStyleBackColor = true;
@@ -383,7 +383,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "CharMaker";
             this.ShowInTaskbar = false;

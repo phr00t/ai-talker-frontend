@@ -329,7 +329,7 @@ namespace TalkerFrontend {
             AlreadyRefreshingNames = true;
             string previous_you = MyName.Text.Trim();
             string previous_name = WhoList.Text.Trim();
-            //ChatManager.MeCharacter = null;
+            ChatManager.MeCharacter = null;
             WhoList.Items.Clear();
             if (skipyou == false) {
                 MyName.Items.Clear();
@@ -347,7 +347,7 @@ namespace TalkerFrontend {
                 if (skipyou == false) MyName.Items.Add(cf);
                 if (cf.short_name == previous_you) {
                     MyName.SelectedItem = cf;
-                    ChatManager.MeCharacter = Character.EfficientLoadCharacter(ChatManager.MeCharacter, cf.short_name, false); // new Character(cf.short_name);
+                    ChatManager.MeCharacter = Character.EfficientLoadCharacter(cf.short_name);
                 }
             }
             WhoList_SelectedValueChanged(null, null);
@@ -370,7 +370,7 @@ namespace TalkerFrontend {
             string sel_name = WhoList.SelectedItem?.ToString() ?? "";
             if (sel_name.Length > 0) {
                 string last_image = ChatManager.SelectedCharacter?.GetPicture ?? "";
-                ChatManager.SelectedCharacter = Character.EfficientLoadCharacter(ChatManager.SelectedCharacter, sel_name, false);// new Character(sel_name);
+                ChatManager.SelectedCharacter = Character.EfficientLoadCharacter(sel_name);
                 UpdateChatLog();
                 // update picture?
                 if (WhoPicture.Image == null || CBGroupChat.Checked == false ||
