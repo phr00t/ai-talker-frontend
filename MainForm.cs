@@ -26,6 +26,7 @@ namespace TalkerFrontend {
             CharMaker.instance = new CharMaker();
         }
 
+        public string GetAlwaysPrompt => always_prompt.Text.Trim();
         public static Random Random = new Random();
         public Dictionary<string, Control> AllControls;
         public static string OptionsFile => Path.Combine(Integration.BaseDirectory, "options.txt");
