@@ -113,15 +113,17 @@ namespace TalkerFrontend {
             Integration.SendTextPrompt(prompt, append_prompt, null, false, Integration.SEND_PIC_TYPE.None, false, StopSequences(false), BannedTalkTokens);
         }
 
-        public static string previousYourPrompt;
-        public static void SendChat(string request, bool send_pic, string image_description = null, string keywords_provided = null) {
+        public static string previousYourPrompt, previousYourThink;
+        public static void SendChat(string request, string think, bool send_pic, string image_description = null, string keywords_provided = null) {
             bool hasPicToSend = send_pic && MainForm.NewImageToSend && Integration.MainForm.GetImage != null;
             if (hasPicToSend && Integration.IMGConfig.UseExistingTextModel == false && !Integration.RemoteOnlyMode) {
                 // uh oh, need to load the visual model to read this image before doing this!
                 Integration.MainForm.DisableAutoTalk();
                 Integration.KillKobold();
                 previousYourPrompt = request;
+                previousYourThink = think;
                 YourPrompt = null;
+                YourThinkInjection = null;
                 YourImageDescription = null;
                 PictureRequested = false;
                 ChatRequested = false;
@@ -162,10 +164,11 @@ namespace TalkerFrontend {
                 ImagePromptRequested = false;
                 AutoTalkTimer = 0;
                 WhoTalking = SelectedCharacter;
+                YourThinkInjection = null;
                 YourPrompt = null;
                 YourImageDescription = null;
                 Integration.MainForm.ClearMonitor();
-                Integration.SendTextPrompt(prompt, preload, null, false, hasPicToSend ? Integration.SEND_PIC_TYPE.SendClear : Integration.SEND_PIC_TYPE.None , false, StopSequences(false), BannedTalkTokens);
+                Integration.SendTextPrompt(prompt, preload, null, false, hasPicToSend ? Integration.SEND_PIC_TYPE.SendClear : Integration.SEND_PIC_TYPE.None , false, StopSequences(false), BannedTalkTokens, think);
             }
         }
 
@@ -186,7 +189,7 @@ namespace TalkerFrontend {
             public Character Who;
         }
 
-        public static string YourPrompt = null, YourImageDescription = null;
+        public static string YourPrompt = null, YourImageDescription = null, YourThinkInjection = null;
 
         public static List<AWAITSAY> AwaitingSay = new List<AWAITSAY>();
         public static Character WhoTalking;

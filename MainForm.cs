@@ -304,7 +304,7 @@ namespace TalkerFrontend {
             if (ReadyOrNot(true, true, true) != "") return;
             if (ChatManager.YourPrompt != null && ChatManager.YourPrompt.Length > 0) {
                 SetStatus("Processing Your Prompt");
-                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription);
+                ChatManager.SendChat(ChatManager.YourPrompt, ChatManager.YourThinkInjection, true, ChatManager.YourImageDescription);
             } else if (CBAutoTalk.Checked && ChatManager.AutoTalkTimer > 0) {
                 ChatManager.AutoTalkTimer--;
                 if (ChatManager.AutoTalkTimer <= 0) {
@@ -313,7 +313,7 @@ namespace TalkerFrontend {
                     if (GroupChatMode)
                         ChatManager.SendContinue();
                     else
-                        ChatManager.SendChat("*silence*", false); // send silence
+                        ChatManager.SendChat("*silence*", "", false); // send silence
                 }
             }
         }
@@ -418,8 +418,10 @@ namespace TalkerFrontend {
             string err = ReadyOrNot(false, false, false);
             if (err.Length == 0) {
                 ChatManager.YourPrompt = SendText.Text.Trim();
+                ChatManager.YourThinkInjection = think_injection.Text.Trim();
                 ChatManager.YourImageDescription = null;
                 SendText.Text = "";
+                think_injection.Text = "";
             } else {
                 MessageBox.Show(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

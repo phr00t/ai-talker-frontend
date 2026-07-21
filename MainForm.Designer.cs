@@ -109,11 +109,14 @@
             this.label20 = new System.Windows.Forms.Label();
             this.manual_keywords = new System.Windows.Forms.TextBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label21 = new System.Windows.Forms.Label();
+            this.always_prompt = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.always_prompt = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.label22 = new System.Windows.Forms.Label();
+            this.think_injection = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -127,6 +130,7 @@
             this.tabPage4.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.SuspendLayout();
             // 
             // WhoPicture
@@ -1171,7 +1175,8 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(629, 54);
             this.label20.TabIndex = 43;
-            this.label20.Text = "Manually Provided Research / Long Term Memory Terms (comma separated):";
+            this.label20.Text = "Manually provided research/long term memory terms (separate with \"|\" pipe charact" +
+    "ers)";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // manual_keywords
@@ -1199,6 +1204,33 @@
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Persistent Message";
             // 
+            // label21
+            // 
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.DarkGray;
+            this.label21.Location = new System.Drawing.Point(5, 0);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(629, 40);
+            this.label21.TabIndex = 44;
+            this.label21.Text = "This message is always included in every prompt, considered \"Persistent Info\":";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // always_prompt
+            // 
+            this.always_prompt.BackColor = System.Drawing.Color.Navy;
+            this.always_prompt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.always_prompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.always_prompt.ForeColor = System.Drawing.Color.White;
+            this.always_prompt.Location = new System.Drawing.Point(0, 42);
+            this.always_prompt.Margin = new System.Windows.Forms.Padding(2);
+            this.always_prompt.MaxLength = 500000;
+            this.always_prompt.Multiline = true;
+            this.always_prompt.Name = "always_prompt";
+            this.always_prompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.always_prompt.Size = new System.Drawing.Size(639, 219);
+            this.always_prompt.TabIndex = 21;
+            // 
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.Color.Black;
@@ -1214,6 +1246,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1234,32 +1267,43 @@
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Forced Research Topics";
             // 
-            // always_prompt
+            // tabPage7
             // 
-            this.always_prompt.BackColor = System.Drawing.Color.Navy;
-            this.always_prompt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.always_prompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.always_prompt.ForeColor = System.Drawing.Color.White;
-            this.always_prompt.Location = new System.Drawing.Point(0, 42);
-            this.always_prompt.Margin = new System.Windows.Forms.Padding(2);
-            this.always_prompt.MaxLength = 500000;
-            this.always_prompt.Multiline = true;
-            this.always_prompt.Name = "always_prompt";
-            this.always_prompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.always_prompt.Size = new System.Drawing.Size(639, 219);
-            this.always_prompt.TabIndex = 21;
+            this.tabPage7.BackColor = System.Drawing.Color.Black;
+            this.tabPage7.Controls.Add(this.label22);
+            this.tabPage7.Controls.Add(this.think_injection);
+            this.tabPage7.Location = new System.Drawing.Point(4, 27);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Size = new System.Drawing.Size(639, 261);
+            this.tabPage7.TabIndex = 3;
+            this.tabPage7.Text = "Think Injection";
             // 
-            // label21
+            // label22
             // 
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.ForeColor = System.Drawing.Color.DarkGray;
-            this.label21.Location = new System.Drawing.Point(5, 0);
-            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(629, 40);
-            this.label21.TabIndex = 44;
-            this.label21.Text = "This message is always included in every prompt, considered \"Persistent Info\":";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.ForeColor = System.Drawing.Color.DarkGray;
+            this.label22.Location = new System.Drawing.Point(5, 0);
+            this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(629, 40);
+            this.label22.TabIndex = 46;
+            this.label22.Text = "This text will be injected into the <think> </think> tags:";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // think_injection
+            // 
+            this.think_injection.BackColor = System.Drawing.Color.Navy;
+            this.think_injection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.think_injection.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.think_injection.ForeColor = System.Drawing.Color.White;
+            this.think_injection.Location = new System.Drawing.Point(0, 42);
+            this.think_injection.Margin = new System.Windows.Forms.Padding(2);
+            this.think_injection.MaxLength = 500000;
+            this.think_injection.Multiline = true;
+            this.think_injection.Name = "think_injection";
+            this.think_injection.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.think_injection.Size = new System.Drawing.Size(639, 219);
+            this.think_injection.TabIndex = 45;
             // 
             // MainForm
             // 
@@ -1335,6 +1379,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1431,6 +1477,9 @@
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox always_prompt;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox think_injection;
     }
 }
 

@@ -288,6 +288,7 @@ namespace TalkerFrontend {
 
         public static void Abort() {
             ChatManager.YourPrompt = null;
+            ChatManager.YourThinkInjection = null;
             ChatManager.YourImageDescription = null;
             autogen_timer = 0;
             MainForm.DisableAutoTalk();
@@ -299,6 +300,7 @@ namespace TalkerFrontend {
             MainForm.SetStatus("Aborted");
             AwaitingAudioFiles.Clear();
             ChatManager.previousYourPrompt = null;
+            ChatManager.previousYourThink = null;
             ChatManager.PictureRequested = false;
             ChatManager.ChatRequested = false;
             ChatManager.ImagePromptRequested = false;
@@ -357,7 +359,7 @@ namespace TalkerFrontend {
             if (ChatManager.KeywordsRequested) {
                 ChatManager.KeywordsRequested = false;
                 // combine possible user-provided manual keywords
-                string[] keywords = Integration.MainForm.ManualKeywords.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] keywords = Integration.MainForm.ManualKeywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] llm_keywords = ConvertToCSV(text).Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 List<string> unique_keywords = new List<string>();
                 for (int i=0; i<keywords.Length; i++) unique_keywords.Add(keywords[i].Trim());
@@ -370,7 +372,7 @@ namespace TalkerFrontend {
                     unique_keywords.Add(lk); skip_add:;
                 }
                 MainForm.ClearKeywords();
-                ChatManager.SendChat(ChatManager.YourPrompt, true, ChatManager.YourImageDescription, string.Join(",", unique_keywords));
+                ChatManager.SendChat(ChatManager.YourPrompt, ChatManager.YourThinkInjection, true, ChatManager.YourImageDescription, string.Join(",", unique_keywords));
             } else if (ChatManager.ImagePromptRequested) {
                 IMGConfig.LastImagePromptResult = text;
                 // switch back to regular text model
@@ -382,6 +384,7 @@ namespace TalkerFrontend {
                     ChatManager.ImagePromptRequested = false;
                     ChatManager.YourImageDescription = IMGConfig.LastImagePromptResult;
                     ChatManager.YourPrompt = ChatManager.previousYourPrompt;
+                    ChatManager.YourThinkInjection = ChatManager.previousYourThink;
                 });
                 t.Start();
             } else if (ChatManager.PictureRequested) {
@@ -706,7 +709,7 @@ namespace TalkerFrontend {
             SendNoClear = 2
         }
 
-        public static void SendTextPrompt(string prompt, string preload_prompt, int? max_len = null, bool not_creative = false, SEND_PIC_TYPE send_pic = SEND_PIC_TYPE.None, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null) {
+        public static void SendTextPrompt(string prompt, string preload_prompt, int? max_len = null, bool not_creative = false, SEND_PIC_TYPE send_pic = SEND_PIC_TYPE.None, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null, string preload_think = "\n\n") {
             if (!RemoteOnlyMode) EnsureKoboldCppMode(true);
             var rr = new RestRequest("/api/v1/generate", Method.Post);
             //last_prompt_sent = prompt;
@@ -729,7 +732,7 @@ namespace TalkerFrontend {
             }
 
             // add ChatML non-thinking to prompt
-            prompt = "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n" + preload_prompt;
+            prompt = "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant\n<think>" + preload_think + "</think>\n" + preload_prompt;
 
             // update ui
             MainForm.SetPromptSent(prompt);
