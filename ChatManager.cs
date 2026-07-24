@@ -33,6 +33,10 @@ namespace TalkerFrontend {
             List<string> stoppers = new List<string>() { "You:", "User:", "Human:", "Timestamp:", "Assistant:", "AI:", "P.S. ",
                                                          "Your Response:", "User's Response:", "Human's Response:", "Assistant's Response:", "AI's Response:" };
             var charnames = Integration.MainForm.GetCharacterList();
+            stoppers.Add("Response Completed");
+            stoppers.Add("RESPONSE COMPLETED");
+            stoppers.Add("Completed Response");
+            stoppers.Add("COMPLETED RESPONSE");
             for (int i=0; i<charnames.Count; i++) {
                 string stop_to_use = charnames[i] + "'s Response:"; // charnames[i] + ":";
                 if (stoppers.Contains(stop_to_use) == false) {
@@ -102,24 +106,16 @@ namespace TalkerFrontend {
                 GroupChatLog = "";
         }
 
-        public static void SendContinue() {
-            Integration.MainForm.SelectNextCharacter();
-            PictureRequested = false;
-            ChatRequested = true;
-            (string prompt, string append_prompt) = PromptGenerator.GetMasterPrompt(SelectedCharacter, Integration.MainForm.GetControl<TextBox>("partial_response").Text, WhoTalking?.Name ?? "",
-                                                                                    WhoTalking?.PersistentDescription ?? "", out _);
-            WhoTalking = SelectedCharacter;
-            Integration.MainForm.ClearMonitor();
-            Integration.SendTextPrompt(prompt, append_prompt, null, false, Integration.SEND_PIC_TYPE.None, false, StopSequences(false), BannedTalkTokens);
-        }
-
         public static string previousYourPrompt, previousYourThink;
-        public static void SendChat(string request, string think, bool send_pic, string image_description = null, string keywords_provided = null) {
+        public static void SendChat(string request, string think, bool send_pic, string image_description = null, string keywords_provided = null, Character group_person = null) {
             bool hasPicToSend = send_pic && MainForm.NewImageToSend && Integration.MainForm.GetImage != null;
+            // if there isn't any request to get keywords from, skip that step (by providing a non-null variable)
+            if (keywords_provided == null && (request == null || request.Trim().Length == 0)) keywords_provided = "";
             if (hasPicToSend && Integration.IMGConfig.UseExistingTextModel == false && !Integration.RemoteOnlyMode) {
                 // uh oh, need to load the visual model to read this image before doing this!
                 Integration.MainForm.DisableAutoTalk();
                 Integration.KillKobold();
+                GroupTalkingPerson = group_person;
                 previousYourPrompt = request;
                 previousYourThink = think;
                 YourPrompt = null;
@@ -141,6 +137,7 @@ namespace TalkerFrontend {
             } else if (Integration.MainForm.PostProcessPrompt && keywords_provided == null) {
                 ChatRequested = false;
                 KeywordsRequested = true;
+                GroupTalkingPerson = group_person;
                 ImagePromptRequested = false;
                 AutoTalkTimer = 0;
                 string prompt = PromptGenerator.GetRAGKeywords(request, out string preload);
@@ -152,12 +149,15 @@ namespace TalkerFrontend {
                     len = 128;
                 Integration.SendTextPrompt(prompt, preload, len, true, Integration.SEND_PIC_TYPE.SendNoClear, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
             } else if (Integration.MainForm.PostProcessPrompt == false || keywords_provided != null) {
-                string MyName = MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
-                string MyDescription = Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
+                string MyName = group_person?.Name ?? GroupTalkingPerson?.Name ?? MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
+                string MyDescription = group_person?.PersistentDescription ?? GroupTalkingPerson?.PersistentDescription ?? Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
                 if (MeCharacter is Character cc) MyDescription += Character.ProcessTags(cc.PersistentDescription);
                 (string prompt, string preload) = PromptGenerator.GetMasterPrompt(SelectedCharacter, request, MyName, MyDescription, out string append_log, image_description, keywords_provided);
-                CurrentChatLog += "\n\n" + append_log;
-                Integration.MainForm.UpdateChatLog();
+                if (GroupTalkingPerson == null && group_person == null) {
+                    // stuff you wrote (not written in a group chat)
+                    CurrentChatLog += "\n\n" + append_log;
+                    Integration.MainForm.UpdateChatLog();
+                }
                 PictureRequested = false;
                 ChatRequested = true;
                 KeywordsRequested = false;
@@ -166,6 +166,7 @@ namespace TalkerFrontend {
                 WhoTalking = SelectedCharacter;
                 YourThinkInjection = null;
                 YourPrompt = null;
+                GroupTalkingPerson = null;
                 YourImageDescription = null;
                 Integration.MainForm.ClearMonitor();
                 Integration.SendTextPrompt(prompt, preload, null, false, hasPicToSend ? Integration.SEND_PIC_TYPE.SendClear : Integration.SEND_PIC_TYPE.None , false, StopSequences(false), BannedTalkTokens, think);
@@ -190,6 +191,7 @@ namespace TalkerFrontend {
         }
 
         public static string YourPrompt = null, YourImageDescription = null, YourThinkInjection = null;
+        public static Character GroupTalkingPerson = null;
 
         public static List<AWAITSAY> AwaitingSay = new List<AWAITSAY>();
         public static Character WhoTalking;

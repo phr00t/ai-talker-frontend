@@ -293,14 +293,14 @@ namespace TalkerFrontend {
 
         private void MainTimer_Tick(object sender, EventArgs e) {
             Integration.Update();
-            if (CBAutoTalk.Checked) {
+            /*if (CBAutoTalk.Checked) {
                 // check for autotalk error
                 string err = ReadyOrNot(false, true, false);
                 if (err != "") {
                     DisableAutoTalk();
                     MessageBox.Show("Cannot auto trigger talking:\n\n" + err, "Auto Trigger Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
+            }*/
             if (ReadyOrNot(true, true, true) != "") return;
             if (ChatManager.YourPrompt != null && ChatManager.YourPrompt.Length > 0) {
                 SetStatus("Processing Your Prompt");
@@ -308,12 +308,17 @@ namespace TalkerFrontend {
             } else if (CBAutoTalk.Checked && ChatManager.AutoTalkTimer > 0) {
                 ChatManager.AutoTalkTimer--;
                 if (ChatManager.AutoTalkTimer <= 0) {
-                    // no error, ready to auto-talk
-                    SetStatus("Auto talk Triggered");
-                    if (GroupChatMode)
-                        ChatManager.SendContinue();
-                    else
-                        ChatManager.SendChat("*silence*", "", false); // send silence
+                    if (ReadyOrNot(false, true, false) != "") {
+                        ChatManager.AutoTalkTimer = 5;
+                    } else {
+                        // no error, ready to auto-talk
+                        SetStatus("Auto talk Triggered");
+                        if (GroupChatMode) {
+                            Integration.MainForm.SelectNextCharacter();
+                            ChatManager.WhoTalking = ChatManager.SelectedCharacter;
+                            ChatManager.SendChat(Integration.MainForm.GetControl<TextBox>("partial_response").Text, "", false, null, null, ChatManager.WhoTalking);
+                        } else ChatManager.SendChat("*silence*", "", false); // send silence
+                    }
                 }
             }
         }
@@ -432,7 +437,7 @@ namespace TalkerFrontend {
         }
 
         private void CBAutoTalk_CheckedChanged(object sender, EventArgs e) {
-            ChatManager.AutoTalkTimer = 0;
+            ChatManager.AutoTalkTimer = 1;
         }
 
         private void label2_Click(object sender, EventArgs e) {

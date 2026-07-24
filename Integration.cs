@@ -299,6 +299,7 @@ namespace TalkerFrontend {
             ChatManager.NeedVoiceFor.Clear();
             MainForm.SetStatus("Aborted");
             AwaitingAudioFiles.Clear();
+            ChatManager.GroupTalkingPerson = null;
             ChatManager.previousYourPrompt = null;
             ChatManager.previousYourThink = null;
             ChatManager.PictureRequested = false;
@@ -327,7 +328,7 @@ namespace TalkerFrontend {
             SendTestString();
         }
 
-        public static string ConvertToCSV(string list) {
+        /*public static string ConvertToCSV(string list) {
             if (string.IsNullOrWhiteSpace(list))
                 return string.Empty;
 
@@ -352,7 +353,7 @@ namespace TalkerFrontend {
             }
 
             return string.Join(", ", items);
-        }
+        }*/
 
         public static void ProcessLLMResponse(string text) {
             text = text.Replace("<think>", " ").Replace("</think>", " ").Replace("/no-think", " ").Replace("/no_think", " ");
@@ -360,7 +361,7 @@ namespace TalkerFrontend {
                 ChatManager.KeywordsRequested = false;
                 // combine possible user-provided manual keywords
                 string[] keywords = Integration.MainForm.ManualKeywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                string[] llm_keywords = ConvertToCSV(text).Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] llm_keywords = text.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 List<string> unique_keywords = new List<string>();
                 for (int i=0; i<keywords.Length; i++) unique_keywords.Add(keywords[i].Trim());
                 for (int i=0; i<llm_keywords.Length; i++) {
@@ -372,7 +373,7 @@ namespace TalkerFrontend {
                     unique_keywords.Add(lk); skip_add:;
                 }
                 MainForm.ClearKeywords();
-                ChatManager.SendChat(ChatManager.YourPrompt, ChatManager.YourThinkInjection, true, ChatManager.YourImageDescription, string.Join(",", unique_keywords));
+                ChatManager.SendChat(ChatManager.YourPrompt, ChatManager.YourThinkInjection, true, ChatManager.YourImageDescription, string.Join(",", unique_keywords), ChatManager.GroupTalkingPerson);
             } else if (ChatManager.ImagePromptRequested) {
                 IMGConfig.LastImagePromptResult = text;
                 // switch back to regular text model
@@ -432,7 +433,7 @@ namespace TalkerFrontend {
                 string timestamp = "Timestamp: " + DateTime.Now.ToString("dddd, MMMM dd, yyyy 'at' H:mm:ss");
                 ChatManager.ChatRequested = false;
                 ChatManager.CurrentChatLog += "\n\n" + timestamp + ", " + ChatManager.WhoTalking.Name + ": " + text;
-                File.WriteAllText(Path.Combine(BaseDirectory, "groupchat.txt"), ChatManager.GroupChatLog);
+                if (MainForm.GroupChatMode) File.WriteAllText(Path.Combine(BaseDirectory, "groupchat.txt"), ChatManager.GroupChatLog);
                 ChatManager.WhoTalking.Save();
                 MainForm.SetMonitorExact(text);
                 MainForm.UpdateChatLog();

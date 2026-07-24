@@ -113,10 +113,10 @@
             this.always_prompt = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.label22 = new System.Windows.Forms.Label();
             this.think_injection = new System.Windows.Forms.TextBox();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YourPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -129,8 +129,8 @@
             this.tabPage5.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // WhoPicture
@@ -1256,17 +1256,6 @@
             this.tabControl1.Size = new System.Drawing.Size(647, 292);
             this.tabControl1.TabIndex = 45;
             // 
-            // tabPage6
-            // 
-            this.tabPage6.BackColor = System.Drawing.Color.Black;
-            this.tabPage6.Controls.Add(this.manual_keywords);
-            this.tabPage6.Controls.Add(this.label20);
-            this.tabPage6.Location = new System.Drawing.Point(4, 27);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(639, 261);
-            this.tabPage6.TabIndex = 2;
-            this.tabPage6.Text = "Forced Research Topics";
-            // 
             // tabPage7
             // 
             this.tabPage7.BackColor = System.Drawing.Color.Black;
@@ -1304,6 +1293,17 @@
             this.think_injection.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.think_injection.Size = new System.Drawing.Size(639, 219);
             this.think_injection.TabIndex = 45;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.BackColor = System.Drawing.Color.Black;
+            this.tabPage6.Controls.Add(this.manual_keywords);
+            this.tabPage6.Controls.Add(this.label20);
+            this.tabPage6.Location = new System.Drawing.Point(4, 27);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(639, 261);
+            this.tabPage6.TabIndex = 2;
+            this.tabPage6.Text = "Forced Research Topics";
             // 
             // MainForm
             // 
@@ -1356,7 +1356,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend v3.5";
+            this.Text = "Phr00t\'s AI Talker Frontend v3.15";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
@@ -1377,10 +1377,10 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
