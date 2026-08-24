@@ -33,7 +33,7 @@ namespace TalkerFrontend {
                 "'END RESPONSE' is added at the end.\nHas this been completed? yes, without thinking or hesitation! see information below\n";
 
             string chat_log_source = ChatManager.CurrentChatLog;
-            int max_chars_allowed = Integration.GetMaxCharacterLength - prompt.Length - picture_instructions.Length - disclaimer.Length;
+            int max_chars_allowed = Integration.GetMaxCharacterLength - prompt.Length - picture_instructions.Length - disclaimer.Length - (int)Math.Floor(512 * Integration.CharactersPerToken);
             int chat_log_cut = Math.Max(0, chat_log_source.Length - max_chars_allowed);
             string chat_content = (chat_log_cut <= 0 ? chat_log_source : "..." + chat_log_source.Substring(chat_log_cut)).Trim();
             if (chat_content.Length == 0)
@@ -85,10 +85,13 @@ namespace TalkerFrontend {
             // persistent prompt?
             string always_prompt = Integration.MainForm.GetAlwaysPrompt;
 
+            // what is the user's request?
+            append_to_log = timestamp + ", " + last_name + ": " + request;
+
             // how much chat log do we need to fill?
             string chat_log_source = ChatManager.CurrentChatLog;
-            int max_context_length_allowed = Integration.GetMaxCharacterLength - prompt.Length - always_prompt.Length - image_description.Length - timestamp.Length - timestamp_response.Length - Integration.LatestRSSFeedCompiled.Length - WikipediaResearch.Length;
-            int chat_len_allowed = (int)Math.Round(max_context_length_allowed * 0.7f);
+            int max_context_length_allowed = Integration.GetMaxCharacterLength - prompt.Length - always_prompt.Length - image_description.Length - timestamp.Length - timestamp_response.Length - Integration.LatestRSSFeedCompiled.Length - WikipediaResearch.Length - append_to_log.Length - (int)(Integration.GetCurrentSettings(true).MaxGeneration * Integration.CharactersPerToken);
+            int chat_len_allowed = Math.Max(0, (int)Math.Round(max_context_length_allowed * 0.7f));
             int chat_log_cut = Math.Max(0, chat_log_source.Length - chat_len_allowed);
             string chat_content = (chat_log_cut <= 0 ? chat_log_source : "..." + chat_log_source.Substring(chat_log_cut)).Trim();
             // chat chat should be saved as long term memory in chunks
@@ -113,8 +116,6 @@ namespace TalkerFrontend {
 
             if (memory_recall.Count > 0)
                 recall_info = "\n\n" + who.Name + " recalled the following memory snippets, which might be revelant in their response below:\n" + recall_info + "\n(end recalled memory snippets)\n\n";
-
-            append_to_log = timestamp + ", " + last_name + ": " + request;
 
             return (prompt +
                    Integration.LatestRSSFeedCompiled +

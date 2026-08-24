@@ -150,7 +150,7 @@ namespace TalkerFrontend {
         public static RestClient ComfyAPI, KoboldAPI;
         public static string ModelName, KoboldURL;
 
-        public static int GetMaxCharacterLength => (int)Math.Floor((max_context_len - 2560) * CharactersPerToken);
+        public static int GetMaxCharacterLength => (int)Math.Floor(max_context_len * CharactersPerToken);
 
         public static string BaseDirectory => Path.GetDirectoryName(Application.ExecutablePath);
         public static string CharDirectory => Path.Combine(BaseDirectory, "Characters/");

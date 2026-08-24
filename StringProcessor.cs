@@ -214,6 +214,7 @@ namespace TalkerFrontend {
 
         public static List<string> GetInfo(string from, string request, ConcurrentDictionary<string, List<StringPosition>> memory, int max_chars, int fill_level = 0, HashSet<string> words_processed = null) {
             List<string> results = new List<string>();
+            if (max_chars < Integration.MainForm.WordsPerRecall * 4) return results;
             request = from + " " + request;
             string[] word_split = request.Split(new char[] { ' ', '.', '?', '!', ':', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (words_processed == null) words_processed = new HashSet<string>();
