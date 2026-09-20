@@ -63,6 +63,8 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.sent_prompt_tb = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chat_template = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
             this.WikiMaxArticles = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.WikiStatus = new System.Windows.Forms.Label();
@@ -613,6 +615,8 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.chat_template);
+            this.tabPage2.Controls.Add(this.label23);
             this.tabPage2.Controls.Add(this.WikiMaxArticles);
             this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Controls.Add(this.WikiStatus);
@@ -652,6 +656,30 @@
             this.tabPage2.Size = new System.Drawing.Size(460, 668);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Advanced";
+            // 
+            // chat_template
+            // 
+            this.chat_template.BackColor = System.Drawing.Color.Navy;
+            this.chat_template.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.chat_template.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chat_template.ForeColor = System.Drawing.Color.White;
+            this.chat_template.Location = new System.Drawing.Point(216, 300);
+            this.chat_template.Margin = new System.Windows.Forms.Padding(2);
+            this.chat_template.Name = "chat_template";
+            this.chat_template.Size = new System.Drawing.Size(168, 25);
+            this.chat_template.TabIndex = 72;
+            this.chat_template.Text = "ChatML";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(212, 281);
+            this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(117, 20);
+            this.label23.TabIndex = 71;
+            this.label23.Text = "Chat Template:";
             // 
             // WikiMaxArticles
             // 
@@ -1356,7 +1384,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Phr00t\'s AI Talker Frontend v3.16";
+            this.Text = "Phr00t\'s AI Talker Frontend v3.17";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.WhoPicture)).EndInit();
@@ -1480,6 +1508,8 @@
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.TextBox think_injection;
+        private System.Windows.Forms.TextBox chat_template;
+        private System.Windows.Forms.Label label23;
     }
 }
 

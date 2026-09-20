@@ -710,6 +710,17 @@ namespace TalkerFrontend {
             SendNoClear = 2
         }
 
+        public static string ApplyChatTemplate(string prompt, string preload_prompt, string type, string preload_think) {
+            string thinking_str = "\n<think>" + preload_think + "</think>\n";
+            switch (type.Trim().ToLower()) {
+                default:
+                case "chatml":
+                    return "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant" + thinking_str + preload_prompt;
+                case "ling":
+                    return "<role>HUMAN</role>" + prompt + "<|role_end|>\n<role>ASSISTANT</role>" + thinking_str + preload_prompt;
+            }
+        }
+
         public static void SendTextPrompt(string prompt, string preload_prompt, int? max_len = null, bool not_creative = false, SEND_PIC_TYPE send_pic = SEND_PIC_TYPE.None, bool skip_eos = false, string[] extra_stop_sequences = null, string[] banned_tokens = null, string preload_think = "\n\n") {
             if (!RemoteOnlyMode) EnsureKoboldCppMode(true);
             var rr = new RestRequest("/api/v1/generate", Method.Post);
@@ -733,7 +744,7 @@ namespace TalkerFrontend {
             }
 
             // add ChatML non-thinking to prompt
-            prompt = "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant\n<think>" + preload_think + "</think>\n" + preload_prompt;
+            prompt = ApplyChatTemplate(prompt, preload_prompt, MainForm.ChatTemplate, preload_think);
 
             // update ui
             MainForm.SetPromptSent(prompt);

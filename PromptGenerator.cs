@@ -50,11 +50,11 @@ namespace TalkerFrontend {
         public static string GetRAGKeywords(string request, out string preload) {
             preload = "Terms separated with | characters: ";
             return "*** Search Terms Separated List ***\n\nWe need to brainstorm search terms to find potentially relevant information in a database to provide an informed response to a human's prompt. The terms " +
-                   "need to be provided in a separated list, using the pipe '|' character. The list of terms should be unique, with the most useful listed first.\n\nNote that search terms may not exactly match words in the prompt. For example, if the prompt was 'did you have any pets?', valid search terms could be:\n\n" +
-                   "pet|cat|dog\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Each search term can be contain multiple words if needed, so don't split up terms that are best searched together.\n\n" +
-                   "Finally, be reasonably concise with the keyword list, choosing only particular keywords that should have direct relevance to the original request. Do not repeat the same terms and order them in importance.\n\n" +
+                   "need to be provided in a separated list, using the pipe '|' character as the separator in the following simple format: <search term(s) #1>|<search terms(s) #2|...\n\nThe list of terms should be unique, with the most useful listed first, but do not number them. Note that search terms may not exactly match words in the prompt. For example, if the prompt was 'did you have any pets?', a properly formatted search terms result could be:\n\n" +
+                   "pet|cat|dog|bird\n\nNotice that we generalize the word 'pet' into common pet types, because the database might mention 'cat', like 'I had a cat', without using the word 'pet'. Each search term can be contain multiple words if needed, so don't split up terms that are best searched together.\n\n" +
+                   "Finally, be reasonably concise with the list of terms, choosing only particular terms that should have direct relevance to the original request. Do not repeat the same terms and order them in importance.\n\n" +
                    "*** Human Prompt We Are Providing Search Terms For ***\n\n" + request + "\n\n*** End Prompt ***\n\n" +
-                   "Do not include anything else in this response, just the separated list of the search terms only. When done listing terms, finish with 'Keywords Finished'.\n\n";
+                   "Do not include anything else in this response, just the separated list of the search terms only. When done listing terms, finish with 'Terms Finished'.\n\n";
         }
 
         public static (string, string) GetMasterPrompt(Character who, string request, string last_name, string last_name_profile, out string append_to_log, string image_desc = null, string processed_keywords = null) {

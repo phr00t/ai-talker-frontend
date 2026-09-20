@@ -142,6 +142,7 @@ namespace TalkerFrontend {
         public bool UseRecommended => CBUseRecommended.Checked;
         public bool FillContext => CBFillContext.Checked;
         public bool PostProcessPrompt => postprocess_prompt.Checked;
+        public string ChatTemplate => chat_template.Text;
 
         private void Form1_Load(object sender, EventArgs e) {
             //WikiRAG.Test();
@@ -179,6 +180,7 @@ namespace TalkerFrontend {
                     AdvDryMult.Text = Integration.LoadTagged(optdata, "AdvDryMult") ?? AdvDryMult.Text;
                     AdvMinP.Text = Integration.LoadTagged(optdata, "AdvMinP") ?? AdvMinP.Text;
                     AdvMaxTokens.Text = Integration.LoadTagged(optdata, "AdvMaxTokens") ?? AdvMaxTokens.Text;
+                    chat_template.Text = Integration.LoadTagged(optdata, "chat_template") ?? chat_template.Text;
                     WikiDir.Text = Integration.LoadTagged(optdata, "WikiDir") ?? WikiDir.Text;
                     WikiMaxArticles.Text = Integration.LoadTagged(optdata, "WikiMaxArticles") ?? WikiMaxArticles.Text;
                     WikiAllowance.Text = Integration.LoadTagged(optdata, "WikiAllowance") ?? WikiAllowance.Text;
@@ -256,6 +258,7 @@ namespace TalkerFrontend {
             optdata += Integration.StringTagged(AdvDryMult.Text, "AdvDryMult");
             optdata += Integration.StringTagged(AdvMinP.Text, "AdvMinP");
             optdata += Integration.StringTagged(AdvMaxTokens.Text, "AdvMaxTokens");
+            optdata += Integration.StringTagged(chat_template.Text, "chat_template");
             optdata += Integration.StringTagged(AdvExtraStops.Text, "AdvExtraStops");
             optdata += Integration.StringTagged(AdvTemperature.Text, "AdvTemperature");
             optdata += Integration.StringTagged(AdvWordRecall.Text, "AdvWordRecall");

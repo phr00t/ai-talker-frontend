@@ -99,48 +99,78 @@ namespace TalkerFrontend {
             return "";
         }
 
-        public static string CleaupWikipediaArticle(string input_string) {
-            if (string.IsNullOrEmpty(input_string))
-                return input_string;
+        public static string CleanupWikipediaArticle(string input) {
+            if (string.IsNullOrEmpty(input))
+                return input;
 
-            string output = input_string;
+            string output = input;
 
-            Regex curly = new Regex(@"\{\{[^{}]*\}\}");
-            Regex fileTag = new Regex(@"\[\[File:.*\]\]", RegexOptions.IgnoreCase);
-            Regex categoryTag = new Regex(@"\[\[Category:.*\]\]", RegexOptions.IgnoreCase);
+            // Recursively extract template content
+            Regex templateRegex = new Regex(@"\{\{(?<content>.*?)\}\}", RegexOptions.Singleline);
 
-            bool changed = true;
+            output = templateRegex.Replace(output, match =>
+            {
+                string content = match.Groups["content"].Value;
 
-            while (changed) {
-                changed = false;
+                // Split on pipes
+                var parts = content.Split('|');
 
-                string newOutput = curly.Replace(output, "");
-                if (newOutput != output) {
-                    output = newOutput;
-                    changed = true;
+                // Skip template name
+                var parameters = parts.Skip(1);
+
+                List<string> extracted = new List<string>();
+
+                foreach (var p in parameters) {
+                    string param = p.Trim();
+
+                    if (string.IsNullOrWhiteSpace(param))
+                        continue;
+
+                    // key=value → keep value
+                    int eq = param.IndexOf('=');
+                    if (eq >= 0) {
+                        string value = param.Substring(eq + 1).Trim();
+                        if (!string.IsNullOrWhiteSpace(value))
+                            extracted.Add(value);
+                        continue;
+                    }
+
+                    // Nested template → recursively process
+                    if (param.StartsWith("{{")) {
+                        extracted.Add(CleanupWikipediaArticle(param));
+                        continue;
+                    }
+
+                    extracted.Add(param);
                 }
 
-                newOutput = fileTag.Replace(output, "");
-                if (newOutput != output) {
-                    output = newOutput;
-                    changed = true;
-                }
+                return string.Join(" ", extracted);
+            });
 
-                newOutput = categoryTag.Replace(output, "");
-                if (newOutput != output) {
-                    output = newOutput;
-                    changed = true;
-                }
-            }
+            // Remove File: and Category:
+            output = Regex.Replace(output, @"\[\[File:[^\]]*\]\]", "", RegexOptions.IgnoreCase);
+            output = Regex.Replace(output, @"\[\[Category:[^\]]*\]\]", "", RegexOptions.IgnoreCase);
 
-            output = output.Replace("''''", "\"");
-            output = output.Replace("'''", "\"");
-            output = output.Replace("''", "\"");
-            output = output.Replace("[[", "[");
-            output = output.Replace("]]", "]");
-            output = output.Replace("\n\n", "\n");
+            // Convert wiki links [[X]] → X
+            output = Regex.Replace(output, @"\[\[(?<text>[^\]|]+)(\|[^\]]+)?\]\]", m => m.Groups["text"].Value);
 
-            return Regex.Replace(WebUtility.HtmlDecode(output.Trim()), "<.*?>", String.Empty).Trim();
+            // Remove HTML tags
+            output = Regex.Replace(output, "<.*?>", "");
+
+            // Normalize whitespace
+            output = WebUtility.HtmlDecode(output);
+            output = Regex.Replace(output, @"\s{2,}", " ").Trim();
+
+            // more cleanup (typically table stuff)
+            // Remove rowspan=2, rowspan="2", colspan=3, style="..."
+            output = Regex.Replace(output, @"\b(rowspan|colspan|style)\s*=\s*((""[^""]*"")|(\S+))", "", RegexOptions.IgnoreCase);
+            output = Regex.Replace(output, @"\{\|", "");
+            output = Regex.Replace(output, @"\|\}", "");
+            output = Regex.Replace(output, @"\|\-", "");
+            output = Regex.Replace(output, @"^\s*\|\s*$", "", RegexOptions.Multiline);
+            output = Regex.Replace(output, @"^\s*\|\s*", "", RegexOptions.Multiline);
+
+            return output.Replace("]]", " ");
         }
 
         public static void Test() {

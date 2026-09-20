@@ -147,7 +147,7 @@ namespace TalkerFrontend {
                     len = 512;
                 else if (len < 128)
                     len = 128;
-                Integration.SendTextPrompt(prompt, preload, len, true, Integration.SEND_PIC_TYPE.SendNoClear, false, new string[] { "Keywords Finished", "Finished Keywords", "KEYWORDS FINISHED", "keywords finished", "finished keywords", "FINISHED KEYWORDS" });
+                Integration.SendTextPrompt(prompt, preload, len, true, Integration.SEND_PIC_TYPE.SendNoClear, false, new string[] { "Terms Finished", "Finished Terms", "TERMS FINISHED", "terms finished", "finished terms", "FINISHED TERMS" });
             } else if (Integration.MainForm.PostProcessPrompt == false || keywords_provided != null) {
                 string MyName = group_person?.Name ?? GroupTalkingPerson?.Name ?? MeCharacter?.Name ?? Integration.MainForm.GetControl<ComboBox>("MyName").Text.Trim();
                 string MyDescription = group_person?.PersistentDescription ?? GroupTalkingPerson?.PersistentDescription ?? Integration.MainForm.GetControl<TextBox>("MyRelation").Text.Trim();
